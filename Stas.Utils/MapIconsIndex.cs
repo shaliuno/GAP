@@ -33,7 +33,7 @@ public enum MapIconsIndex {
 
     EntrancePortal = 29,    //start row index = 2
     Breach = 30,
-    _31 = 31,
+    SmallWhiteCircle = 31,
     I_died = 32,
     BestiaryDeadMonster = 33,
     BestiaryBloodAlter = 34,
@@ -65,7 +65,7 @@ public enum MapIconsIndex {
     LootFilterSmallRedCircle = 58,
     LargeWhiteCircle = 59,
     MediumWhiteCircle = 60,
-    SmallWhiteCircle = 61,
+    BlightTowerStune = 61,
     LootFilterLargeYellowCircle = 62,
     LootFilterMediumYellowCircle = 63,
     LootFilterSmallYellowCircle = 64,
@@ -241,6 +241,8 @@ public enum MapIconsIndex {
     BigChest = 223,
     Azurite = 224,
 
+    //https://poedb.tw/us/Expedition_league#MinimapIcons
+    //https://poedb.tw/us/Blight_league#BlightReward
     RewardJewelry = 225,//starting last row-1 //ring RewardChestTrinkets
     RewardArmour = 226,
     RewardWeapons = 227,
@@ -268,6 +270,6 @@ public enum MapIconsIndex {
     RewardUnique = 248,
     RewardGems = 249,
     RewardMaps = 250,
-    empty_251 = 251,
+    RewardScarabs = 251,
     empty_252 = 252,
 }
