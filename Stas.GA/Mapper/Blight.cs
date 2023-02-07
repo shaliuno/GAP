@@ -7,8 +7,8 @@ using sh = Stas.GA.SpriteHelper;
 namespace Stas.GA;
 public partial class AreaInstance {
     Entity blight_pamp = null;
-    List<Entity> frame_blight = new List<Entity>();
-    public ConcurrentBag<Entity> blight_beams = new();
+    List<Beam> frame_blight = new ();
+    public ConcurrentBag<Beam> blight_beams = new();
     void GetBlight() {
         if (blight_pamp == null)
             return;

@@ -1,10 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Drawing;
-using V2 = System.Numerics.Vector2;
+﻿using V2 = System.Numerics.Vector2;
 using sh = Stas.GA.SpriteHelper;
-using System.Runtime.CompilerServices;
-using System.Xml;
 
 namespace Stas.GA;
 public partial class AreaInstance {
@@ -18,6 +13,8 @@ public partial class AreaInstance {
 
         }
         var name = icon.name;
+        if (string.IsNullOrEmpty(name))
+            name = icon.metadata;
         //if (e.eType == eTypes.LegionMonolith && !e.IsTargetable) //
         //    return null;
         if (e.GetComp<Chest>(out var chect) && e.IsOpened)
@@ -26,40 +23,43 @@ public partial class AreaInstance {
             if (name == "DynamiteWall") {
                 return asStaticMapItem(e, miType.DynamiteWall, MapIconsIndex.DynamiteWall);
             }
-            if (name == "LakeStampingDevice") {
+            else if (name == "LakeStampingDevice") {
                 return asStaticMapItem(e, miType.LeagueEvent, MapIconsIndex.LakeStampingDevice);
             }
-            if (name == "StashPlayer") {
+            else if (name == "StashPlayer") {
                 return asStaticMapItem(e, miType.Stash, MapIconsIndex.StashPlayer);
             }
-            if (name == "StashGuild") {
+            else if (name == "StashGuild") {
                 return asStaticMapItem(e, miType.GuildStash, MapIconsIndex.StashGuild);
             }
-            if (name.StartsWith("HarvestCollector")) {
+            else if (name.StartsWith("HarvestCollector")) {
                 return asStaticMapItem(e, miType.Harvest, MapIconsIndex.HarvestCollectorBlue); //, !e.IsTargetable
             }
-            if (name == "UltimatumAltar") {
+            else if (name == "UltimatumAltar") {
                 return asStaticMapItem(e, miType.Ultimatum, MapIconsIndex.UltimatumAltar); //, !e.IsTargetable
             }
-            if (name.Contains("RitualRune")) {
+            else if (name.Contains("RitualRune")) {
                 return asStaticMapItem(e, miType.Ritual, MapIconsIndex.RitualRewards); //, e.buffs != null
             }
-            if (e.Path.Contains("DelveMineral")) {
+            else if (e.Path.Contains("DelveMineral")) {
                 if (!e.IsTargetable)
                     return null;
                 var info = "Sulphite id=" + e.id + " gdist=" + e.gdist_to_me.ToRoundStr(0);
                 return asStaticMapItem(e, miType.Sulphite, MapIconsIndex.Sulphite, info); //, !e.IsTargetable
             }
-            if (e.Path.Contains("BlightPump")) {
+            else if (e.Path.Contains("BlightPump")) {
                 blight_pamp = e;
                 return asStaticMapItem(e, miType.Blight, MapIconsIndex.BlightSpawner); //, !e.IsTargetable
             }
             //if (name == "BlightPathInactive")
             //    return null;
-            if (name == "BlightPath" || name == "BlightPathInactive") {
+            else if (name == "BlightPath" || name == "BlightPathInactive") {
                 if (e.GetComp<Beam>(out var beam)) {
-                    frame_blight.Add(e);
+                    frame_blight.Add(beam);
                 }
+            }
+            else if (name.Contains("Fossil") || e.Path.Contains("Fossil")) {
+                mi.uv = sh.GetUV(MapIconsIndex.RewardFossils);
             }
             var iconIndexByName = ui.IconIndexByName(name);
             if (iconIndexByName != 0) {
@@ -93,34 +93,34 @@ public partial class AreaInstance {
                         mi.uv = sh.GetUV(MapIconsIndex.BlightPathInactive);
                     return mi;
                 }
-                if (name == "AfflictionInitiator") {
+                else if (name == "AfflictionInitiator") {
                     if (icon.IsHide)
                         return null;
                     mi.uv = sh.GetUV(MapIconsIndex.RewardDelirium);
                 }
-                if (name == "HeistEngineering") {
+                else if (name == "HeistEngineering") {
                     mi.uv = sh.GetUV(MapIconsIndex.CraftingBench);
                 }
-                if (name == "HeistCounterThaumaturge") {
+                else if (name == "HeistCounterThaumaturge") {
                     if (e.IsDead)
                         return null;
                 }
-                if (name == "HeistSpottedMiniBoss") {
+                else if (name == "HeistSpottedMiniBoss") {
                     if (e.IsDead)
                         return null;
                     mi.uv = sh.GetUV(MapIconsIndex.BlightBoss);
                 }
-                if (name == "HeistDisplayCase")
+                else if (name == "HeistDisplayCase")
                     mi.uv = sh.GetUV(MapIconsIndex.DelveMapViewer);
                 if (name == "HeistPathChest") {
                     mi.info = e.Path.Replace("Metadata/Chests/LeagueHeist/HeistChestSecondary", "");
                 }
-                if (name.Contains("Jewellery") || e.Path.Contains("Jewellery") || e.Path.Contains("Jewels")
+                else if (name.Contains("Jewellery") || e.Path.Contains("Jewellery") || e.Path.Contains("Jewels")
                     || name.Contains("Trinkets") || e.Path.Contains("Trinkets")) {
                     mi.uv = sh.GetUV(MapIconsIndex.Ring);
                 }
 
-                if (name.Contains("Currency") || e.Path.Contains("Currency")) {
+                else if (name.Contains("Currency") || e.Path.Contains("Currency")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardCurrency);
                 }
                 else if (name.Contains("Fragment") || e.Path.Contains("Fragment")) {
@@ -129,47 +129,45 @@ public partial class AreaInstance {
                 if (name.Contains("Unique") || e.Path.Contains("Unique")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardUnique);
                 }
-                if (name.Contains("Divination") || e.Path.Contains("Divination") || e.Path.Contains("StackedDecks")) {
+                else if (name.Contains("Divination") || e.Path.Contains("Divination") || e.Path.Contains("StackedDecks")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardDivination);
                 }
-                if (name.Contains("Weapons") || e.Path.Contains("Weapons")) {
+                else if (name.Contains("Weapons") || e.Path.Contains("Weapons")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardWeapons);
                 }
-                if (name.Contains("Harbinger") || e.Path.Contains("Harbinger")) {
+                else if (name.Contains("Harbinger") || e.Path.Contains("Harbinger")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardHarbinger);
                 }
-                if (name.Contains("Armour") || e.Path.Contains("Armour")) {
+                else if (name.Contains("Armour") || e.Path.Contains("Armour")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardArmour);
                 }
-                if (name.Contains("Essence") || e.Path.Contains("Essence")) {
+                else if (name.Contains("Essence") || e.Path.Contains("Essence")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardEssence);
                 }
-                if (name.Contains("Fossil") || e.Path.Contains("Fossil")) {
-                    mi.uv = sh.GetUV(MapIconsIndex.RewardFossils);
-                }
-                if (name.Contains("Prophecy") || name.Contains("Prophecies")
+
+                else if (name.Contains("Prophecy") || name.Contains("Prophecies")
                     || e.Path.Contains("Prophecy") || e.Path.Contains("Prophecies")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardProphecy);
                 }
-                if (name.Contains("Gems") || e.Path.Contains("Gems")) {
+                else if (name.Contains("Gems") || e.Path.Contains("Gems")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardGems);
                 }
-                if (name.Contains("Corrupted") || e.Path.Contains("Corrupted")) {
+                else if (name.Contains("Corrupted") || e.Path.Contains("Corrupted")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardCorrupted);
                 }
-                if (name.Contains("Generic") || e.Path.Contains("Generic")) {
+                else if (name.Contains("Generic") || e.Path.Contains("Generic")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardGeneric);
                 }
-                if (name.Contains("Abyss") || e.Path.Contains("Abyss")) {
+                else if (name.Contains("Abyss") || e.Path.Contains("Abyss")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardAbyss);
                 }
-                if (name.Contains("Talisman") || e.Path.Contains("Talisman")) {
+                else if (name.Contains("Talisman") || e.Path.Contains("Talisman")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardTalisman);
                 }
-                if (name.Contains("Maps") || e.Path.Contains("Maps")) {
+                else if (name.Contains("Maps") || e.Path.Contains("Maps")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardMaps);
                 }
-                if (name.Contains("Breach") || e.Path.Contains("Breach")) {
+                else if (name.Contains("Breach") || e.Path.Contains("Breach")) {
                     mi.uv = sh.GetUV(MapIconsIndex.RewardBreach);
                 }
             }

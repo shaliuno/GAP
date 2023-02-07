@@ -78,7 +78,8 @@ public partial class Entity : RemoteObjectBase {
         var ws_key = entityDetails.name.Buffer;
         if (!ui.std_wstrings.ContainsKey(ws_key))
            ui.std_wstrings[ws_key] = ui.m.ReadStdWString(entityDetails.name);
-        Path = ui.std_wstrings[ws_key];
+        ui.std_wstrings.TryGetValue(ws_key, out var _path);
+        Path = _path;
         var lookupPtr = ui.m.Read<ComponentLookUpStruct>(entityDetails.ComponentLookUpPtr);
         var namesAndIndexes = ui.m.ReadStdBucket<ComponentNameAndIndexStruct>(lookupPtr.ComponentsNameAndIndex);
         for (var i = 0; i < namesAndIndexes.Count; i++) {

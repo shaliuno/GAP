@@ -12,8 +12,6 @@ public partial class AreaInstance {
     MapItem GetChest(Entity e, MapItem mi) {
         e.GetComp<Chest>(out var chest);
         var key = e.GetKey; //1336988036
-        if (key == 1336988036) {
-        }
         if (e.IsOpened) {
             static_items.TryRemove(key, out _);
             return null;
@@ -28,6 +26,10 @@ public partial class AreaInstance {
         }
         else if(e.eType == eTypes.ExpeditionChest)
             smi.uv = sh.GetUV(MapIconsIndex.opened_chest_big);
+        else if (e.eType == eTypes.ImportantStrongboxChest) {
+            smi.uv = sh.GetUV(MapIconsIndex.RewardNiceBox);
+            smi.size = 20;
+        }
         else {
             if (mi.info.EndsWith("Strongbox")) {
                 smi.uv = sh.GetUV(MapIconsIndex.RewardNiceBox);

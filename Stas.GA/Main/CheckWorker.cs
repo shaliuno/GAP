@@ -14,7 +14,8 @@ public partial class ui {
     static void CheckWorker() {
         if (me.Address == default || b_worker_err! || !me.GetComp<Player>(out var _cp) || string.IsNullOrEmpty(_cp.Name)) {
             //Address== defaul possible if relogin fast - debug here mb
-            ui.AddToLog(tName + ".CheckWorker err get curr player", MessType.Error);
+            if(!ui.sett.b_debug_native_dll)
+                ui.AddToLog(tName + ".CheckWorker err get curr player", MessType.Error);
             return;
         }
         if (worker == null || curr_player == null || _cp.Name != curr_player.Name) {
@@ -47,7 +48,8 @@ public partial class ui {
                     err += (string)re.Matches(ex.Message)[0].Groups[1].Value;
                 else
                     err += "=>" + ex.Message;
-                ui.AddToLog(err, MessType.Critical);
+                if (!ui.sett.b_debug_native_dll)//dont spam here in console
+                    ui.AddToLog(err, MessType.Critical);
                 return null;
             }
         }

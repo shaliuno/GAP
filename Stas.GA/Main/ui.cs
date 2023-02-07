@@ -166,7 +166,12 @@ public partial class ui {
   
     public static Camera camera => curr_world.camera;
     public static unsafe IntPtr GetPtrFromImageData(Bitmap bmp) {
-        return DrawMain.scene.LoadImageToPtr(bmp).Item1;
+        if (DrawMain.scene != null)
+            return DrawMain.scene.LoadImageToPtr(bmp).Item1;
+        else {
+            ui.AddToLog(tName+ ".GetPtrFromImageData DrawMain.scene = null", MessType.Error);
+            return default;
+        }
     }
     public static void ReloadGameState() {
         ThreadPool.QueueUserWorkItem(new WaitCallback(curr_map.UpdateMap));
@@ -208,8 +213,12 @@ public partial class ui {
 
     public static void AddToLog(string str, MessType _mt = MessType.Ok) {
         log.Add(str, _mt);
+#if DEBUG
+        if(sett.b_debug_native_dll)
+            Console.WriteLine("["+ _mt + "] "+ str);
+#endif
     }
-    #endregion
+#endregion
 
     internal static Settings sett { get; private set; }
     internal static ExpedSett exped_sett { get; private set; }

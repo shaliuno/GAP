@@ -37,7 +37,12 @@ public partial class GameUiElements : Element {
         Debug.Assert(Address != default);
         var data = new guiOffset();
         GetGuiOffsets(Address, ref data);
-        Debug.Assert(data.map_root_ptr != default);
+        Debug.Assert(data.map_root_ptr != default);//alt+f4 on poe window = frbug here
+        if (data.map_root_ptr == default) {
+            ui.AddToLog(tName + "data.map_root_ptr = def\n" +
+                " was the client forcibly disconnected?", MessType.Critical);
+            return;
+        }
         map_root.Tick(data.map_root_ptr, tName);
         if (map_root.children_pointers.Length == 4) {
             large_map.Tick(map_root[0].Address, tName);

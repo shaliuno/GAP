@@ -9,7 +9,7 @@ public partial class AreaInstance {        //
     ConcurrentDictionary<eTypes, ConcurrentDictionary<uint, Entity>> bad_etypes = new();
     public ConcurrentBag<Entity> exped_keys = new();
     public ConcurrentBag<Entity> exped_beams = new();
-    Dictionary<uint, string> id_ifos = new(); //map loading cleare
+    ConcurrentDictionary<uint, string> id_ifos = new(); //map loading cleare
     public Dictionary<string, MapItem> bad_map_items = new();
     public List<Entity> need_check = new();//not processed yet ent 
 

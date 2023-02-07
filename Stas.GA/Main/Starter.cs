@@ -9,7 +9,21 @@ internal class Starter {
         };
       
         AppDomain.CurrentDomain.ProcessExit += new EventHandler(DisposeAllResourceHere);
-        var drawler = new DrawMain();
+        ui.ReloadSett();
+        //ui.sett.b_debug_native_dll = true;
+        if (ui.sett.b_debug_native_dll) {
+            ui.Init();
+            Console.WriteLine("Press Q to exit");
+            while (true) {
+                var k = Console.ReadKey();
+                if (k.Key == ConsoleKey.Q)
+                    break;
+                Thread.Sleep(100);
+            }
+        }
+        else {
+            var drawler = new DrawMain();
+        }
     }
     static void DisposeAllResourceHere(object sender, EventArgs e) {
         //todo: need make dispose for same type - i not sure ui have IDisposable

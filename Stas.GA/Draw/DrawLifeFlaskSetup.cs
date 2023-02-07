@@ -5,32 +5,64 @@ namespace Stas.GA;
 
 partial class DrawMain {
     void DrawLifeFlaskSetup() {
+        //ui.SetDebugPossible(null);
         var flist = ui.flask_keys.Select(x => x.ToString()).ToArray();
 
-        if (ImGui.Checkbox("Life  ", ref ui.sett.b_use_life_flask)) {
-            ui.sett.Save();
+        if (ui.worker != null) {
+            if (ImGui.Checkbox("Life  ", ref ui.worker.b_use_life_flask)) {
+                ui.worker.Save();
+            }
+        }
+        else {
+            if (ImGui.Checkbox("Life  ", ref ui.sett.b_use_life_flask))
+                ui.sett.Save();
         }
         ImGuiExt.ToolTip("Will also use this flask if you left [%] life");
-        var life_flask_key = ui.sett.life_flask_key;
-        if (ui.worker != null)
-            life_flask_key = ui.worker.life_flask_key;
-        var life_index = ui.flask_keys.IndexOf(life_flask_key);
+
         ImGui.SameLine();
         ImGui.SetNextItemWidth(40);
-        if (ImGui.Combo("<=lKey ", ref life_index, flist, flist.Length)) {
-            ui.sett.life_flask_key = ui.flask_keys[life_index];
-            ui.sett.Save();
+        if (ui.worker != null) {
+            var mf_index = ui.flask_keys.IndexOf(ui.worker.life_flask_key);
+            if (ImGui.Combo("Key ", ref mf_index, flist, flist.Length)) {
+                ui.worker.life_flask_key = ui.flask_keys[mf_index];
+                ui.worker.Save();
+            }
         }
+        else {
+            var mf_index = ui.flask_keys.IndexOf(ui.sett.life_flask_key);
+            if (ImGui.Combo("Key ", ref mf_index, flist, flist.Length)) {
+                ui.sett.life_flask_key = ui.flask_keys[mf_index];
+                ui.sett.Save();
+            }
+        }
+        ImGuiExt.ToolTip("The hot button to be used for the mana flask");
+
         ImGui.SetNextItemWidth(60);
         ImGui.SameLine();
-        if (ImGui.SliderInt("<=trigger last %   ", ref ui.sett.trigger_life_left_persent, 5, 80)) {
-            ui.sett.Save();
+        if (ui.worker == null) {
+            if (ImGui.SliderInt("last %   ", ref ui.sett.trigger_life_left_persent, 30, 80)) {
+                ui.sett.Save();
+            }
+        }
+        else {
+            if (ImGui.SliderInt("last %   ", ref ui.worker.min_life_percent, 30, 80)) {
+                ui.worker.Save();
+            }
         }
         ImGuiExt.ToolTip("Set the triggering percentage (default==50)");
 
-
-        ImGuiExt.ToolTip("automatically cast in the presence of danger nearby\n" +
-             "For example, if there is a mod on the map...\n" +
-             "layers cannot regenerate life, mana and ES.");
+        ImGui.SetNextItemWidth(60);
+        ImGui.SameLine();
+        if (ui.worker == null) {
+            if (ImGui.SliderInt("Time(ms) ", ref ui.sett.life_flask_ms, 1000, 4000)) {
+                ui.sett.Save();
+            }
+        }
+        else {
+            if (ImGui.SliderInt("Time(ms) ", ref ui.worker.life_flask_ms, 1000, 4000)) {
+                ui.worker.Save();
+            }
+        }
+        ImGuiExt.ToolTip("Life flask action time");
     }
 }

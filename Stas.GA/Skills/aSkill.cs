@@ -25,7 +25,8 @@ public abstract class aSkill {
     public Keys key { get; protected private set; }
     public int id { get; }
     public int cooldown { get; protected private set; }
-    public int mana_cost { get; protected private set; } = 5;
+    [JsonInclude]
+    public int mana_cost = 5;
     public int cast_time { get; protected private set; }
     public int grange { get; protected private set; } = 6;
     public Skill skill;

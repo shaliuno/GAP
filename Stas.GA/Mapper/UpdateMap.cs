@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace Stas.GA;
 public partial class AreaInstance {
-    Stopwatch sw = new Stopwatch();
+    public bool b_mine { get; private set; } = false;
+     Stopwatch sw = new Stopwatch();
     public IntPtr map_ptr;
     public float progress = 0f;
     public int rows;

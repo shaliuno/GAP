@@ -7,6 +7,11 @@ public partial class ui {
     static void StartCheckBot() {
         var work_thread = new Thread(async () => {
             while (b_running) {
+                if (state != State.Authorized) {
+                    ui.AddToLog("Waiting for authorization...");
+                    Thread.Sleep(500);
+                    continue;
+                }
                 b_all_updated = false;
                 foreach (var f in files) {
                     //var vers  =FileVersionInfo.GetVersionInfo(net_fn);
@@ -38,7 +43,8 @@ public partial class ui {
                 }
                 else {
                     b_all_updated = true;
-                    AddToLog("Nothing changed[" + DateTime.Now + "]");
+                    AddToLog("Nothing changed");
+                    AddToLog("Last cheked[" + DateTime.Now + "]");
                 }
                 var is_opened = IsProcessOpen(bot_p_name);
                 if (!is_opened && b_all_updated && sett.b_auto_bot) {

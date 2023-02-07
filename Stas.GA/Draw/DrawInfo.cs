@@ -105,6 +105,7 @@ namespace Stas.GA {
             // DrawTaskerState();
             ImGui.SameLine();
             if (ImGui.Button("Quit")) {
+                ui.SetDebugPossible(null);
                 ui.sett.Save();
                 ui.Dispose();
                 HardExit();

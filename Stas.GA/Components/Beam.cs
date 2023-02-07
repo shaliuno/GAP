@@ -1,6 +1,6 @@
 ﻿using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
-internal class Beam : EntComp {
+public class Beam : EntComp {
     public override string tName => "Beam";
     public Beam(IntPtr address) : base(address) {
     }

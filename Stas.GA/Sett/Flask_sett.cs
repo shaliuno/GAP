@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Stas.GA;
+﻿namespace Stas.GA;
 
 public partial class Settings : iSett {
     [JsonInclude]
@@ -14,12 +11,16 @@ public partial class Settings : iSett {
     public bool b_use_life_flask = false;
     [JsonInclude]
     public bool b_use_mana_flask = false;
-   
+    [JsonInclude]
+    public int min_life_percent = 55;
     [JsonInclude]
     public int trigger_life_left_persent = 50;
     [JsonInclude]
     public int mana_cast_price = 20;
-   
+    [JsonInclude]
+    public int mana_flask_ms = 7000;
+    [JsonInclude]
+    public int life_flask_ms = 3000;
     [JsonInclude]
     public Keys two_left_flask_key = Keys.Q;
     [JsonInclude]

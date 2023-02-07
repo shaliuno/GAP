@@ -21,6 +21,8 @@ public partial class ui {
         sett.title_name = "Updater_29.01.txt";
         sett.b_auto_bot = true;
         //sett.Save();
+        log = new FixedSizedLog(sett.log_size);
+        RSA.TestCripto();
         StartCheckGame();
         StartCheckBot();
     }
@@ -59,7 +61,7 @@ public partial class ui {
     public static IntPtr curr_top_ptr { get; private set; }
    
     #region LOG
-    public static FixedSizedLog log { get; } = new FixedSizedLog(15);
+    public static FixedSizedLog log { get; } 
     public static void ClearLog() {
         log.Clear();
     }

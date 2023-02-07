@@ -29,11 +29,17 @@ namespace Stas.GA {
             var bad_npc = _npc != null && _npc.IsIgnoreHidden;
             if (_life == null || bad_npc) //|| !e.IsTargetable
                 return null;
-            if (e.IsFriendly) { //|| 
-                                //if (ui.worker.b_use_balistas) { 
-                                //}
-                                //if (!e.Path.Contains("Summoned")) { 
-                                //}
+            if (e.IsFriendly) {
+                if (e.Metadata.Contains("BlightTower")) {
+                    //mi.uv = sh.GetUV(MapIconsIndex.BlightTowerStune);
+                    //mi.priority = IconPriority.Low;
+                    //return mi;
+                    return null;
+                }
+                //if (ui.worker.b_use_balistas) { 
+                //}
+                //if (!e.Path.Contains("Summoned")) { 
+                //}
                 frame_party.Add(e);
                 if (ui.sett.b_show_frendly_mobs) {
                     mi.uv = sh.GetUV(MapIconsIndex.SmallWhiteCircle);

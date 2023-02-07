@@ -38,10 +38,14 @@ namespace Stas.GA {
                 }
                 if (smi.remn != null) {
                     var pval = smi.remn.positive.Sum(p => p.Value);
-                    map_ptr.AddText(pos.Increase(-5, -15), Color.White.ToImgui(), pval.ToString());
+                    var pval_str = pval.ToString(); if (pval_str.Length == 1) pval_str = " " + pval_str;
+                    if (pval == 0) pval_str = "...";
+                    map_ptr.AddText(pos.Increase(-10, -15), Color.White.ToImgui(), pval_str);
 
                     var nval = smi.remn.negative.Sum(p => p.Value);
-                    map_ptr.AddText(pos.Increase(-5, 0), Color.White.ToImgui(), nval.ToString());
+                    var n_val_str = nval.ToString(); if (n_val_str.Length == 1) n_val_str = " " + n_val_str;
+                    if (nval == 0) n_val_str = "...";
+                    map_ptr.AddText(pos.Increase(-10, 0), Color.White.ToImgui(), n_val_str);
                 }
             }
           

@@ -16,6 +16,9 @@ public partial class Entity : RemoteObjectBase {
         if (!GetComp<Render>(out var _)) {
             this.eType = eTypes.Useless;
         }
+        else if (Path.Contains("/Abyss/", StringComparison.Ordinal)) {
+            eType = eTypes.Abyss;
+        }
         else if (Path.StartsWith("Metadata/MiscellaneousObjects/Expedition/", StringComparison.Ordinal)
                     || Path.Contains("Leagues/Expedition", StringComparison.Ordinal)) {
             eType = eTypes.Exped;

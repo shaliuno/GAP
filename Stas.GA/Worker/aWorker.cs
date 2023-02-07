@@ -7,23 +7,25 @@ namespace Stas.GA;
 public abstract class aWorker :iSett{
     #region fields
     [JsonInclude]
-    public bool b_mana_use_auto = false;
-   
-    [JsonInclude]
-    public bool b_use_mana_flask = true;
+    public bool b_use_life_flask = true;
     [JsonInclude]
     public Keys life_flask_key = Keys.E;
     [JsonInclude]
-    public Keys mana_flask_key = Keys.F6;
-    [JsonInclude]
-    public Keys silver_flask_key = Keys.F5;
-
-    [JsonInclude]
-    public int mana_flask_ms = 7000;
-    [JsonInclude]
     public int life_flask_ms = 6000;
     [JsonInclude]
-    public int mim_life_percent = 55;
+    public int min_life_percent = 55;
+
+    [JsonInclude]
+    public bool b_mana_use_auto = false;
+    [JsonInclude]
+    public bool b_use_mana_flask = true;
+    [JsonInclude]
+    public Keys mana_flask_key = Keys.F6;
+    [JsonInclude]
+    public int mana_flask_ms = 7000;
+
+    [JsonInclude]
+    public Keys silver_flask_key = Keys.F5;
     [JsonIgnore]
     protected List<aSkill> all_skills => new List<aSkill>() { 
         main, rb, mb, jump, d3, d4, d5, d6, d7, d8, d9, d0, totem, link, mark};

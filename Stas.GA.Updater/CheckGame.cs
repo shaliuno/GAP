@@ -11,7 +11,11 @@ public partial class ui {
         var poew_thread = new Thread(async () => {
             while (b_running) {
                 try {
-                   
+                    if (state != State.Authorized) {
+                        ui.AddToLog("Waiting for authorization...");
+                        Thread.Sleep(500);
+                        continue;
+                    }
                     curr_top_ptr = EXT.GetForegroundWindow(); // <1 ms
                     game_process = GetProcessByName(poe_p_name);
                     if (game_process == null) {

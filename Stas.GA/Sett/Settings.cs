@@ -1,6 +1,8 @@
 ﻿namespace Stas.GA;
 
 public partial class Settings : iSett {
+    //use for debug same, like native dll
+    public bool b_debug_native_dll { get; set; } = false;
     [JsonInclude]
     public string production_config_path = @"C:\Users\poe\Documents\My Games\Path of Exile\production_Config.ini";
     [JsonInclude]

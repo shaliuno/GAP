@@ -36,16 +36,17 @@ public partial class ui {
 
     public static void InitNative(int pid) {
         //ReloadSett();
-        m = new Memory(pid);    
+        m = new Memory(pid);   
     }
+   
     public static void Init() {
+        int w8_err = 300;
         Icons = new Dictionary<string, MapIconsIndex>(200);
-        foreach (var icon in Enum.GetValues(typeof(MapIconsIndex))) {
+        var icons = Enum.GetValues(typeof(MapIconsIndex));
+        foreach (var icon in icons) {
             Icons[icon.ToString()] = (MapIconsIndex)icon;
         }
        
-        int w8_err = 300;
-        ReloadSett();
         hot_keys = new HotKeysFromGame();
         var elaps = 0; var add_w8 = 5; var max_w8 = 50;
         while (hot_keys.use_bound_skill1.Key == Keys.None) {
@@ -97,7 +98,8 @@ public partial class ui {
                     //todo: temporary dont need a worker
                     tasker.Tick();
                     if (worker == null) {
-                        ui.AddToLog("Frame err: worker need be setup", MessType.Warning);
+                        if(!sett.b_debug_native_dll)
+                            ui.AddToLog("Frame err: worker need be setup", MessType.Warning);
                         Thread.Sleep(w8);
                         continue;
                     }

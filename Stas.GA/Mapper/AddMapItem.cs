@@ -38,6 +38,8 @@ public partial class AreaInstance {
         switch (e.eType) { //order is importand here - > fallow GO
             case eTypes.Exped:
                 return GetExped(e, mi);
+            case eTypes.Abyss:
+                return GetAbyss(e, mi);
             case eTypes.MinimapIcon:
                 return GetIcon(e, mi);
             case eTypes.Portal:
@@ -176,12 +178,11 @@ public partial class AreaInstance {
     }
     ConcurrentBag<Entity> frame_party = new();
     string pa_info(Entity e) {
-        lock (id_ifos) {
-            if (!id_ifos.ContainsKey(e.id)) {
-                var pa = e.Path.Split('/');
-                id_ifos[e.id] = pa[pa.Length - 1];
-            }
-            return id_ifos[e.id];
+        if (!id_ifos.ContainsKey(e.id)) {
+            var pa = e.Path.Split('/');
+            id_ifos[e.id] = pa[pa.Length - 1];
         }
+        return id_ifos[e.id];
+       
     }
 }

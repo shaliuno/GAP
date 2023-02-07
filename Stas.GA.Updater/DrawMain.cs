@@ -15,7 +15,7 @@ partial class DrawMain : Overlay {
     protected override Task Render() {
         if (!ui.b_running)
             return Task.CompletedTask;
-        var isMainMenuExpanded = ImGui.Begin(_title!, ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoFocusOnAppearing);
+        var isMainMenuExpanded = ImGui.Begin(_title!, ImGuiWindowFlags.AlwaysAutoResize  | ImGuiWindowFlags.NoFocusOnAppearing);
         //ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.MenuBar
         if (!isMainMenuExpanded) {
             ImGui.End();

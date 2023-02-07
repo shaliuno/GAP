@@ -82,7 +82,7 @@ public class ExpedSett : iSett {
         mods.Add("Metadata/Terrain/Doodads/Leagues/Expedition/monstermarker_set", 3);
         mods.Add("Metadata/Terrain/Doodads/Leagues/Expedition/elitemarker_set", 3);
     }
-    public override string fname => @"C:\log\exped_settings.sett";
+    public override string fname => @"exped_settings.sett";
     [JsonInclude]
     public bool PhysImmune = true;
     [JsonInclude]
