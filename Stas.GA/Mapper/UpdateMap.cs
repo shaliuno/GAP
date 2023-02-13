@@ -29,8 +29,7 @@ public partial class AreaInstance {
         ui.curr_map.GetTileTgtName();
         ui.LoadQuest();
         ui.area_change_counter.Tick(ui.area_change_counter.Address, "UpdateMap");
-        if (!ui.b_town && !ui.b_home)
-            ui.curr_loaded_files.Load(tName);
+        ui.curr_loaded_files.Load(tName);
         //ui.looter.LoadOldLoot();
     }
     void UpdMapImage() {

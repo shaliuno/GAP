@@ -11,8 +11,11 @@ internal class Starter {
         AppDomain.CurrentDomain.ProcessExit += new EventHandler(DisposeAllResourceHere);
         ui.ReloadSett();
         //ui.sett.b_debug_native_dll = true;
+        //ui.sett.Save();
+#if DEBUG
         if (ui.sett.b_debug_native_dll) {
             ui.Init();
+            Console.WriteLine("In b_debug_native_dll mode you need to run only from VS in Debug mode...");
             Console.WriteLine("Press Q to exit");
             while (true) {
                 var k = Console.ReadKey();
@@ -24,6 +27,9 @@ internal class Starter {
         else {
             var drawler = new DrawMain();
         }
+#else
+        var drawler = new DrawMain();
+#endif      
     }
     static void DisposeAllResourceHere(object sender, EventArgs e) {
         //todo: need make dispose for same type - i not sure ui have IDisposable

@@ -7,12 +7,15 @@ namespace Stas.GA {
 
         public ItemsOnGroundLabelElement(IntPtr ptr):base(ptr) { 
         }
-        internal override void Tick(IntPtr ptr, string from=null) {
-            if (Address == IntPtr.Zero)
+        internal override void Tick(IntPtr ptr, string from = null) {
+            Address = ptr;
+            if (Address == default) {
+                Clear();
                 return;
-
+            }
         }
-        protected override void Clear() { }
+        protected override void Clear() {
+        }
            
         public Element LabelOnHover {
             get {

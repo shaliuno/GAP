@@ -13,13 +13,15 @@ using sh = Stas.GA.SpriteHelper;
 #endregion
 
 namespace Stas.GA {
-    public partial class AreaInstance  {
+    public partial class AreaInstance : RemoteObjectBase {
         MapItem GetMonster(Entity e, MapItem mi) {
-            e.GetComp<ObjectMagicProperties>(out var _omp);
-            var cond_one = e.eType == eTypes.Stage0FIT && _omp.Rarity != Rarity.Unique;
-            if (cond_one) {
-                return null;
+            if (e.GetComp<ObjectMagicProperties>(out var _omp)) {
+                var cond_one = e.eType == eTypes.Stage0FIT && _omp.Rarity != Rarity.Unique;
+                if (cond_one) {
+                    return null;
+                }
             }
+
             if (e.IsHidden) {
                 mi.uv = sh.GetUV(MapIconsIndex.hidden);
                 return mi;
@@ -52,16 +54,21 @@ namespace Stas.GA {
                 if (e.rarity == Rarity.Unique && e.Path.Contains("Metadata/Monsters/Spirit/"))
                     mi.uv = sh.GetUV(MapIconsIndex.Spirit);
 
-                e.Stats?.TryGetValue(GameStat.FrozenInTime, out var FrozenInTime);
-                e.Stats?.TryGetValue(GameStat.MonsterHideMinimapIcon, out var MonsterHideMinimapIcon);
                 e.GetComp<Buffs>(out var buffs);
                 if (buffs != null && buffs.StatusEffects.ContainsKey("proximity_shield_aura")) {
                     //archnemesis_bubble_shield 
                     mi.uv = sh.GetUV(MapIconsIndex.ProximityShield);
                     mi.size = 32;
                 }
+
                 if (_omp != null && _omp.Mods != null) {
-                    if (_omp.Mods.Count > 2) {
+                    if (_omp.Mods.Contains("MonsterModShakariTouched")) {
+                        mi.uv = sh.GetUV(MapIconsIndex.RedBoss);
+                        mi.priority = IconPriority.Critical;
+                        mi.size = 26;
+                        return mi;
+                    }
+                    else if (_omp.Mods.Any(m => m.Contains("BestiaryMod"))) {
                         mi.size = Math.Clamp(mi.size + 4 + (_omp.Mods.Count - 4), 16, 25);
                         mi.priority = IconPriority.VeryHigh;
                         if (e.rarity == Rarity.Normal) {
@@ -77,11 +84,13 @@ namespace Stas.GA {
                             mi.uv = sh.GetUV(MapIconsIndex.BestiaryBoss);
                         }
                     }
+                    if (_omp.Mods.Count > 2) {
+                    }
                     if (_omp.Mods.Any(m => m.Contains("ArchnemesisFrostTouched")))
                         mi.uv = sh.GetUV(MapIconsIndex.frost);
-                    else if(_omp.Mods.Any(m => m.Contains("MonsterArchnemesisVolatileFlameBlood")))
+                    else if (_omp.Mods.Any(m => m.Contains("MonsterArchnemesisVolatileFlameBlood")))
                         mi.uv = sh.GetUV(MapIconsIndex.FlameBlood);
-                    else if(_omp.Mods.Any(m => m.Contains("HeraldOfTheObelisk") || m.Contains("LivingCrystals")))
+                    else if (_omp.Mods.Any(m => m.Contains("HeraldOfTheObelisk") || m.Contains("LivingCrystals")))
                         mi.uv = sh.GetUV(MapIconsIndex.Heralding_minions);
                     else if (_omp.Mods.Contains("FlameWalker"))
                         mi.uv = sh.GetUV(MapIconsIndex.BestiaryBoss);

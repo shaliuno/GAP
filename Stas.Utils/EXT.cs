@@ -263,6 +263,8 @@ public static partial class EXT {
         return (Math.Round(f, round)).ToString();
     }
     public static string ToRoundStr(this float f, int round = 3) {
+        if (f == 0f)
+            return "Zerro";
         return (Math.Round(f, round)).ToString();
     }
 

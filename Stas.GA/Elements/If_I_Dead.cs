@@ -9,6 +9,7 @@ internal class If_I_Dead : Element {
     public Element res_at_checkpoint { get; private set; } = new Element("res_at_checkpoint");
 
     internal override void Tick(IntPtr ptr, string from=null) {
+        base.Tick(ptr, from);
         if (Address == IntPtr.Zero)
             return;
         res_in_town = GetTextElem_by_Str("resurrect in town");
