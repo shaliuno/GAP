@@ -2,6 +2,7 @@
 
 public class ChatBoxElem : Element {
     internal ChatBoxElem() : base("ChatBoxElem") {
+        b_dynamic_childrens = true;
     }
     internal override void Tick(nint ptr = 0, string from = null) {
         base.Tick(ptr, from);

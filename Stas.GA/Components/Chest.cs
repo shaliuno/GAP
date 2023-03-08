@@ -1,16 +1,13 @@
-﻿using System;
+﻿
 using ImGuiNET;
-
-
 namespace Stas.GA;
 
 /// <summary>
 ///     The <see cref="Chest" /> component in the entity.
 /// </summary>
 public class Chest : EntComp {
-    public override string tName => "Chest";
-
-    public Chest(IntPtr address) : base(address) { 
+    public Chest(IntPtr address) : base(address) {
+        _tname = "Chest";
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

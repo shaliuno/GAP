@@ -25,7 +25,7 @@ namespace Stas.GA
         [FieldOffset(0x458)] public IntPtr ui_passive_point_available;
         [FieldOffset(0x2C8)] public IntPtr ui_flask_root;
         [FieldOffset(0x2D0)] public IntPtr ui_xp_bar;
-        //[FieldOffset(0x9A8)] public IntPtr ui_lake_map; 
+        [FieldOffset(0x320)] public IntPtr passives_tree;
         [FieldOffset(0x9C0)] public IntPtr ui_ritual_rewards;
         [FieldOffset(0xAC8)] public IntPtr incomin_user_request; 
         [FieldOffset(0x710)] public IntPtr NpcDialog;              

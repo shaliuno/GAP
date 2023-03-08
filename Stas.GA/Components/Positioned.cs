@@ -7,9 +7,10 @@ namespace Stas.GA;
 ///     The <see cref="Positioned" /> component in the entity.
 /// </summary>
 public class Positioned : EntComp {
-    public override string tName => "Positioned";
-
-    public Positioned(IntPtr address)  : base(address) {
+    public Positioned(IntPtr ptr)  : base(ptr) {
+        _tname = "Positioned";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
    
     internal override void Tick(IntPtr ptr, string from=null) {

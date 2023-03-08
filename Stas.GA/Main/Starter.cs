@@ -4,36 +4,23 @@ internal class Starter {
     public static void Main() {
         AppDomain.CurrentDomain.UnhandledException += (sender, exceptionArgs) => {
             var errorText = "Program exited with message:\n " + exceptionArgs.ExceptionObject;
-            File.AppendAllText("Error.log", $"{DateTime.Now:g} {errorText}\r\n{new string('-', 30)}\r\n");
+            ui.AppendToLog(errorText);
             Environment.Exit(1);
         };
       
         AppDomain.CurrentDomain.ProcessExit += new EventHandler(DisposeAllResourceHere);
-        ui.ReloadSett();
-        //ui.sett.b_debug_native_dll = true;
-        //ui.sett.Save();
-#if DEBUG
-        if (ui.sett.b_debug_native_dll) {
-            ui.Init();
-            Console.WriteLine("In b_debug_native_dll mode you need to run only from VS in Debug mode...");
-            Console.WriteLine("Press Q to exit");
-            while (true) {
-                var k = Console.ReadKey();
-                if (k.Key == ConsoleKey.Q)
-                    break;
-                Thread.Sleep(100);
+        ui.Init();
+        var title_name = ui.sett.title_name + " - Notepad";
+        Run();
+        async void Run() {
+            using (ui.draw_main = new DrawMain(title_name)) {
+                await ui.draw_main.Run();
             }
         }
-        else {
-            var drawler = new DrawMain();
-        }
-#else
-        var drawler = new DrawMain();
-#endif      
     }
+  
     static void DisposeAllResourceHere(object sender, EventArgs e) {
         //todo: need make dispose for same type - i not sure ui have IDisposable
         // all Base need call: OnGameClose  
-        DrawMain.scene?.Dispose();
     }
 }

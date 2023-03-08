@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
@@ -6,21 +7,26 @@ public partial class Element : RemoteObjectBase {
     long _last_ch_hash;
     List<Element> _childrens = new();
     public List<Element> children = new();
-    public IntPtr[] children_pointers { get; private set; }
-    IntPtr first_children_offset = 0x30;
-    public void GetChildren(string from) {
-        var ch_ptr = ui.m.Read<StdVector>(Address + first_children_offset);
-        if (ch_ptr.First == 0 || ch_ptr.End == 0 || chld_count < 0) {
+    public IntPtr[] children_pointers { get; private set; } = Array.Empty<IntPtr>();
+    /// <summary>
+    /// GetParentChain dont use parent.Tick (stack overflow here)
+    /// </summary>
+    public bool b_dynamic_childrens { get; set; } = false;
+    public void GetChildren(string from, bool b_dynamic = false) {
+        var ch_ptr = ui.m.Read<StdVector>(Address + ui.first_children_offset);
+        if (ch_ptr.Size == 0) {
             return;
         }
         var curr_hash = ch_ptr.GetHashCode();
-        if (curr_hash == _last_ch_hash)
-            return;
-
+        if (!b_dynamic_childrens && !b_dynamic) { //&& ui.test_elem==null
+            if (curr_hash == _last_ch_hash)
+                return;
+        }
+        else {
+            children_pointers = ui.m.ReadStdVector<IntPtr>(ch_ptr);
+        }
         _childrens.Clear();
-        children_pointers = ui.m.ReadStdVector<IntPtr>(ch_ptr);
         var chi = 0;
-
         foreach (var _ptr in children_pointers) {
             var ch = new Element(_ptr, tName + ".child[" + chi + "]");
             ch.Tick(ch.Address, from);
@@ -59,7 +65,7 @@ public partial class Element : RemoteObjectBase {
                 return null;
             }
 
-            if (curr_elem.Address == IntPtr.Zero) {
+            if (curr_elem.Address == default) {
                 ui.AddToLog($"{tName} with index {index} has address = 0. Indices: " +
                     $"{BuildErrorString(indexNumber)}", MessType.Error);
                 return null;
@@ -68,6 +74,7 @@ public partial class Element : RemoteObjectBase {
 
         return curr_elem;
     }
+
     public Element GetTextElem_with_Str(string str, bool only_vis = true, bool ignore_case = true) {
         if (only_vis && !this.IsVisible)
             return null;
@@ -83,10 +90,12 @@ public partial class Element : RemoteObjectBase {
             }
         }
 
-        GetChildren("GetTextElem_with_Str");
-        foreach (var ch in children) {
-            var element = ch.GetTextElem_with_Str(str);
-            if (element != null) return element;
+        this.GetChildren("GetTextElem_with_Str");
+        for (int i = 0; i < children.Count; i++) {
+            var ch = children[i];
+            var element = ch.GetTextElem_by_Str(str);
+            if (element != null)
+                return element;
         }
         return null;
     }

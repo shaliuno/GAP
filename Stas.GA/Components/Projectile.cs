@@ -1,8 +1,10 @@
 ﻿namespace Stas.GA;
 internal class Projectile : EntComp {
-    public override string tName => "Positioned";
 
     public Projectile(IntPtr ptr) : base(ptr) {
+        _tname = "Positioned";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
    
     internal override void Tick(IntPtr ptr, string from=null) {

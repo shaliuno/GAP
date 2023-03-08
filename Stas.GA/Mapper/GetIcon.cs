@@ -117,7 +117,7 @@ public partial class AreaInstance {
                 }
                 else if (name.Contains("Jewellery") || e.Path.Contains("Jewellery") || e.Path.Contains("Jewels")
                     || name.Contains("Trinkets") || e.Path.Contains("Trinkets")) {
-                    mi.uv = sh.GetUV(MapIconsIndex.Ring);
+                    mi.uv = sh.GetUV(MapIconsIndex.RewardJewelry);
                 }
 
                 else if (name.Contains("Currency") || e.Path.Contains("Currency")) {

@@ -4,8 +4,8 @@ using System;
 
 namespace Stas.GA {
     public class LabelOnGround : RemoteObjectBase {
-        public override string tName => "LabelOnGround";
         internal LabelOnGround(IntPtr address) : base(address) {
+            _tname = "LabelOnGround";
         }
         IntPtr labelInfo = IntPtr.Zero;//for debug only
         internal override void Tick(IntPtr ptr, string from=null) {

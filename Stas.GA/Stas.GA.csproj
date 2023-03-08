@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -11,6 +11,7 @@
 		<AssemblyName>Notepad</AssemblyName>
 		<ApplicationIcon>notepad.ico</ApplicationIcon>
 		<NoWarn>SYSLIB0006,CS8981, CS0219, CA1416, CS0414, CS0169, CS0649</NoWarn>
+		<StartupObject>Stas.GA.Starter</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -60,17 +61,20 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="ImGui.NET" Version="1.89.2" />
+		<PackageReference Include="ImGui.NET" Version="1.89.4" />
 		<PackageReference Include="NAudio" Version="2.1.0" />
 		<PackageReference Include="ProcessMemoryUtilities.Net" Version="1.3.4" />
 		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.24" />
 		<PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+		<PackageReference Include="Vortice.D3DCompiler" Version="2.4.1-beta" />
+		<PackageReference Include="Vortice.Direct3D11" Version="2.4.1-beta" />
+		<PackageReference Include="Vortice.DirectX" Version="2.4.1-beta" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Stas.ImGuiNet\Stas.ImGuiNet.csproj" />
+		<ProjectReference Include="..\ClickableTransparentOverlay\ClickableTransparentOverlay\ClickableTransparentOverlay.csproj" />
 		<ProjectReference Include="..\Stas.Utils\Stas.Utils.csproj" />
 	</ItemGroup>
 

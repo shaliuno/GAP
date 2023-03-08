@@ -191,7 +191,7 @@ public class Session : IEquatable<Session> {
         IfClose?.Invoke(key);
     }
 
-    public bool Equals(Session? other) {
+    public bool Equals(Session other) {
         if (!b_pull_ok)
             return false;
         return other != null && other.tcp.GetHashCode() == this.tcp.GetHashCode();

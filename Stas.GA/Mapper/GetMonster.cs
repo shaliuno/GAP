@@ -13,7 +13,7 @@ using sh = Stas.GA.SpriteHelper;
 #endregion
 
 namespace Stas.GA {
-    public partial class AreaInstance : RemoteObjectBase {
+    public partial class AreaInstance {
         MapItem GetMonster(Entity e, MapItem mi) {
             if (e.GetComp<ObjectMagicProperties>(out var _omp)) {
                 var cond_one = e.eType == eTypes.Stage0FIT && _omp.Rarity != Rarity.Unique;

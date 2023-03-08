@@ -1,9 +1,8 @@
 ﻿namespace Stas.GA;
 
 public class GrantedEffectsPerLevel : RemoteObjectBase {
-    public override string tName => "GrantedEffectsPerLevel";
-
     public GrantedEffectsPerLevel(IntPtr address) : base(address) {
+        _tname = "GrantedEffectsPerLevel";
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

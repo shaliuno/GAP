@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ImGuiNET;
 using System;
+using System.IO;
 
 namespace Stas.GA; 
 
@@ -111,11 +112,18 @@ public class DisappearingEntity {
 
     private void UpdateActivation(IReadOnlyList<int> environments) {
         this.isActivated = false;
-        foreach (var envKey in environments) {
-            if (envKey >= this.envKeyMin && envKey <= this.envKeyMax) {
-                this.isActivated = true;
-                break;
+        try {
+            foreach (var envKey in environments) {
+                if (envKey >= this.envKeyMin && envKey <= this.envKeyMax) {
+                    this.isActivated = true;
+                    break;
+                }
             }
+        }
+        catch (Exception ex) {
+            if(ui.sett.b_develop)
+                ui.AddToLog(tName + ".UpdateActivation an error...", MessType.Error);
+            ui.AppendToLog(ex.StackTrace);    
         }
     }
     public string tName = "dEnt";

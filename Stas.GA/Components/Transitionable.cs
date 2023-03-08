@@ -1,8 +1,9 @@
 ﻿namespace Stas.GA;
 internal class Transitionable : EntComp {
-    public override string tName => "Transitionable";
-
     public Transitionable(IntPtr ptr) : base(ptr) {
+        _tname = "Transitionable";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

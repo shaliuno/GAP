@@ -7,7 +7,6 @@ namespace Stas.GA;
 ///     and get the items available in them.
 /// </summary>
 public class Inventory : RemoteObjectBase {
-    public override string tName => "Inventory";
 
     /// <summary>
     ///     This array stores items addresses in a given inventory.
@@ -22,7 +21,7 @@ public class Inventory : RemoteObjectBase {
     /// <param name="address">address of the remote memory object.</param>
     /// <param name="name">name of the inventory for displaying purposes.</param>
     internal Inventory(IntPtr address, string name) : base(address, name) {
-
+        _tname = "Inventory";
     }
     internal override void Tick(IntPtr ptr, string from) {
         Address = ptr;

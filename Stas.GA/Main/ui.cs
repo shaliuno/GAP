@@ -4,11 +4,13 @@ using Stas.GA.Main;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 public partial class ui {
+    public static DrawMain draw_main;
     public static ServerData server_data => curr_map.server_data;
     static string tName = "ui";
 
@@ -28,14 +30,20 @@ public partial class ui {
     /// <summary>
     /// Use only for a certain place and always remove it from production
     /// </summary>
-    /// <param name="act"></param>
-    public static void SetDebugPossible(Action act) {
-#if DEBUG
-        DrawMain.scene.sdl_window.SetOverlayClickable(false);
-        //Thread.Sleep(10);
-        //Debugger.Break();
-        act?.Invoke();
-#endif
+    public static void SetDebugPossible() {
+        ui.draw_main.SetOverlayClickable(false, false);
+        Thread.Sleep(100);
+        ////var b_vs_top = ui.draw_main.VS_ptr == EXT.GetForegroundWindow();
+        var elaps = 0;
+        var one_tick = 1000;
+        while (b_imgui_top) {
+            if (ui.b_alt)
+                break;
+            EXT.SetWindowToTop(ui.draw_main.VS_ptr);
+            Thread.Sleep(one_tick);
+            elaps += one_tick;
+            ui.AddToLog("elaps=[" + elaps + "]");
+        }
     }
     /// <summary>
     /// its temporary only method who wold make alot of exeption, 
@@ -58,25 +66,15 @@ public partial class ui {
     /// <summary>
     /// disables the overlay's ability to lock the cursor - for further debugging
     /// </summary>
-    public static bool SetTop(IntPtr ptr, int one_w8=1) {
+    public static bool SetTop(IntPtr ptr, int one_w8=50, int max_w8=1000) {
         Debug.Assert(ptr != IntPtr.Zero);
-        if (ptr == game_ptr) {
-            DrawMain.scene.sdl_window.SetOverlayClickable(false);
+        //if (ptr != game_ptr && ptr!=imgui_ptr) {
+        //    DrawMain.scene.sdl_window.SetOverlayClickable(false);
+        //}
+        if (!EXT.SetWindowToTop(ptr)) {
+            ui.AddToLog(tName + ".SetTop Can't set top for "+ max_w8+"ms...", MessType.Error);
+            return false;
         }
-        int try_count = 1;
-        var max_try = 500 / one_w8;
-        IntPtr curr_ptr() => EXT.GetForegroundWindow();
-        while (curr_ptr() != ptr) {
-            EXT.SetWindowToTop(ptr);
-            Thread.Sleep(one_w8);
-            try_count += 1;
-            AddToLog("Try set top...[" + try_count + "]", MessType.Warning);
-            if (try_count > max_try) {//one sec
-                AddToLog("Try set top for", MessType.Error);
-                return false;
-            }
-        }
-        //AddToLog("SetTop was OK");
         return true;
     }
     public static int curr_life_percent {
@@ -98,7 +96,7 @@ public partial class ui {
     public static int min_new_skill_id { get; set; } = -1;
     public static Element test_elem;
     static public List<RemoteObjectBase> need_upd_per_frame = new List<RemoteObjectBase>();
-    public static uint frame_count { get; private set; }
+    public static uint curr_frame { get; private set; }
     public static SoundPlayer sound_player = new SoundPlayer();
     public static UdpSound udp_sound;
     public static PoeNinja ninja = new PoeNinja();
@@ -149,6 +147,20 @@ public partial class ui {
             return curr_world.world_area.Name; //name
         }
     }
+    //TODO need make it for check using Flare
+    public static bool b_mine {
+        get {
+            if (curr_map_name.StartsWith("Azurite Mine")) {
+                return true;
+                //if (curr_role != Role.Master) {
+                //    //bi.flares = gui.
+                //}
+            }
+            else {
+                return false;
+            }
+        }
+    }
     public static aWorker worker { get; private set; }
     public static gState curr_state => states.curr_gState;
     public static Role curr_role { get; }
@@ -165,12 +177,11 @@ public partial class ui {
     public static float aura_gdist => 55f;
   
     public static Camera camera => curr_world.camera;
-    public static unsafe IntPtr GetPtrFromImageData(Bitmap bmp) {
-        if (DrawMain.scene != null)
-            return DrawMain.scene.LoadImageToPtr(bmp).Item1;
-        else {
-            ui.AddToLog(tName+ ".GetPtrFromImageData DrawMain.scene = null", MessType.Error);
-            return default;
+    public static void AppendToLog(string stack_trace) {
+        try {
+            File.AppendAllText(sett.log_fname, $"{DateTime.Now:g} {stack_trace}\r\n{new string('-', 30)}\r\n");
+        }
+        catch (Exception) {
         }
     }
     public static void ReloadGameState() {

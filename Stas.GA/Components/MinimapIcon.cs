@@ -4,9 +4,8 @@ namespace Stas.GA;
 ///     The <see cref="MinimapIcon" /> component in the entity.
 /// </summary>
 public class MinimapIcon : EntComp {
-    public override string tName => "MinimapIcon";
-
-    public MinimapIcon(IntPtr address) : base(address) { 
+    public MinimapIcon(IntPtr address) : base(address) {
+        _tname = "MinimapIcon";
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

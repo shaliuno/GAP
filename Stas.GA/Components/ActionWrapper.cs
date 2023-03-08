@@ -2,8 +2,8 @@
 
 namespace Stas.GA;
 public class ActionWrapper : EntComp {
-    public override string tName => "ActionWrapper";
     public ActionWrapper(IntPtr address, Actor _actor) : base(address) {
+        _tname = "ActionWrapper";
         actor = _actor;
     }
 

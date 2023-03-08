@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Stas.Utils;
+using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
@@ -15,6 +17,7 @@ public partial class GameUiElements : Element {
     Thread worker;
     public SafeScreen safe_screen;
     internal GameUiElements()   : base("gui") {
+        b_dynamic_childrens = true;
         worker = new Thread(() => {
             while (ui.b_running) {
                 if (Address == default || ui.curr_state != gState.InGameState) {
@@ -52,8 +55,7 @@ public partial class GameUiElements : Element {
         KiracMission.Tick(data.KiracMission, tName);
         open_right_panel.Tick(data.open_right_panel, tName);
         open_left_panel.Tick(data.open_left_panel, tName);
-        if (children_pointers.Length > 25)
-            passives_tree.Tick(children_pointers[23], tName);
+        passives_tree.Tick(data.passives_tree, tName);
         NpcDialog.Tick(data.NpcDialog, tName); //wromg insade not upd now
         LeagueNpcDialog.Tick(data.LeagueNpcDialog, tName);
         BetrayalWindow.Tick(data.BetrayalWindow, tName);
@@ -65,7 +67,6 @@ public partial class GameUiElements : Element {
         world_map.Tick(data.WorldMap, tName);
         stash_element.Tick(data.StashElement, tName);
         QuestRewardWindow.Tick(data.QuestRewardWindow, tName);
-        labels_on_ground_elem.Tick(data.itemsOnGroundLabelRoot);
         ultimatum.Tick(data.UltimatumProgressPanel, tName);
         incomin_user_request.Tick(data.incomin_user_request, tName);
         delve_darkness_elem.Tick(data.ui_debuf_panell, tName);
@@ -81,10 +82,26 @@ public partial class GameUiElements : Element {
         MyBuffPanel.Tick(data.ui_buff_panel, tName);
         party_panel.Tick(data.party_panel, tName);
         GetEsc();
-        ExpedPlacement.Tick(data.ExpedPlacement, tName);
-        Exped_selector = ExpedPlacement.GetChildFromIndices(0, 1);
+        //ExpedPlacement.Tick(data.ExpedPlacement, tName);
+        //Exped_selector = ExpedPlacement.GetChildFromIndices(0, 1);
         //GetPlayerInvetory();
 
+        if (!ui.sett.b_use_gh_map)
+            need_check_vis["large_map"] = large_map;
+        else if (need_check_vis.ContainsKey("large_map"))
+            need_check_vis.Remove("large_map");
+        need_check_vis["map_devise"] = map_devise;
+        need_check_vis["KiracMission"] = KiracMission;
+        need_check_vis["open_left_panel"] = open_left_panel;
+        need_check_vis["open_right_panel"] = open_right_panel;
+        need_check_vis["passives_tree"] = passives_tree;
+        need_check_vis["NpcDialog"] = NpcDialog;
+        need_check_vis["LeagueNpcDialog"] = LeagueNpcDialog;
+        need_check_vis["BetrayalWindow"] = BetrayalWindow;
+        need_check_vis["AtlasPanel"] = AtlasPanel;
+        need_check_vis["AtlasSkillPanel"] = AtlasSkillPanel;
+        need_check_vis["DelveWindow"] = DelveWindow;
+        need_check_vis["TempleOfAtzoatl"] = TempleOfAtzoatl;
     }
     internal override void Tick(IntPtr ptr, string from) {
         Address = ptr;
@@ -95,7 +112,6 @@ public partial class GameUiElements : Element {
     }
     protected override void Clear() {
         base.Clear();
-        ui.elements.Clear();
         esc_ptr = default;
         pi_ptr = default;
         map_root.Tick(default, "Clear");
@@ -145,9 +161,6 @@ public partial class GameUiElements : Element {
     internal DelveDarknessElem delve_darkness_elem { get; } = new DelveDarknessElem();
     internal ModalDialog modal_dialog { get; } = new ModalDialog() ;
     internal IncomingUserRequest incomin_user_request { get; } = new IncomingUserRequest();
-    internal IList<LabelOnGround> ItemsOnGroundLabels => labels_on_ground_elem.LabelsOnGround;
-    internal IList<LabelOnGround> ItemsOnGroundLabelsVisible => labels_on_ground_elem.LabelsOnGround.Where(x => x.Address != IntPtr.Zero && x.IsVisible).ToList();
-    internal ItemsOnGroundLabelElement labels_on_ground_elem { get; } = new ItemsOnGroundLabelElement(IntPtr.Zero);
     internal ChatBoxElem chat_box_elem { get; } = new ChatBoxElem();
     internal SkillBarElement SkillBar { get; } = new SkillBarElement();
     internal PartyPanel party_panel { get; } = new PartyPanel();

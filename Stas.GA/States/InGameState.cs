@@ -8,10 +8,9 @@ namespace Stas.GA;
 ///    [2] ui.states.ingame_state 
 /// </summary>
 public class InGameState : RemoteObjectBase {
-    public override string tName => "InGameState";
 
     internal InGameState(IntPtr address) : base(address) {
-     
+        _tname = "InGameState";
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

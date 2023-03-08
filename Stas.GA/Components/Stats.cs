@@ -3,10 +3,10 @@
 /// WIP need updame 
 /// </summary>
 internal class Stats : EntComp {
-    public override string tName => "Stats";
-
-    public Stats(IntPtr address) : base(address) {
-
+    public Stats(IntPtr ptr) : base(ptr) {
+        _tname = "Stats";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     int last_hash = 0;
     DateTime next_get = DateTime.Now;

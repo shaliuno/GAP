@@ -153,7 +153,7 @@ public partial class ui {
                 return game_process == null || game_process.HasExited 
                     || game_process.MainWindowHandle.ToInt64() <= 0x00;
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 ui.AddToLog("b_bad_process err: game closed?", MessType.Critical);
                 return true;
             }

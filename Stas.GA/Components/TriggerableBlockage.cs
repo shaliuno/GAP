@@ -7,8 +7,10 @@ namespace Stas.GA;
 ///     The <see cref="TriggerableBlockage" /> component in the entity.
 /// </summary>
 public class TriggerableBlockage : EntComp {
-    public override string tName => "TriggerableBlockage";
-    public TriggerableBlockage(IntPtr address): base(address) {
+    public TriggerableBlockage(IntPtr ptr) : base(ptr) {
+        _tname = "TriggerableBlockage";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

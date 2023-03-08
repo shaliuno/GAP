@@ -4,7 +4,7 @@ using System.Numerics;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
-public partial class AreaInstance : RemoteObjectBase {
+public partial class AreaInstance {
     private Dictionary<string, List<V2>> GetTgtFileData() {
         var tileData = ui.m.ReadStdVector<TileStructure>(this.terr_meta_data.TileDetailsPtr);
         var ret = new Dictionary<string, List<V2>>();

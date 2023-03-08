@@ -2,8 +2,9 @@
 namespace Stas.GA;
 
 public class Actor : EntComp {
-    public override string tName => "Actor";
+   
     public Actor(IntPtr address) : base(address) {
+        _tname = "Actor";
     }
     DateTime next_upd = DateTime.Now;
     DateTime next_totems_upd = DateTime.Now;

@@ -9,13 +9,12 @@ namespace Stas.GA;
 /// </summary>
 [CodeAtt("must be updated after area changed")]
 public class LoadedFiles : RemoteObjectBase {
-    public override string tName => "LoadedFiles";
     string searchText = string.Empty;
     string[] searchTextSplit = Array.Empty<string>();
 
     internal LoadedFiles(IntPtr ptr) : base(ptr) {
+        _tname = "LoadedFiles";
         Debug.Assert(Address != default);
-
     }
     uint last_map_hash = 0;
     public bool b_ready { get; private set; }

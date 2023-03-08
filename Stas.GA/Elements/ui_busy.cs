@@ -16,7 +16,7 @@ public partial class GameUiElements : Element {
 
     bool _bbi;
     public string b_busy_info { get; private set; }
-    List<Element> need_check_vis = new();
+    Dictionary<string, Element> need_check_vis = new();
     StringBuilder sb = new StringBuilder();
     object locker = new object();
     /// <summary>
@@ -24,24 +24,25 @@ public partial class GameUiElements : Element {
     /// </summary>
     public bool b_busy {
         get {
-            lock (locker) {
+            _bbi = false;
+            lock (locker) {// we need lock sb from multy thread reading
                 sb.Clear();
-                _bbi = false;
-                foreach (var e in need_check_vis) {
+                foreach (var e in need_check_vis.Values) {
                     if (e.IsValid) {
-                        if (e.IsVisible)
+                        if (e.IsVisible) {
                             _bbi = true;
-                        sb.AppendLine(e.tName + "=[" + e.IsVisible + "]");
+                            sb.AppendLine(e.tName + "=[true]");
+                            break;
+                        }
+                        else
+                            sb.AppendLine(e.tName + "=[false]");
                     }
                     else
                         sb.AppendLine(e.tName + " NOT valid");
                 }
-                b_busy_info = sb.ToString() ;
+                b_busy_info = sb.ToString();
             }
             return _bbi;
         }
-    }
-    public void AddToNeedCheck(List<Element> curr) {
-        need_check_vis = curr;
     }
 }

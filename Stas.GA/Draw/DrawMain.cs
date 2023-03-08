@@ -1,43 +1,37 @@
-﻿using ImGuiNET;
-using Stas.ImGuiNet;
-
+﻿using ClickableTransparentOverlay;
+using ImGuiNET;
 using System.IO;
 using System.Reflection;
 using System.Text;
 namespace Stas.GA;
-public partial class DrawMain {
+public partial class DrawMain : Overlay {
     public IntPtr icons;
     public string title_name { get; }
-    public static SimpleImGuiScene scene;
     public static bool b_ready = false;
-    public DrawMain() {
-        ui.Init();
-        title_name = ui.sett.title_name + " - Notepad";
-        var exe_dir = Assembly.GetExecutingAssembly().Location;
-        var dir = Path.GetDirectoryName(exe_dir);
-        var fname = Path.Combine(dir, ui.sett.icons_fname);
-        scene = SimpleImGuiScene.CreateOverlay(title_name, ui.log);
-        icons = scene.LoadImageToPtr(fname).Item1;
-        scene.sdl_window.SetOverlayClickable(false);
-        b_ready = true;
-
-        //scene.OnBuildUI += ImGui.ShowDemoWindow;
-        scene.OnBuildUI += Draw;
-        scene.Run();
+    public IntPtr VS_ptr;
+    public DrawMain(string title) : base(title, true) {
+        VS_ptr = new IntPtr(132050);
     }
+    protected override Task PostInitialized() {
+        AddOrGetImagePointer(ui.sett.icons_fname, true, out var p, out var _, out var _);
+        icons = p;
+        b_ready = true;
+        return Task.CompletedTask;
+    }
+
     ImDrawListPtr map_ptr;
     StringBuilder sp_warn = new StringBuilder();
     SW sw_main = new SW("Draw Map:");
     int fi = 0;
-    public void Draw() {
+    bool b_clickable = false;
+    protected override void Render() {
         var b_top = ui.b_game_top || ui.b_imgui_top;
-        var b_only_alt = ui.b_alt && !ui.b_shift;
         var test_ui_elem = ui.test_elem != null && ui.sett.b_gui_debug_on_top && !ui.b_alt;
-        if (test_ui_elem || (b_top && ui.b_alt_shift && !b_only_alt) || (ui.b_ga_menu_top && !b_only_alt)) { //  &&
-            scene.sdl_window.SetOverlayClickable(true);
+        if (test_ui_elem || ui.b_alt_shift) { //  &&
+            b_clickable = true;
         }
         else {
-            scene.sdl_window.SetOverlayClickable(false);
+            b_clickable = false;
         }
         if (ui.b_vs) {
             return;
@@ -62,6 +56,5 @@ public partial class DrawMain {
         ui.warning = sp_warn.ToString();
         if ((on_top && !ui.b_busy) || ui.b_show_info_over)
             DrawInfo();
-
     }
 }

@@ -107,7 +107,11 @@ public partial class Looter:IDisposable {
         loot_items.Clear();
         bad_labels.Clear();
     }
-
+    /// <summary>
+    /// load loot items after reenter on map? like load visited
+    /// </summary>
+    public void LoadOldLoot() {
+    }
     public void Dispose() {
        
     }

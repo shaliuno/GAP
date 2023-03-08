@@ -1,13 +1,14 @@
 ﻿namespace Stas.GA;
 public class ItemDPB : RemoteObjectBase {
-    public override string tName => "ItemDPB";
     int _localId;
 
-    public ItemDPB(IntPtr ptr, bool hasInventoryLocation,  Vector2i locationBottomRight, Vector2i locationTopLeft):base(ptr) {
-        this.LocationBottomRight = locationBottomRight;
-        this.LocationTopLeft = locationTopLeft;
-        this.HasInventoryLocation = hasInventoryLocation;
-        this._localId =ui.m.Read<int>(Address + 2920L); //7733358
+    public ItemDPB(IntPtr ptr, bool hasInventoryLocation, 
+        Vector2i locationBottomRight, Vector2i locationTopLeft):base(ptr) {
+        _tname = "ItemDPB";
+        LocationBottomRight = locationBottomRight;
+        LocationTopLeft = locationTopLeft;
+        HasInventoryLocation = hasInventoryLocation;
+        _localId =ui.m.Read<int>(Address + 2920L); //7733358
     }
 
     public bool IsValid {

@@ -24,7 +24,7 @@ public class FixedSizedLog : ConcurrentQueue<Mess> {
     }
     public new void Clear() {
         lock (locker) {
-            Mess? outObj;
+            Mess outObj;
             while (base.TryDequeue(out outObj)) {
                 // do nothing
             }

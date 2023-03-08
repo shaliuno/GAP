@@ -7,8 +7,6 @@ using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 public partial class AreaInstance  {
-    public override string tName => "AreaInstance";
-
     internal SW sw_ent_upd = new SW("Ent upd:");
     void UpdateEntities(StdMap ePtr, bool addToCache = true) {
         FrameClear();
@@ -74,6 +72,10 @@ public partial class AreaInstance  {
         GetBlight();
         CalcExped();
         GetParty();
+        if (ui.sett.role != Role.Master && ui.bi != null) {
+            var tc = transit_close;
+            ui.bi.b_portal_close = (tc.Count > 0) ? true : false;
+        }
         danger = curr_danger;
         UpdMapTasks();//insded iTasks = frame_i_tasks;
         triggers = new ConcurrentBag<Cell>(frame_trigger);//рисуются отдельно
@@ -127,8 +129,9 @@ public partial class AreaInstance  {
                 var e = kv.Value;
                 var so_faar = e.gdist_to_me > ui.sett.max_entyty_valid_gdistance;
                 var is_dead = e.eType == eTypes.Monster && e.IsDead;
-                if (!e.IsValid || so_faar || is_dead) { //dont delete misk etc for prevent remake it
-                    var done = AwakeEntities.TryRemove(kv.Key, out _);
+                if (!e.IsValid || so_faar || is_dead) {
+                    var done = data.TryRemove(kv.Key, out _);
+                    iTasks = new(iTasks.Where(t => t.id != e.id));
                     if (!done) {
                         ui.AddToLog("cant delete ent from cash", MessType.Error);
                     }
@@ -150,6 +153,8 @@ public partial class AreaInstance  {
         if (ui.b_contrl || ui.b_alt) {//try pick debug entyty from last draw list
             if (frame_di == null) {
                 foreach (var mi in static_items.Values) {
+                    if (mi.ent == null) //not valid jet
+                        continue;
                     var _cd = mi.gpos.GetDistance(ui.MapPixelToGP);
                     if (_cd < 2) {
                         frame_di = mi;

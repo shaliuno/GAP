@@ -1,10 +1,12 @@
-﻿using V2 = System.Numerics.Vector2;
+﻿using System.Net;
+using V2 = System.Numerics.Vector2;
 namespace Stas.GA; 
 
 public class Pathfinding : EntComp {
-    public override string tName => "Pathfinding";
-
     public Pathfinding(IntPtr ptr):base(ptr) {
+        _tname = "Pathfinding";
+        if (Address != default)
+            Tick(Address, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

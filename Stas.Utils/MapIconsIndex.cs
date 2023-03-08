@@ -186,30 +186,30 @@ public enum MapIconsIndex {
     BetrayalSymbolCart = 171,
     LegionInitiator = 172,
     LegionGeneric = 173,
-    //RewardAbyss = 174,
-    //RewardArmour = 175,
-    //RewardBestiary = 176,
-    //RewardBreach = 177,
-    //RewardCurrency = 178,
-    //RewardDivinationCards = 179,
-    //RewardEssences = 180,
-    //RewardFossils = 181,
-    //RewardFragments = 182,
+    LootAbyss = 174,
+    LootArmour = 175,
+    LootBestiary = 176,
+    LootBreach = 177,
+    LootCurrency = 178,
+    LootDivinationCards = 179,
+    LootEssences = 180,
+    LootFossils = 181,
+    LootFragments = 182,
 
-    //RewardGems = 183,//starting last row-4
+    LootGems = 183,//starting last row-4
     RewardNiceBox = 184,
-    //RewardHarbinger = 185,
-    //RewardLabyrinth = 186,
-    //RewardMaps = 187,
-    //RewardPerandus = 188,
-    //RewardProphecy = 189,
-    //RewardScarabs = 190,
-   //RewardTalisman = 191,
-    Ring = 192,
-    //RewardUniques = 193,
-    //RewardWeapons = 194,
-    //RewardWeaponEnchants = 195,
-    //RewardJewels = 196,
+    LootHarbinger = 185,
+    LootLabyrinth = 186,
+    LootMaps = 187,
+    LootPerandus = 188,
+    LootProphecy = 189,
+    LootScarabs = 190,
+    LootTalisman = 191,
+    LootRing = 192,
+    LootUniques = 193,
+    LootWeapons = 194,
+    LootWeaponEnchants = 195,
+    LootJewels = 196,
 
     //RewardBlight = 197, //starting last row-3
     BlightCore = 198, //
@@ -226,8 +226,8 @@ public enum MapIconsIndex {
     Green_door = 209,
     HeistEscapeRoute = 210,
 
-    //RewardMetamorph = 211, //starting last -2
-    //RewardDelirium = 212,
+    Metamorph = 211, //starting last -2
+    Delirium = 212,
     RewardCorrupted = 213,
     bleed = 214,
     poison = 215,
@@ -271,5 +271,13 @@ public enum MapIconsIndex {
     RewardGems = 249,
     RewardMaps = 250,
     RewardScarabs = 251,
-    empty_252 = 252,
+    UnknowLootIcon = 252,
+
+    //Currency_0
+    CurrencyUpgradeToRare = 253,
+    CurrencyUpgradeToRareShard = 254,
+    z255 = 255,
+    z256 = 256,
+    CurrencyRerollRare = 257,
+    z258 = 258
 }

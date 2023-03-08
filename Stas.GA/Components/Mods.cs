@@ -1,7 +1,7 @@
 ﻿namespace Stas.GA;
 internal class Mods : EntComp {
-    public override string tName => "Mods";
     public Mods(nint address) : base(address) {
+        _tname = "Mods";
     }
 
     public bool Identified { get; private set; }

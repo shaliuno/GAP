@@ -2,9 +2,11 @@
 
 namespace Stas.GA;
 internal class Quality : EntComp {
-    public override string tName => "Quality";
 
     public Quality(IntPtr ptr) : base(ptr) {
+        _tname = "Quality";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

@@ -60,7 +60,7 @@ public partial class AreaInstance {
                 smi.uv = sh.GetUV(MapIconsIndex.CurioDisplay);
             }
             else if (mi.info.Contains("Jewellery") || mi.info.Contains("Rings")) {
-                smi.uv = sh.GetUV(MapIconsIndex.Ring);
+                smi.uv = sh.GetUV(MapIconsIndex.RewardJewelry);
             }
             else if (mi.info.Contains("Azurite")) {
                 smi.uv = sh.GetUV(MapIconsIndex.Azurite);

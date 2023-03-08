@@ -5,9 +5,9 @@ namespace Stas.GA;
 ///     The <see cref="Charges" /> component in the entity.
 /// </summary>
 public class Charges : EntComp {
-    public override string tName => "Charges";
-   
-    public Charges(IntPtr address) : base(address) { }
+    public Charges(IntPtr address) : base(address) {
+        _tname = "Charges";
+    }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
         if (Address == IntPtr.Zero)

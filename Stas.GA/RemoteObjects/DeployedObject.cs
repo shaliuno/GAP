@@ -3,8 +3,8 @@
 /// is this entComp?
 /// </summary>
 public class DeployedObject : RemoteObjectBase {
-    public override string tName => "DeployedObject";
     public DeployedObject(IntPtr ptr) : base(ptr) {
+        _tname = "DeployedObject";
     }
 
     internal override void Tick(IntPtr ptr, string from = null) {

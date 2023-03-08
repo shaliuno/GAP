@@ -97,14 +97,14 @@ partial class DrawMain {
         if (gui_offs.Length > 0 && b_relative) {
             adress = "0x" + gui_offs;
         }
-           
+
         if (ImGui.TreeNode($"{adress} {text}")) {
             _CheckAndAddFrame();//we need check this too, с
-            foreach (var ptr in el.children_pointers) {
-                if (!ui.elements.ContainsKey(ptr)){
-                    ui.elements[ptr] = new Element(ptr, "debug gui"); }
-                AddToTree(ui.elements[ptr]);
+            for (int i = 0; i < el.children_pointers.Length; i++) {
+                var ch = new Element(el.children_pointers[i], "ch[" + i + "]");
+                AddToTree(ch);
             }
+
             ImGui.TreePop();
         }
         _CheckAndAddFrame();

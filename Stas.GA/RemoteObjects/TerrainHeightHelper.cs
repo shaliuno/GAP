@@ -6,15 +6,11 @@ namespace Stas.GA {
     ///     Contains the static data for calculating the terrain height.
     /// </summary>
     public class TerrainHeightHelper : RemoteObjectBase {
-        public override string tName => "TerrainHeightHelper";
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TerrainHeightHelper" /> class.
-        /// </summary>
-        /// <param name="address">address of the remote memory object.</param>
-        /// <param name="size">expected size of this remote memory object.</param>
-        internal TerrainHeightHelper(IntPtr address, int size) : base(address) {
+        internal TerrainHeightHelper(IntPtr ptr, int size) : base(ptr) {
+            _tname = "TerrainHeightHelper";
             this.Values = new byte[size];
+            if (ptr != default)
+                Tick(ptr, tName + "()");
         }
         internal override void Tick(IntPtr ptr, string from=null) {
             Address = ptr;

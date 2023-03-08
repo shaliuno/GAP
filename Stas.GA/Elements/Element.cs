@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using System.Text;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 /// <summary>
 ///     Points to the Ui Element of the game and reads its data.
 /// </summary>
 public partial class Element : RemoteObjectBase {
-    public override string tName => _tname;
-    string _tname;
     internal Element(string _tname) : this(IntPtr.Zero, _tname) {
     }
     internal Element(IntPtr ptr, string tname) : base(ptr) {
@@ -21,8 +20,8 @@ public partial class Element : RemoteObjectBase {
             Init(tname + "()");
     }
     internal bool b_init { get; private set; } = false;
+
     void Init(string from) {
-        ui.elements[Address] = this;
         var data = ui.m.Read<ElemOffsets>(Address, tName);
         var _nam = tName;
         if (_nam.Length > 32)
@@ -40,13 +39,11 @@ public partial class Element : RemoteObjectBase {
         b_goodbye_selected = ui.m.Read<uint>(Address + 0x1C8) == 0xFFFFCA96;
         TextBoxOverlayColor = Color.FromArgb((int)data.TextBoxOverlayColor);
         b_link_selected = (TextBoxOverlayColor == ((uint)0xFFFFFFF).ToColor());
-        b_mouse_over = ui.m.Read<byte>(Address + 0x1E0 + 0x1B) == 1;
+        b_mouse_over = ui.m.Read<byte>(Address + 0x1E0 + 0x13) == 1;
         X = data.X;
         Y = data.Y;
-        if (data.Parent != default) {
-            if (!ui.elements.ContainsKey(data.Parent))
-                ui.elements[data.Parent] = new Element(data.Parent, tName + ".parent");
-            Parent = ui.elements[data.Parent];
+        if (data.parent_ptr != default) {
+            Parent =new Element(data.parent_ptr, tName + ".parent");
         }
         chld_count = data.chld_ptr.Size / 8;
         children_pointers = ui.m.ReadStdVector<IntPtr>(data.chld_ptr);
@@ -64,6 +61,11 @@ public partial class Element : RemoteObjectBase {
         IsVisibleLocal = (data.IsVisibleLocal & 8) == 8;// ==(byte) 0x2E;  //0x26 is hidden
         b_init = true;
     }
+
+    /// <summary>
+    /// all children must use this like base.Tick() -
+    /// if u dont use old DPB, ExileAPI lazy get/set method for same prop;
+    /// </summary>
     internal override void Tick(IntPtr ptr, string from) {
         var nam = this.tName;
         Address = ptr;
@@ -73,8 +75,17 @@ public partial class Element : RemoteObjectBase {
         }
         if (!b_init)
             Init(from);
-        //GetChildren(from);
+        else {
+            //GetChildren(from);
+            var data = ui.m.Read<ElemOffsets>(Address, tName);
+            X = data.X;
+            Y = data.Y;
+            unScaledSize.X = Width = data.UnscaledSize.X;
+            unScaledSize.Y = Height = data.UnscaledSize.Y;
+        }
         IsVisibleLocal = (ui.m.Read<byte>(Address + ui.IsVisibleLocalOffs) & 8) == 8;// ==(byte) 0x2E;  //0x26 is hidden
+        b_link_selected = (TextBoxOverlayColor == ((uint)0xFFFFFFF).ToColor());
+        b_mouse_over = ui.m.Read<byte>(Address + 0x1E0 + 0x13) == 1;
     }
     protected override void Clear() {
         b_init = false;
@@ -86,22 +97,19 @@ public partial class Element : RemoteObjectBase {
         scaleIndex = 0x00;
     }
     string GetText() {
-        var curr_elem = tName;
         var offs = Address + ui.elem_text_offs;
-        if (!ui.texts.ContainsKey(offs)) {
+        if (!ui.string_cashe.ContainsKey(offs)) {
             var length = ui.m.Read<long>(offs + 0x10);
             var Capacity = (int)ui.m.Read<long>(offs + 0x18);
             var addr = Capacity < 8 ? offs : ui.m.Read<long>(offs);
 
             if (addr <= 0 || length > 5120 || length <= 0)
-                ui.texts[offs] = "";
+                ui.string_cashe[offs] = "";
             else
-                ui.texts[offs] = ui.m.ReadStringU(addr, (int)length * 2);
+                ui.string_cashe[offs] = ui.m.ReadStringU(addr, (int)length * 2);
         }
-        return ui.texts[offs];
+        return ui.string_cashe[offs];
     }
-
-
     #region Props
     public float X { get; private set; }
     public float Y { get; private set; }
@@ -218,7 +226,8 @@ public partial class Element : RemoteObjectBase {
             if (children_pointers.Length <= i) {
                 return null;
             }
-            return new Element(children_pointers[i], tName + ".chld[" + i + "]");
+            var res = new Element(children_pointers[i], tName + ".chld[" + i + "]");
+            return res;
         }
     }
 
@@ -230,7 +239,8 @@ public partial class Element : RemoteObjectBase {
     /// <returns></returns>
     public virtual RectangleF get_client_rectangle {
         get {
-            if (Address == default) return RectangleF.Empty;
+            if (Address == default)
+                return RectangleF.Empty;
             var vPos = GetParentPos();
             float width = ui.camera.Width;
             float height = ui.camera.Height;
@@ -262,7 +272,7 @@ public partial class Element : RemoteObjectBase {
         while (parent != null && !hashSet.Contains(parent)
                                 && ui_root.Address != parent.Address
                                 && parent.Address != IntPtr.Zero) {
-            if (parent.tName != "gui")
+            if (!parent.b_dynamic_childrens)
                 parent.Tick(parent.Address, tName);
             list.Add(parent);
             hashSet.Add(parent);
@@ -284,8 +294,6 @@ public partial class Element : RemoteObjectBase {
 
         return new V2(num, num2);
     }
-
-
 
     /// <summary>
     ///     This function was basically parsed/read/decompiled from the game.

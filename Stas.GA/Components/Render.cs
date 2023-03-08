@@ -7,9 +7,10 @@ namespace Stas.GA;
 ///     The <see cref="Render" /> component in the entity.
 /// </summary>
 public class Render : EntComp {
-    public override string tName => "Render";
-
-    public Render(IntPtr address) : base(address) {
+    public Render(IntPtr ptr) : base(ptr) {
+        _tname = "Render";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
   
     internal override void Tick(IntPtr ptr, string from=null) {

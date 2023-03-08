@@ -20,7 +20,11 @@ public class PoeNinja : iSett, IDisposable {
     List<(string, string)> priceQueue { get; set; }
     JsonSerializerOptions js_opt;
     public PoeNinja() {
-
+        js_opt = new JsonSerializerOptions {
+            WriteIndented = true, IncludeFields = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+        };
+        js_opt.Converters.Add(new JSON.ValueTupleFactory());
         //TestItem();
         client = new HttpClient();
         //Check(); //here for debug in start league
@@ -33,13 +37,13 @@ public class PoeNinja : iSett, IDisposable {
         curr_price.Clear();
         var done = 0f;
         if (priceQueue == null) {
-            var source = File.ReadAllText(ui.sett.ninja_price);
-            priceQueue = FILE.LoadJson<List<(string, string)>>(source);
+            var source = File.ReadAllText(@"NinjaPriceQueue.sett");
+            priceQueue = JsonSerializer.Deserialize<List<(string, string)>>(source, js_opt);
         }
         foreach (var q in priceQueue) {
             var uri = "https://poe.ninja/api/data/" + q.Item1 + "overview?league=" + ui.sett.curr_league + "&type=" + q.Item2;
             await GetFromUrl(uri, q.Item1, q.Item2);
-            await Task.Delay(200);
+            await Task.Delay(200);//for not kicked from server
             done += 1;
             ui.AddToLog("Ninja.Check [" + (done / priceQueue.Count).ToRoundStr(2) + "]");
         }
@@ -114,7 +118,7 @@ public class PoeNinja : iSett, IDisposable {
         var opt = new JsonSerializerOptions {
             WriteIndented = true,
             IncludeFields = true,
-            IgnoreNullValues = true
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         };
         var raw = File.ReadAllText(@"c:\log\test.txt");
         var res = FILE.LoadJson<ItemOverviewModel>(raw);

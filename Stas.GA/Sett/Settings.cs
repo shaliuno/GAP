@@ -12,15 +12,13 @@ public partial class Settings : iSett {
     public Role role = Role.None;
     public string pp_name = "PathOfExile"; //PathOfExile_KG PathOfExileSteam PathOfExile_x64 if we support it
     public string poe_w_name = "Path of Exile";
-    public string icons_fname { get; set; } = @"Icons.png";
+    public string icons_fname { get; set; } = "Icons.png";
     public string title_name { get; set; } = "Master_3.19.txt";
-    public string curr_league { get; set; } = "Kalandra";
-    public string ninja_price { get; set; } = @"priceQueue.txt";
-    public string preload_fname { get; set; } = @"preloads.txt";
+    public string curr_league { get; set; } = "Sanctum";
     public string sounds_dir { get; set; } = @"Sounds\";
-    public string log_fname { get; set; } = @"bot.log";
+    public string log_fname { get; set; } = "Error.log";
     public string master_IP { get; set; } = "192.168.1.2";
-
+    public string preload_fname { get; set; } = "preloads.txt";
     [JsonInclude]
     public bool b_develop = false;
     [JsonInclude]

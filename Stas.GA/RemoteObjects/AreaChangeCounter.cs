@@ -6,8 +6,8 @@ namespace Stas.GA;
 /// </summary>
 [CodeAtt("Must be updated after each map change")]
 public class AreaChangeCounter : RemoteObjectBase {//core.
-    public override string tName => "AreaChangeCounter";
     internal AreaChangeCounter(IntPtr address) : base(address) {
+        _tname = "AreaChangeCounter";
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

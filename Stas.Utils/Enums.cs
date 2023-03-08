@@ -98,6 +98,6 @@ namespace Stas.Utils {
         /// </summary>
         DeliriumSpawner,
         InventoryItem,
-        Abyss
+        Abyss, Daemon, Item
     }
 }

@@ -9,43 +9,37 @@ namespace Stas.GA {
     partial class DrawMain {
         string input = "";
         ImDrawListPtr info_ptr;
-        public static RectangleF curr_info_rect = new RectangleF();
         [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "HardExit")]
         public static extern int HardExit();
 
         void DrawInfo() {
-            bool b_pushed = false;
-            if (ui.b_contr_alt) {
-                ImGui.PushStyleColor(ImGuiCol.WindowBg, Color.FromArgb(255, 1, 1, 1).ToImgui());
-                b_pushed = true;
+            var flags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoFocusOnAppearing
+           | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize;
+            if (b_clickable || ui.b_info_clickable) {
+                ImGui.SetNextWindowBgAlpha(1.0f);
             }
-
+            else {
+                ImGui.SetNextWindowBgAlpha(0.5f);
+                flags = flags | ImGuiWindowFlags.NoInputs;
+            }
             if (ui.b_minimize) {
                 ImGui.SetNextWindowSize(new V2(50, 30));
             }
-
-            ImGui.Begin("Master INFO", ImGuiWindowFlags.NoCollapse |
-                ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
-          
-            var vMax = ImGui.GetWindowContentRegionMax();
-            var pos = ImGui.GetWindowPos();
-            curr_info_rect.X = pos.X;
-            curr_info_rect.Y = pos.Y;
-            curr_info_rect.Width = vMax.X;
-            curr_info_rect.Height = vMax.Y;
+            ImGui.Begin("Master INFO", flags);
+            ImGui.SetWindowFontScale(ui.sett.info_font_size);
 
             info_ptr = ImGui.GetWindowDrawList();
             if (ImGui.Button("_")) {
                 ui.b_minimize = !ui.b_minimize;
             }
             ImGuiExt.ToolTip("Minimize/Maximize [F11]");
+           
             ImGui.SameLine();
-            if (ImGui.Checkbox("", ref ui.b_ga_menu_top)) {
+            if (ImGui.Checkbox("", ref ui.b_info_clickable)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("The mouse can interact with this window");
 
-            ImGui.SetWindowFontScale(ui.sett.info_font_size);
             ImGui.SameLine();
             var warn = ui.warning;
             if (!string.IsNullOrEmpty(warn)) {
@@ -87,13 +81,14 @@ namespace Stas.GA {
             if (ui.looter != null && ImGui.Button(ui.looter.debug_info)) {
                 ui.looter.LoadSett();
             }
-            ImGuiExt.ToolTip("all/close/need... Click for reload filters");
-
+            ImGuiExt.ToolTip("all/close/I need... " +
+              "\nClick to reload the filter after changing the loot settings");
 
             if (ui.curr_map != null) {
                 ImGui.SameLine();
                 ImGui.Button(ui.curr_map.debug_info);
             }
+            ImGuiExt.ToolTip("Ent in cash /Ent in frame/ready Map items");
 
             ImGui.SameLine();
             if (ImGui.Button("Donate")) {
@@ -105,7 +100,7 @@ namespace Stas.GA {
             // DrawTaskerState();
             ImGui.SameLine();
             if (ImGui.Button("Quit")) {
-                ui.SetDebugPossible(null);
+                ui.SetDebugPossible();
                 ui.sett.Save();
                 ui.Dispose();
                 HardExit();
@@ -126,9 +121,7 @@ namespace Stas.GA {
             DrawTabs();
             ImGui.SetWindowFontScale(1f);
             ImGui.End();
-            if (b_pushed)
-                ImGui.PopStyleColor();
-          
+            ImGui.PopStyleColor();
         }
         // When in Debug mode running on a development computer, this will not run to avoid shutting down the dev computer
         // When in release mode the Remote Connection or other computer this is run on will be shut down.

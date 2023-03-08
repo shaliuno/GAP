@@ -14,7 +14,7 @@ public struct ElemOffsets {
     //[FieldOffset(0xA8)] public float horizontal_scroll;//for root tabpanel with list of tabs=>like sub tab folder in stash]
     [FieldOffset(0xD8)] public IntPtr Root;
     [FieldOffset(0xB0)] public StdWString Id;
-    [FieldOffset(0xE0)] public IntPtr Parent;
+    [FieldOffset(0xE0)] public IntPtr parent_ptr;
     [FieldOffset(0xE8)] public V2 Position;
     [FieldOffset(0xE8)] public float X;
     [FieldOffset(0xEC)] public float Y;

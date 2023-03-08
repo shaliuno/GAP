@@ -1,8 +1,10 @@
 ﻿namespace Stas.GA; 
 
 public class WorldItem : EntComp {
-    public override string tName => "WorldItem";
-    public WorldItem(IntPtr address) : base(address) { //1B1DD150C10
+    public WorldItem(IntPtr ptr) : base(ptr) { //1B1DD150C10
+        _tname = "WorldItem";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
 
     //Size 0x28

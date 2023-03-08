@@ -1,8 +1,9 @@
 namespace Stas.GA;
 public class Targetable : EntComp {
-    public override string tName => "Targetable";
-
-    public Targetable(IntPtr address) : base(address) {
+    public Targetable(IntPtr ptr) : base(ptr) {
+        _tname = "Targetable";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

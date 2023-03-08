@@ -5,10 +5,11 @@ using System.Xml.Linq;
 namespace Stas.GA;
 
 public partial class Skill : RemoteObjectBase {
-    public override string tName => "Skill";
-    public Skill(IntPtr address, Actor _actor)
-        : base(address, _actor) {
+    public Skill(IntPtr ptr, Actor _actor) : base(ptr, _actor) {
+        _tname = "Skill";
         actor = _actor;
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     public Actor actor { get; private set; }
     public void setActor(Actor _actor) {

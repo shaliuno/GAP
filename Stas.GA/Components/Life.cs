@@ -2,11 +2,10 @@
 using System.Runtime.InteropServices;
 namespace Stas.GA;
 public class Life : RemoteObjectBase {
-    public override string tName => "Life";
-
     [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetLifeOffsets")]
     static extern IntPtr GetLifeOffsets(IntPtr ptr, ref LifeOffset offs);
     public Life(IntPtr address)  : base(address) {
+        _tname = "Life";
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

@@ -6,11 +6,10 @@ namespace Stas.GA;
 ///     ObjectMagicProperties component of the entity.
 /// </summary>
 public class ObjectMagicProperties : EntComp {
-    public override string tName => "OMP";
-
-    public ObjectMagicProperties(IntPtr address) : base(address) {
-        if (address != default)
-            Tick(address, tName+"()");
+    public ObjectMagicProperties(IntPtr ptr) : base(ptr) {
+        _tname = "OMP";
+        if (ptr != default)
+            Tick(ptr, tName+"()");
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

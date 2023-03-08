@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Stas.GA {
     public class ActiveSkillWrapper : EntComp {
-        public override string tName => "ActiveSkillWrapper";
         public ActiveSkillWrapper(IntPtr address) : base(address) {
+            _tname = "ActiveSkillWrapper";
         }
         internal override void Tick(IntPtr ptr, string from=null) {
             Address = ptr;

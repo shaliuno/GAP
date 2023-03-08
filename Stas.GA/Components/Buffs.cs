@@ -7,8 +7,8 @@ namespace Stas.GA;
 ///     The <see cref="Buffs" /> component in the entity.
 /// </summary>
 public class Buffs : EntComp {
-    public override string tName => "Buffs";
     public Buffs(IntPtr address) : base(address) {
+        _tname = "Buffs";
     }
     int last_hash = 0;
     internal override void Tick(IntPtr ptr, string from = null) {

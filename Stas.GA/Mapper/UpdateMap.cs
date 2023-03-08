@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using System.Diagnostics;
+using Color = System.Drawing.Color;
 
 namespace Stas.GA;
 public partial class AreaInstance {
-    public bool b_mine { get; private set; } = false;
-     Stopwatch sw = new Stopwatch();
+    Stopwatch sw = new Stopwatch();
     public IntPtr map_ptr;
     public float progress = 0f;
     public int rows;
@@ -23,18 +23,22 @@ public partial class AreaInstance {
     public void UpdateMap(object state) {
         ClearOldData();
         UpdMapImage();
-
         ui.nav.MakeGridSells();//here first coz ve need cell to dtae quest area
-        ui.nav.LoadVisited();
-        ui.curr_map.GetTileTgtName();
-        ui.LoadQuest();
+        if (!ui.b_mine) {
+            ui.nav.LoadVisited();
+            ui.curr_map.GetTileTgtName();
+            ui.LoadQuest();
+        }
         ui.area_change_counter.Tick(ui.area_change_counter.Address, "UpdateMap");
         ui.curr_loaded_files.Load(tName);
-        //ui.looter.LoadOldLoot();
+        ui.looter.LoadOldLoot();
     }
+    const string map_name = "walkable_map";
+    object map_locker = new object();
     void UpdMapImage() {
         int curr_w8 = 0;
         int w8 = 3;
+        ui.draw_main.RemoveImage(map_name);
         AreaInstanceOffsets data = default;
         while (data.TerrainMetadata.BytesPerRow <= 0
             || data.TerrainMetadata.GridWalkableData.Size <= 200 * 200
@@ -72,7 +76,9 @@ public partial class AreaInstance {
         else
             b_added_col = false;
         bit_data = new int[cols, rows];
-        var bmp = new Bitmap(bytesPerRow * 2, walkable_data.Length / bytesPerRow);
+        Configuration customConfig = Configuration.Default.Clone();
+        customConfig.PreferContiguousImageBuffers = true;
+        Image<Rgba32> image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
 #if DEBUG
         for (int y = 0; y < height_data.Length; y++) {
             Run(y);
@@ -89,30 +95,47 @@ public partial class AreaInstance {
                 var both = walkable_data[index];
                 Debug.Assert(valid.Contains(both));
                 var bit = both >> shift & 0xF;
-                bit_data[x, y] = bit;
+                var h = (int)(height_data[y][x] / 21.91f);
+
+                if (ui.sett.b_use_gh_map) {
+                    var cond_one = x - h >= 0 && bit_data.GetLength(0) > x - h;
+                    if (!cond_one) {
+                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
+                        continue;
+                    }
+                    var cond_two = y - h >= 0 && bit_data.GetLength(1) > y - h;
+                    if (!cond_two) {
+                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
+                        continue;
+                    }
+                    bit_data[x - h, y - h] = bit;
+                    image[x - h, y - h] = GetRgba32(bit);
+                }
+                else {
+                    bit_data[x, y] = bit;
+                    image[x, y] = GetRgba32(bit);
+
+                }
+
                 if (bit == 0)
                     continue;
-                //TODO temporary - mb need filling array[color, color] or mb array[byte[4], byte[4]]
-                //https://swharden.com/csdv/system.drawing/array-to-image/
-                lock (bmp) { //we need it coz using Parallel
-                    bmp.SetPixel(x, y, GetColor(bit));
-                }
-             }
+            }
         }
-        map_ptr = ui.GetPtrFromImageData(bmp);
-        bmp.Dispose();
+#if DEBUG
+        //image.Save("current_map_" + ui.curr_map_hash + ".jpeg");
+#endif
+        ui.draw_main.AddOrGetImagePointer(map_name, image, false, out map_ptr); ;
+        image.Dispose();
+
         b_ready = true;
         ui.AddToLog("Map create time=[" + sw.ElapsedTostring() + "]", MessType.Warning);
     }
-    [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "MapWasChanged")]
-    public static extern void MapWasChanged();
+
     void ClearOldData() {
-        MapWasChanged();
-        ui.std_wstrings.Clear();
+        ui.string_cashe.Clear();
         ui.sett.map_scale = ui.sett.map_scale_def;
         //quest_ent.Clear(); //mb don't
         b_ready = false;
-        ui.elements.Clear();
         ui.w8ting_click_until.Clear();
         environmentPtr = default;
         environments.Clear();
@@ -136,6 +159,33 @@ public partial class AreaInstance {
         ui.nav.b_ready = false;//for not draw old visited
         ui.nav.debug_res = null;//same oldes debug must be deleted
         ui.test?.spa?.Clear(); //debug data need only actuale
+    }
+
+    internal static Rgba32 GetRgba32(int i) {
+        Rgba32 res;
+        switch (i) {
+            case 0:
+                res = new Rgba32(0, 0, 0, 0);
+                break;
+            case 1:
+                res = new Rgba32(255, 255, 255, 20);
+                break;
+            case 2:
+                res = new Rgba32(255, 255, 255, 50);
+                break;
+            case 3:
+                res = new Rgba32(255, 255, 255, 90);
+                break;
+            case 4:
+                res = new Rgba32(255, 255, 255, 25);
+                break;
+            case 5:
+                res = new Rgba32(255, 255, 255, 15);
+                break;
+            default:
+                throw new Exception(i.ToString());
+        }
+        return res;
     }
 
     internal static Color GetColor(int i) {

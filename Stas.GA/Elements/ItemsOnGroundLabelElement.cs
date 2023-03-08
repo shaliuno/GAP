@@ -3,9 +3,9 @@ using System;
 
 namespace Stas.GA {
     public class ItemsOnGroundLabelElement : RemoteObjectBase {
-        public override string tName => "ItemsOnGroundLabelElement";
+        public ItemsOnGroundLabelElement(IntPtr ptr):base(ptr) {
+            _tname = "ItemsOnGroundLabelElement";
 
-        public ItemsOnGroundLabelElement(IntPtr ptr):base(ptr) { 
         }
         internal override void Tick(IntPtr ptr, string from = null) {
             Address = ptr;

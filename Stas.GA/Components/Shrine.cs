@@ -4,8 +4,10 @@ namespace Stas.GA;
 ///     The <see cref="Shrine" /> component in the entity.
 /// </summary>
 public class Shrine : EntComp {
-    public override string tName => "Shrine";
-    public Shrine(IntPtr address) : base(address) {
+    public Shrine(IntPtr ptr) : base(ptr) {
+        _tname = "Shrine";
+        if (ptr != default)
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

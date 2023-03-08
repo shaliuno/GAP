@@ -9,9 +9,8 @@ namespace Stas.GA;
 /// </summary>
 [CodeAtt("game ctate changer")]
 public class GameStates : RemoteObjectBase {
-    public override string tName => "GameStates";
-
     internal GameStates(IntPtr address) : base(address) {
+        _tname = "GameStates";
     }
     gState _cgs = gState.GameNotLoaded; //current game state
     gState _old_gs;

@@ -149,11 +149,17 @@ public static partial class EXT {
         res.Z = BitConverter.ToSingle(data, 8);
         return res;
     }
-    public static void SetWindowToTop(IntPtr handle) {
+    public static bool SetWindowToTop(IntPtr handle, int one_tick=50, int max_tick=1000) {
+        var elapse = 0;
         while (GetForegroundWindow() != handle) {
-            Thread.Sleep(250);
             SetForegroundWindow(handle);
+            Thread.Sleep(one_tick);
+            elapse+= one_tick;
+            if (elapse > max_tick) {
+                return false;
+            }
         }
+        return true;
     }
     [DllImport("user32.dll")]
     static extern int SetForegroundWindow(IntPtr hWnd);
@@ -263,8 +269,6 @@ public static partial class EXT {
         return (Math.Round(f, round)).ToString();
     }
     public static string ToRoundStr(this float f, int round = 3) {
-        if (f == 0f)
-            return "Zerro";
         return (Math.Round(f, round)).ToString();
     }
 

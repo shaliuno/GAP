@@ -44,7 +44,9 @@ namespace Stas.GA {
 
             ImGui.SameLine();
             ImGui.Checkbox("Tile", ref ui.b_tile);
-            ImGuiExt.ToolTip("When you press Alt, it shows the title under your feet.\nIf it is unique, you can add it \nto the important tiles on this type of map)");
+            ImGuiExt.ToolTip("When you press Alt, it shows the title under your feet." +
+                "\nIf it is unique, you can add it " +
+                "\nto the important tiles on this type of map)");
 
         }
     }

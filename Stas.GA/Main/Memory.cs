@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 using ProcessMemoryUtilities.Managed;
@@ -39,15 +40,10 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
     /// <param name="address">address to read the data from.</param>
     /// <returns>data from the process in T format.</returns>
     public T Read<T>(IntPtr address, string from = null) where T : unmanaged {
-        string add = !string.IsNullOrEmpty(from) ? " " + from : "";
-
-        if(add.Length > max_add)
-            add = add.Substring(0, max_add) +"..skip..";
         T result = default;
-      
         if (IsInvalid || address.ToInt64() <= 0) {
             if(ui.sett.b_develop)
-                ui.AddToLog("Mem.Read adres wrong: [" + (aw_count += 1) + "]"+ add, MessType.Critical);
+                ui.AddToLog("Mem.Read adres wrong: [" + (aw_count += 1) + "] "+ from, MessType.Critical);
             if (aw_count > 50) { 
             }//<=debug here
             return result;
@@ -57,7 +53,7 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
             if (!NativeWrapper.ReadProcessMemory(handle, address, ref result)) {
                 var err = (NtStatus)NativeWrapper.LastError;
                 if (ui.sett.b_develop)
-                    ui.AddToLog("Mem.Read err..."+  add + err, MessType.Critical);
+                    ui.AddToLog("Mem.Read err..."+ from + err, MessType.Critical);
                 if (rpm_count > 50) { 
                 }//<==set BP here for see who is
             }
@@ -65,7 +61,7 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
         }
         catch (Exception e) {
             if (ui.sett.b_develop)
-                ui.AddToLog("Mem.Read exept: " + e.Message + add, MessType.Critical);
+                ui.AddToLog("Mem.Read exept: " + e.Message + from, MessType.Critical);
             return default;
         }
     }
@@ -295,7 +291,7 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
                 else
                     return "err: "+ ret.Substring(0, Math.Min(20, ret.Length));
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 return "Error";
             }
         }
@@ -410,6 +406,32 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
     protected override bool ReleaseHandle() {
         ui.AddToLog($"Releasing handle on 0x{handle:X}\n", MessType.Warning);
         return NativeWrapper.CloseHandle(handle);
+    }
+
+    Stopwatch sw = new Stopwatch();
+    public IList<long> ReadPointersArray(long startAddress, long endAddress, int offset = 8) {
+        var result = new List<long>();
+        var length = endAddress - startAddress;
+        if (length <= 0 || length > 20000 * 8)
+            return result;
+
+        sw.Restart();
+        result = new List<long>((int)(length / offset) + 1);
+        var bytes = ReadMemoryArray<byte>(new IntPtr(startAddress), (int)length);
+
+        for (var i = 0; i < length; i += offset) {
+            if (sw.ElapsedMilliseconds > 2000) {
+                ui.AddToLog($"ReadPointersArray result count: {result.Count}", MessType.Critical);
+                return new List<long>();
+            }
+
+            if (bytes.Length > i + 7)
+                result.Add(BitConverter.ToInt64(bytes, i));
+            else
+                ui.AddToLog($"ReadPointersArray error: bytes.Length ==" + (i + 7), MessType.Warning);
+        }
+
+        return result;
     }
 }
 

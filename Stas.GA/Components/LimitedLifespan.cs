@@ -1,13 +1,9 @@
 ﻿namespace Stas.GA; 
 
 internal class LimitedLifespan : RemoteObjectBase {
-    public override string tName => "LimitedLifespan";
-    Entity e88 { get; } = new Entity();
-    Entity e168 { get; } = new Entity();
-    Entity e248 { get; } = new Entity();
-    Entity e328 { get; } = new Entity();
     public Entity parent { get; } = new Entity();
     public LimitedLifespan(IntPtr ptr):base(ptr) {
+        _tname = "LimitedLifespan";
     }
     public void TryFindeLInkedEnt() {
         var start = Address.ToInt64();
@@ -23,10 +19,6 @@ internal class LimitedLifespan : RemoteObjectBase {
         Address = ptr;
         if (Address == IntPtr.Zero)
             return;
-        //parent.Address = M.Read<IntPtr>(Address + 88);
-        //e168.Address = M.Read<IntPtr>(Address + 168);
-        //e248.Address = M.Read<IntPtr>(Address + 248); //wrong 3.19
-        //e328.Address = M.Read<IntPtr>(Address + 328);
     }
     
     protected override void Clear() {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
 
@@ -8,13 +9,13 @@ using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 public partial class Entity : RemoteObjectBase {
-    public override string tName => "Entity";
     /// <summary>
     ///     Initializes a new instance of the <see cref="Entity" /> class.
     ///     NOTE: Without providing an address, only invalid and empty entity is created.
     /// </summary>
     internal Entity() : base(IntPtr.Zero) {
-       componentAddresses = new();
+        _tname = "Entity";
+        componentAddresses = new();
        componentCache = new();
        Path = string.Empty;
        id = 0;
@@ -25,11 +26,14 @@ public partial class Entity : RemoteObjectBase {
 
     internal Entity(IntPtr address) : this() {
         this.Address = address;
+        if (Address != default)
+            Tick(Address, "()");
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
-        if (Address == IntPtr.Zero)
+        if (Address == default || version == ui.curr_frame)
             return;
+        version = ui.curr_frame;
         var data = ui.m.Read<EntityOffsets>(this.Address);
         var cl_ptr = data.ItemBase.ComponentListPtr; //component list_ptr
         IsValid = EntityHelper.IsValidEntity(data.IsValid);
@@ -76,10 +80,16 @@ public partial class Entity : RemoteObjectBase {
         var entityComponent = ui.m.ReadStdVector<IntPtr>(idata.ComponentListPtr);
         var entityDetails = ui.m.Read<EntityDetails>(idata.EntityDetailsPtr);
         var ws_key = entityDetails.name.Buffer;
-        if (!ui.std_wstrings.ContainsKey(ws_key))
-           ui.std_wstrings[ws_key] = ui.m.ReadStdWString(entityDetails.name);
-        ui.std_wstrings.TryGetValue(ws_key, out var _path);
-        Path = _path;
+        if (!ui.string_cashe.ContainsKey(ws_key)) {
+            Path = ui.m.ReadStdWString(entityDetails.name);
+            if (!ui.string_cashe.TryAdd(ws_key, Path)) {
+                //TODO: debug here - its can hapened if map changed
+                ui.AddToLog(tName + ".UpdateComponentData cant add to string cashe", MessType.Error);
+            }
+        }
+        else
+            Path = ui.string_cashe[ws_key];
+
         var lookupPtr = ui.m.Read<ComponentLookUpStruct>(entityDetails.ComponentLookUpPtr);
         var namesAndIndexes = ui.m.ReadStdBucket<ComponentNameAndIndexStruct>(lookupPtr.ComponentsNameAndIndex);
         for (var i = 0; i < namesAndIndexes.Count; i++) {

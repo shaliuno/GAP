@@ -17,8 +17,8 @@ namespace Stas.GA {
             var can_hit = nav.b_can_hit(ent);
             return isee && can_hit;
         }
-        public static bool b_running = true, b_draw_bots = true, b_pause, b_tile, b_ga_menu_top,  b_appl_started, b_minimize, b_show_info_over,
-            b_vs, b_edit_sett, b_show_cell,  b_in_mine, b_only_unknow, b_draw_bad_centr, b_draw_save_screen;
+        public static bool b_running = true, b_draw_bots = true, b_pause, b_tile, b_info_clickable,  b_appl_started, b_minimize, b_show_info_over,
+            b_vs, b_edit_sett, b_show_cell, b_only_unknow, b_draw_bad_centr, b_draw_save_screen;
         public static bool b_trade_top { get; private set; }
         //public bool b_modal => gui == null ? false : gui.Ultimatum.IsVisible || gui.modal_dialog.IsVisible || gui.esc_dialog.IsVisible;
        
@@ -65,19 +65,20 @@ namespace Stas.GA {
         }
         public static bool b_imgui_top {
             get {
-                if (DrawMain.scene == null)
-                    return false;
-                var sdl_ptr = DrawMain.scene.sdl_window.GetHWnd();
-                return curr_top_ptr == sdl_ptr;
+                if (draw_main != null) {
+                    var sdl_ptr = draw_main.OverlayPtr;
+                    if (curr_top_ptr == sdl_ptr) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
         public static bool b_busy {
             get {
-                if (gui ==null || curr_state != gState.InGameState)
+                if (!gui.b_init || curr_state != gState.InGameState)
                     return true;
                 var res = b_chat_box_inp || gui.b_busy;
-                //var info = gui.b_busy_info;
-                //ui.warning = "open_right_panel=" + ui.gui.open_right_panel.IsVisible;
                 return res;
             }
         }

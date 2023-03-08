@@ -12,13 +12,11 @@ public partial class ui {
     public static int elem_text_offs = 0x3F8;
     public static int IsVisibleLocalOffs = 0x161;
     static Dictionary<string, MapIconsIndex> Icons;
-    public static ConcurrentDictionary<IntPtr, Element> elements = new();
-    public static ConcurrentDictionary<IntPtr, string> texts = new();
     public static ConcurrentDictionary<IntPtr, DateTime> w8ting_click_until = new();
     /// <summary>
     ///Necessary for fast UpdateComponentData.  Must be cleared for each new map
     /// </summary>
-    public static ConcurrentDictionary<IntPtr, string> std_wstrings = new();
+    public static ConcurrentDictionary<IntPtr, string> string_cashe = new();
     public static MapIconsIndex IconIndexByName(string name) {
         name = name.Replace(" ", "").Replace("'", "");
         Icons.TryGetValue(name, out var result);
@@ -46,7 +44,7 @@ public partial class ui {
         foreach (var icon in icons) {
             Icons[icon.ToString()] = (MapIconsIndex)icon;
         }
-       
+        sett = new Settings().Load<Settings>();
         hot_keys = new HotKeysFromGame();
         var elaps = 0; var add_w8 = 5; var max_w8 = 50;
         while (hot_keys.use_bound_skill1.Key == Keys.None) {
@@ -60,12 +58,7 @@ public partial class ui {
         }
         flask_keys.AddRange(new List<Keys>(){hot_keys.use_flask_in_slot1.Key, hot_keys.use_flask_in_slot2.Key,
             hot_keys.use_flask_in_slot3.Key, hot_keys.use_flask_in_slot4.Key,hot_keys.use_flask_in_slot5.Key});
-        var need_ea = new List<Element>() {gui.map_devise, gui.KiracMission, gui.open_left_panel, gui.open_right_panel,
-                        gui.passives_tree, gui.NpcDialog, gui.LeagueNpcDialog, gui.BetrayalWindow, gui.large_map,
-                        gui.AtlasPanel, gui.AtlasSkillPanel,gui.DelveWindow,gui.TempleOfAtzoatl };
-        if (!sett.b_use_gh_map)
-            need_ea.Add(gui.large_map);
-        gui.AddToNeedCheck(need_ea);
+ 
         udp_sound = new UdpSound();
         StartGameWatcher();
         SetRole();
@@ -77,7 +70,7 @@ public partial class ui {
 
         frame_thread = new Thread(() => {
             while (b_running) {
-                frame_count += 1;
+                curr_frame += 1;
                 if (game_ptr == IntPtr.Zero) {
                     game_not_loadin += 1;
                     if (game_not_loadin > 100) {
@@ -139,7 +132,7 @@ public partial class ui {
         try {
             b_running = false;
         }
-        catch (Exception ex) {
+        catch (Exception) {
         }
     }
 }

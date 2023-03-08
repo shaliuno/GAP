@@ -7,10 +7,12 @@ namespace Stas.GA;
 ///     each remote memory object requires to implement a time/event based coroutine.
 /// </summary>
 public abstract class RemoteObjectBase {
+    public uint version { get; protected set; } = 0;
+    protected string _tname;
     /// <summary>
     /// this.Type.Name for show in debug
     /// </summary>
-    public abstract string tName { get; }
+    public string tName => _tname;
     /// <summary>
     ///     Initializes a new instance of the <see cref="RemoteObjectBase" /> class.
     /// </summary>
