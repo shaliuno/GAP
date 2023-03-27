@@ -1,10 +1,7 @@
 ﻿namespace Stas.GA;
-/// <summary>
-/// is this entComp?
-/// </summary>
+
 public class DeployedObject : RemoteObjectBase {
-    public DeployedObject(IntPtr ptr) : base(ptr) {
-        _tname = "DeployedObject";
+    public DeployedObject(IntPtr ptr) : base(ptr, "DeployedObject") {
     }
 
     internal override void Tick(IntPtr ptr, string from = null) {

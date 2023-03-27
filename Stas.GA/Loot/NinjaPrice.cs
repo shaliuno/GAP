@@ -75,7 +75,6 @@ public class PoeNinja : iSett, IDisposable {
             return;
         }
 
-
         if (task_type == "currency") {
             var surrencys = FILE.LoadJson<CurrencyOverviewModel>(resp);
             foreach (var r in surrencys.lines) {

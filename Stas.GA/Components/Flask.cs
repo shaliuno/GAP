@@ -2,10 +2,9 @@
 namespace Stas.GA;
 
 internal class Flask : EntComp {
-
-    public Flask(IntPtr address) : base(address) { }
+    public Flask(IntPtr address) : base(address, "Flask") {
+    }
     internal override void Tick(IntPtr ptr, string from=null) {
-        _tname = "Flask";
         if (Address == IntPtr.Zero)
             return;
         var data = ui.m.Read<FlaskOffsets>(Address);

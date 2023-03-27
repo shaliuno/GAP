@@ -1,17 +1,14 @@
 ﻿namespace Stas.GA; 
 
 public class SkillGemWrapper : RemoteObjectBase {
-    public SkillGemWrapper(IntPtr ptr) : base(ptr) {
-        _tname = "SkillGemWrapper";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public SkillGemWrapper(IntPtr ptr) : base(ptr, "SkillGemWrapper") {
+     
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
         if (Address == IntPtr.Zero)
             return;
         Name = ui.m.ReadStringU(ui.m.Read<IntPtr>(Address));
-        //27CBBCA4BA0
         ActiveSkill.Tick(ui.m.Read<IntPtr>(Address + 0x6D0));
     }
 

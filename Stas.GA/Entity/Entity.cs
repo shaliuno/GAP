@@ -14,18 +14,9 @@ public partial class Entity : RemoteObjectBase {
     ///     NOTE: Without providing an address, only invalid and empty entity is created.
     /// </summary>
     internal Entity() : base(IntPtr.Zero) {
-        _tname = "Entity";
-        componentAddresses = new();
-       componentCache = new();
-       Path = string.Empty;
-       id = 0;
-       IsValid = false;
-       eType = eTypes.Unidentified;
-       isnearby = false;
     }
 
-    internal Entity(IntPtr address) : this() {
-        this.Address = address;
+    internal Entity(IntPtr ptr) : base(ptr, "") {
         if (Address != default)
             Tick(Address, "()");
     }
@@ -68,30 +59,28 @@ public partial class Entity : RemoteObjectBase {
     }
     IntPtr last_ptr = default;
     int last_comp_hash = 0;
-   
+
     /// <summary>
     ///     Updates the component data associated with the Entity base object (i.e. item).
     /// </summary>
     /// <param name="idata">Entity base (i.e. item) data.</param>
     /// <param name="hasAddressChanged">has this class Address changed or not.</param>
-    protected void UpdateComponentData(ItemStruct idata) {
+    public void UpdateComponentData(ItemStruct idata) {
         this.componentAddresses.Clear();
         this.componentCache.Clear();
+        if (idata.ComponentListPtr.Size <= 0 || idata.ComponentListPtr.Size > 500) {
+            ui.AddToLog(tName + ".UpdateComponentData wrong comonent size", MessType.Critical);
+            return;
+        }
         var entityComponent = ui.m.ReadStdVector<IntPtr>(idata.ComponentListPtr);
         var entityDetails = ui.m.Read<EntityDetails>(idata.EntityDetailsPtr);
-        var ws_key = entityDetails.name.Buffer;
-        if (!ui.string_cashe.ContainsKey(ws_key)) {
-            Path = ui.m.ReadStdWString(entityDetails.name);
-            if (!ui.string_cashe.TryAdd(ws_key, Path)) {
-                //TODO: debug here - its can hapened if map changed
-                ui.AddToLog(tName + ".UpdateComponentData cant add to string cashe", MessType.Error);
-            }
-        }
-        else
-            Path = ui.string_cashe[ws_key];
 
+        var ws_key = entityDetails.name.Buffer;
+        Path = ui.string_cashe.Read(ws_key, () => ui.m.ReadStdWString(entityDetails.name));
         var lookupPtr = ui.m.Read<ComponentLookUpStruct>(entityDetails.ComponentLookUpPtr);
-        var namesAndIndexes = ui.m.ReadStdBucket<ComponentNameAndIndexStruct>(lookupPtr.ComponentsNameAndIndex);
+
+        var namesAndIndexes = ui.m.ReadStdBucket<ComponentNameAndIndexStruct>(
+            lookupPtr.ComponentsNameAndIndex);
         for (var i = 0; i < namesAndIndexes.Count; i++) {
             var nameAndIndex = namesAndIndexes[i];
             if (nameAndIndex.Index >= 0 && nameAndIndex.Index < entityComponent.Length) {
@@ -101,9 +90,10 @@ public partial class Entity : RemoteObjectBase {
                 }
             }
         }
+        foreach (var kv in componentCache) {
+            kv.Value.Tick(kv.Value.Address, "ent=>tick");
+        }
     }
-    bool isnearby;
-    public bool IsNearby => this.IsValid && this.isnearby;
     /// <summary>
     ///     Gets a value indicating whether this entity can explode or not.
     /// </summary>
@@ -387,28 +377,28 @@ public partial class Entity : RemoteObjectBase {
     static string deliriumHiddenMonsterStarting =
         "Metadata/Monsters/LeagueAffliction/DoodadDaemons/DoodadDaemon";
 
-    public readonly ConcurrentDictionary<string, IntPtr> componentAddresses;// 0x00000211e0d14810
-    readonly ConcurrentDictionary<string, RemoteObjectBase> componentCache;
+    public readonly ConcurrentDictionary<string, IntPtr> componentAddresses = new();
+    readonly ConcurrentDictionary<string, RemoteObjectBase> componentCache = new();
 
     /// <summary>
     ///     Gets the Path (e.g. Metadata/Character/int/int) assocaited to the entity.
     /// </summary>
-    public string Path { get; private set; }
+    public string Path { get; private set; } = string.Empty;
 
     /// <summary>
     ///     Gets the Id associated to the entity. This is unique per map/Area.
     /// </summary>
-    public uint id { get; private set; }
+    public uint id { get; private set; } = 0;
 
     /// <summary>
     ///     Gets or Sets a value indicating whether the entity
     ///     exists in the game or not.
     /// </summary>
-    public bool IsValid { get; set; }
+    public bool IsValid { get; set; } = false;
     /// <summary>
     ///     Gets a value indicating the type of entity this is.
     /// </summary>
-    public eTypes eType { get; protected set; }
+    public eTypes eType { get; protected set; } = eTypes.Unidentified;
 
     /// <summary>
     ///     Gets the Component data associated with the entity.

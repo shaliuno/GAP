@@ -128,10 +128,10 @@ namespace Stas.GA {
             return SpToSp_safe(sp);
         }
         public static V2 SpToSp_safe(V2 sp) {
-            if (gui.safe_screen == null)
+            if (ui.safe_screen == null)
                 return sp;
             var cp = game_window_rect.Center();
-            foreach (var b in gui.safe_screen.Blocks.Values) {
+            foreach (var b in ui.safe_screen.Blocks.Values) {
                 if(b ==null)
                     continue;
                 var hit = b.LS_intersection(new V2(cp.X, cp.Y), sp);

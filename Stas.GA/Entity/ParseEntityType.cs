@@ -12,7 +12,11 @@ public partial class Entity : RemoteObjectBase {
             case eTypes.Shrine:
                 return;
         }
-
+        if (Path == null) {
+            ui.AddToLog(tName + ".ParseEntityType path==null", MessType.Error);
+            eType = eTypes.Useless;
+            return;
+        }
         if (!GetComp<Render>(out var _)) {
             this.eType = eTypes.Useless;
         }

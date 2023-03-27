@@ -3,8 +3,7 @@
 ///     The <see cref="DiesAfterTime" /> component in the entity.
 /// </summary>
 public class DiesAfterTime : EntComp {
-    public DiesAfterTime(IntPtr address) : base(address) {
-        _tname = "DiesAfterTime";
+    public DiesAfterTime(IntPtr address) : base(address, "DiesAfterTime") {
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

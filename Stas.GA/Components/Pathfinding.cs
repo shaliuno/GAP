@@ -3,10 +3,9 @@ using V2 = System.Numerics.Vector2;
 namespace Stas.GA; 
 
 public class Pathfinding : EntComp {
-    public Pathfinding(IntPtr ptr):base(ptr) {
-        _tname = "Pathfinding";
-        if (Address != default)
-            Tick(Address, tName + "()");
+    public Pathfinding(IntPtr ptr): base(ptr, "Pathfinding") {
+        if (ptr != default) 
+            Tick(ptr, tName + "()");
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

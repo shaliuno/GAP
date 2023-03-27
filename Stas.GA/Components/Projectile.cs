@@ -1,8 +1,7 @@
 ﻿namespace Stas.GA;
 internal class Projectile : EntComp {
 
-    public Projectile(IntPtr ptr) : base(ptr) {
-        _tname = "Positioned";
+    public Projectile(IntPtr ptr) : base(ptr, "Projectile") {
         if (ptr != default)
             Tick(ptr, tName + "()");
     }

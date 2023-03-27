@@ -1,7 +1,6 @@
 ﻿namespace Stas.GA;
 internal class Transitionable : EntComp {
-    public Transitionable(IntPtr ptr) : base(ptr) {
-        _tname = "Transitionable";
+    public Transitionable(IntPtr ptr) : base(ptr, "Transitionable") { 
         if (ptr != default)
             Tick(ptr, tName + "()");
     }

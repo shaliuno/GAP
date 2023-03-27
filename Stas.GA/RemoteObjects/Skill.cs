@@ -5,8 +5,7 @@ using System.Xml.Linq;
 namespace Stas.GA;
 
 public partial class Skill : RemoteObjectBase {
-    public Skill(IntPtr ptr, Actor _actor) : base(ptr, _actor) {
-        _tname = "Skill";
+    public Skill(IntPtr ptr, Actor _actor) : base(ptr, "Skill") {
         actor = _actor;
         if (ptr != default)
             Tick(ptr, tName + "()");

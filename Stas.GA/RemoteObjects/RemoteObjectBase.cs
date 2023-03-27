@@ -1,45 +1,50 @@
 ﻿using ImGuiNET;
 using System.Reflection;
+
 namespace Stas.GA;
-/// <summary>
-///     Points to a Memory location and reads/understands all the data from there.
-///     CurrentAreaInstance in remote memory location changes w.r.t time or event. Due to this,
-///     each remote memory object requires to implement a time/event based coroutine.
-/// </summary>
-public abstract class RemoteObjectBase {
+public abstract class ObjectBase {
     public uint version { get; protected set; } = 0;
+    /// <summary>
+    /// this.Type.Name for show in debug
+    /// </summary>
     protected string _tname;
     /// <summary>
     /// this.Type.Name for show in debug
     /// </summary>
     public string tName => _tname;
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="RemoteObjectBase" /> class.
-    /// </summary>
-    /// <param name="address">address of the remote memory object.</param>
-    internal RemoteObjectBase(IntPtr ptr,  object obj=null) { 
-        Address = ptr;
-        if (tName == "ActorSkill" && obj != null) {
-            ((Skill)this).setActor((Actor)obj);
-        }else if (tName == "ActionWrapper" && obj != null) {
-            ((ActionWrapper)this).setActor((Actor)obj);
-        }
-        //if (ptr != default)
-        //    Tick(ptr, tName + "()");
-    }
-    internal RemoteObjectBase() {
-        //var here = this.GetType().FullName;
-        ui.AddToLog(tName + "() err: debug me", MessType.Error);
-    }
     public IntPtr Address { get; protected private set; }
+
+
+    public virtual void Update(nint ptr, string from) {
+        Address = ptr;
+    }
+
+    public ObjectBase(IntPtr ptr, string tname = null) {
+        Address = ptr;
+        if (tname == null)
+            _tname = GetType().Name;
+        else
+            _tname = tname;
+    }
+}
+/// <summary>
+///     Points to a Memory location and reads/understands all the data from there.
+///     CurrentAreaInstance in remote memory location changes w.r.t time or event. Due to this,
+///     each remote memory object requires to implement a time/event based coroutine.
+/// </summary>
+public abstract class RemoteObjectBase : ObjectBase {
+    public RemoteObjectBase(IntPtr ptr, string name = null) : base(ptr, name) {
+        if (ptr != default)
+            Tick(ptr, tName + "()");
+    }
+    internal abstract void Tick(IntPtr ptr, string from = null);
 
     /// <summary>
     ///     Knows how to clean up the object.
     /// </summary>
     protected abstract void Clear();
-    internal abstract void Tick(IntPtr ptr, string from=null);
-       
-    #region ImGui old trash
+
+    #region  old ImGui
     /// <summary>
     ///     Converts the <see cref="RemoteObjectBase" /> to ImGui Widget via reflection.
     ///     By default, only knows how to convert <see cref="address" /> field
@@ -116,39 +121,4 @@ public abstract class RemoteObjectBase {
     }
     #endregion
 }
-/// <summary>
-/// Most of EntComp should be updated even if address hasn't changed.
-/// </summary>
-public abstract class EntComp : RemoteObjectBase {
-    public EntComp(IntPtr address) : base(address) { }
-    IntPtr _optr = IntPtr.Zero;
-    /// <summary>
-    /// ovner entity ptr
-    /// </summary>
-    public IntPtr owner_ptr { get {
-            if (_optr == IntPtr.Zero) {
-                _optr = ui.m.Read<IntPtr>(Address + 8);//entity ptr
-            }
-            return _optr;
-        } }
 
-    DateTime last_meta = DateTime.MinValue;
-    string _md;
-    public string metadata {
-        get {
-            if (last_meta == DateTime.MinValue) {
-                var ent = new Entity(owner_ptr);
-                //var _optr = ui.m.Read<IntPtr>(Address + 8);//entity ptr
-                var m_ptr = ui.m.Read<IntPtr>(this.owner_ptr + 8);
-                _md = ui.m.ReadStdWString(ui.m.Read<StdWString>(m_ptr + 8L));
-                last_meta = DateTime.Now;
-            }
-            return _md;
-        }
-    }
-    protected override void Clear() {
-        _md = null;
-        last_meta = DateTime.MinValue;
-        _optr = IntPtr.Zero;
-    }
-}

@@ -6,10 +6,9 @@ namespace Stas.GA;
 ///  [3] ui.states.ingame_state.curr_world_data  
 /// </summary>
 public class WorldData : RemoteObjectBase {
-    internal WorldData(IntPtr ptr) : base(ptr) { 
-        _tname = "WorldData";
-        if (ptr != default) 
-            Tick(ptr, tName + "()"); }
+    internal WorldData(IntPtr ptr) : base(ptr, "WorldData") { 
+       
+    }
     //OnPerFrame(), "[AreaInstance] Update World Data", int.MaxValue - 3
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

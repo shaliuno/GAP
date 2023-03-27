@@ -7,8 +7,7 @@ namespace Stas.GA;
 /// </summary>
 [CodeAtt("area changed generator")]
 public sealed class AreaLoadingState : RemoteObjectBase {
-    internal AreaLoadingState(IntPtr address) : base(address) {
-        _tname = "AreaLoadingState";
+    internal AreaLoadingState(IntPtr address) : base(address, "AreaLoadingState") {
     }
     AreaLoadingStateOffset lastCache;
 

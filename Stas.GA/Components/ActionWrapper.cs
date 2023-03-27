@@ -2,8 +2,7 @@
 
 namespace Stas.GA;
 public class ActionWrapper : EntComp {
-    public ActionWrapper(IntPtr address, Actor _actor) : base(address) {
-        _tname = "ActionWrapper";
+    public ActionWrapper(IntPtr address, Actor _actor) : base(address, "ActionWrapper") {
         actor = _actor;
     }
 

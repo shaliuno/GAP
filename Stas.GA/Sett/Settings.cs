@@ -1,13 +1,15 @@
 ﻿namespace Stas.GA;
 
 public partial class Settings : iSett {
+    public float loot_dist { get; set; } = 60;
     //use for debug same, like native dll
     public bool b_debug_native_dll { get; set; } = false;
     [JsonInclude]
     public string production_config_path = @"C:\Users\poe\Documents\My Games\Path of Exile\production_Config.ini";
     [JsonInclude]
     public bool b_use_gh_map = false;
-   
+    [JsonInclude]
+    public bool b_gui_on_top = false;
     [JsonInclude]
     public Role role = Role.None;
     public string pp_name = "PathOfExile"; //PathOfExile_KG PathOfExileSteam PathOfExile_x64 if we support it

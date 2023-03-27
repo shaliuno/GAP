@@ -66,11 +66,12 @@ public class Memory : SafeHandleZeroOrMinusOneIsInvalid {
         }
     }
 
-    public T Read<T>(long addr, params int[] offsets) where T : unmanaged {
-        return Read<T>(new IntPtr(addr), offsets);
+    public T Read<T>(long addr,string from, params int[] offsets) where T : unmanaged {
+        return Read<T>(new IntPtr(addr), from, offsets);
     }
-    public T Read<T>(IntPtr addr, params int[] offsets) where T : unmanaged {
-        if (addr == IntPtr.Zero) return default;
+    public T Read<T>(IntPtr addr, string from, params int[] offsets) where T : unmanaged {
+        if (addr == IntPtr.Zero) 
+            return default;
         var num = Read<long>(addr);
         var result = num;
 

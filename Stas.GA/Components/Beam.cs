@@ -1,8 +1,7 @@
 ﻿using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 public class Beam : EntComp {
-    public Beam(IntPtr address) : base(address) {
-        _tname = "Beam";
+    public Beam(IntPtr address) : base(address, "Beam") {
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

@@ -2,23 +2,24 @@
 namespace Stas.GA;
 
 public partial class GameUiElements : Element {
-    public Element KiracMission = new Element("KiracMission") ;
-    public Element open_right_panel = new Element("OpenRightPanel");
-    public Element open_left_panel = new Element("OpenLeftPanel") ;
-    public Element passives_tree = new Element("passives_tree") ;
-    public NpcDialog NpcDialog = new NpcDialog();
-    public Element LeagueNpcDialog = new Element("LeagueNpcDialog") ;
-    public Element BetrayalWindow = new Element("BetrayalWindow") ;
-    public Element AtlasSkillPanel = new Element("AtlasSkillPanel") ;
-    public Element DelveWindow = new Element("DelveWindow");
-    public Element TempleOfAtzoatl = new Element("TempleOfAtzoatl");
-    public Element AtlasPanel = new Element("AtlasPanel") ;
-
+    //all of this element can be found by ui.test.GetRootElemUnderCursor(0);
+    public Element map_devise => new Element(data.MapDeviceWindow, "map_devise");
+    public Element KiracMission => new Element(data.KiracMission, "KiracMission");
+    public Element open_right_panel => new Element(data.open_right_panel, "OpenRightPanel");
+    public Element open_left_panel => new Element(data.open_left_panel, "OpenLeftPanel");
+    public NpcDialog NpcDialog => new NpcDialog(data.NpcDialog);
+    public Element LeagueNpcDialog => new Element(data.LeagueNpcDialog, "LeagueNpcDialog");
+    public Element BetrayalWindow => new Element(data.BetrayalWindow, "BetrayalWindow"); 
+    public Element AtlasSkillPanel => new Element(data.AtlasSkillPanel, "AtlasSkillPanel");
+    public Element DelveWindow => new Element(data.DelveWindow, "DelveWindow");
+    public Element TempleOfAtzoatl => new Element(data.TempleOfAtzoatl, "TempleOfAtzoatl");
+    public Element AtlasPanel => new Element(data.AtlasPanel, "AtlasPanel");
+    internal Element passive_tree => new Element(data.passives_tree, "AtlasPanel");
     bool _bbi;
     public string b_busy_info { get; private set; }
     Dictionary<string, Element> need_check_vis = new();
-    StringBuilder sb = new StringBuilder();
     object locker = new object();
+    StringBuilder sb= new StringBuilder();
     /// <summary>
     /// same time make debug string b_busy_info
     /// </summary>
@@ -28,7 +29,11 @@ public partial class GameUiElements : Element {
             lock (locker) {// we need lock sb from multy thread reading
                 sb.Clear();
                 foreach (var e in need_check_vis.Values) {
-                    if (e.IsValid) {
+                    if (e == null) {
+                        sb.AppendLine("same safeElemem==null");
+                        continue;
+                    }
+                    if ( e.IsValid) {
                         if (e.IsVisible) {
                             _bbi = true;
                             sb.AppendLine(e.tName + "=[true]");

@@ -8,9 +8,7 @@ public partial class DrawMain : Overlay {
     public IntPtr icons;
     public string title_name { get; }
     public static bool b_ready = false;
-    public IntPtr VS_ptr;
     public DrawMain(string title) : base(title, true) {
-        VS_ptr = new IntPtr(132050);
     }
     protected override Task PostInitialized() {
         AddOrGetImagePointer(ui.sett.icons_fname, true, out var p, out var _, out var _);
@@ -37,8 +35,6 @@ public partial class DrawMain : Overlay {
             return;
         }
         if (ui.test_elem != null && ui.sett.b_develop) { // && ui.tasker.ui_root.IsValid
-            ui.test_elem.Tick(ui.test_elem.Address, "debug_gui");
-            GetUiFrames();
             DrawUiFrames();
             DrawInfo();
             return;

@@ -1,17 +1,12 @@
 ﻿namespace Stas.GA;
 
 public class GrantedEffectsPerLevel : RemoteObjectBase {
-    public GrantedEffectsPerLevel(IntPtr address) : base(address) {
-        _tname = "GrantedEffectsPerLevel";
+    public GrantedEffectsPerLevel(IntPtr address) : base(address, "GrantedEffectsPerLevel") {
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
-        if (Address == IntPtr.Zero)
+        if (Address == default)
             return;
-        if (Address == 0x0000025decf62f18) {
-
-            var aaa = Convert.ToInt32(TimeSpan.FromMilliseconds(1200).Seconds);
-        }
         SkillGemWrapper.Tick(ui.m.Read<IntPtr>(Address));
         Level = ui.m.Read<int>(Address + 0x10); //dpb 3.19.2
         RequiredLevel = ui.m.Read<int>(Address + 0x14);//dpb 3.19.2

@@ -33,13 +33,11 @@ public partial class ui {
     public static void SetDebugPossible() {
         ui.draw_main.SetOverlayClickable(false, false);
         Thread.Sleep(100);
-        ////var b_vs_top = ui.draw_main.VS_ptr == EXT.GetForegroundWindow();
         var elaps = 0;
-        var one_tick = 1000;
+        var one_tick = 50;
         while (b_imgui_top) {
             if (ui.b_alt)
                 break;
-            EXT.SetWindowToTop(ui.draw_main.VS_ptr);
             Thread.Sleep(one_tick);
             elaps += one_tick;
             ui.AddToLog("elaps=[" + elaps + "]");
@@ -56,7 +54,7 @@ public partial class ui {
         return b_sp_is_safe(sp);
     }
     public static bool b_sp_is_safe(V2 sp) {
-        foreach (var b in gui.safe_screen.Blocks.Values) {
+        foreach (var b in ui.safe_screen.Blocks.Values) {
             if (b != null && b.Insade(sp))
                 return false;
         }

@@ -1,16 +1,13 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 
 namespace Stas.GA {
     /// <summary>
     ///     Contains the static data for calculating the terrain height.
     /// </summary>
     public class TerrainHeightHelper : RemoteObjectBase {
-        internal TerrainHeightHelper(IntPtr ptr, int size) : base(ptr) {
-            _tname = "TerrainHeightHelper";
-            this.Values = new byte[size];
-            if (ptr != default)
-                Tick(ptr, tName + "()");
+        internal TerrainHeightHelper(IntPtr ptr, int size) : base(ptr, "TerrainHeightHelper") {
+            this.Values = new byte[size]; 
+           
         }
         internal override void Tick(IntPtr ptr, string from=null) {
             Address = ptr;

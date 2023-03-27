@@ -7,7 +7,6 @@ namespace Stas.GA;
 /// </summary>
 public class Base : EntComp {
     public Base(IntPtr address) : base(address) {
-        _tname = "Base";
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
@@ -25,7 +24,17 @@ public class Base : EntComp {
                 this.ItemBaseName = name;
             }
         }
+        InfluenceFlag = (Influence)data.InfluenceFlag;
+        isCorrupted = (data.isCorrupted & 0x01) == 0x01;
     }
+    Influence InfluenceFlag;
+    public bool isShaper => (InfluenceFlag & Influence.Shaper) == Influence.Shaper;
+    public bool isElder => (InfluenceFlag & Influence.Elder) == Influence.Elder;
+    public bool isCrusader => (InfluenceFlag & Influence.Crusader) == Influence.Crusader;
+    public bool isHunter => (InfluenceFlag & Influence.Hunter) == Influence.Hunter;
+    public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
+    public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
+    public bool isCorrupted { get; private set; }
     /// <summary>
     ///     Cache the BaseItemType.Dat data to save few reads per frame.
     /// </summary>
@@ -42,11 +51,17 @@ public class Base : EntComp {
         ImGui.Text($"Base Name: {this.ItemBaseName}");
     }
 
-   
-
-    
-
     private static void OnGameClose() {
         BaseItemTypeDatCache.Clear();
     }
+}
+
+[Flags]
+public enum Influence : byte {
+    Shaper = 1,
+    Elder = 2,
+    Crusader = 4,
+    Redeemer = 8,
+    Hunter = 16,
+    Warlord = 32,
 }

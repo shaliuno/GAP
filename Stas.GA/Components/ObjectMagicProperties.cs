@@ -1,15 +1,10 @@
 ﻿using ImGuiNET;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace Stas.GA; 
-/// <summary>
-///     ObjectMagicProperties component of the entity.
-/// </summary>
+
 public class ObjectMagicProperties : EntComp {
-    public ObjectMagicProperties(IntPtr ptr) : base(ptr) {
-        _tname = "OMP";
-        if (ptr != default)
-            Tick(ptr, tName+"()");
+    public ObjectMagicProperties(IntPtr ptr) : base(ptr, "OMP") {
+        if (ptr != default) 
+            Tick(ptr, tName + "()"); 
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
@@ -29,7 +24,6 @@ public class ObjectMagicProperties : EntComp {
         if (hash == last_hash) {//not need update
             return;
         }
-
         var first = data.Mods.First.ToInt64();
         var last = data.Mods.Last.ToInt64();
         var end = data.Mods.First.ToInt64() + 256 * MOD_RECORD_SIZE;
@@ -40,7 +34,7 @@ public class ObjectMagicProperties : EntComp {
 
         last = Math.Min(last, end);
         for (var i = first + MOD_RECORDS_OFFSET; i < last; i += MOD_RECORD_SIZE) {
-            var s_ptr = ui.m.Read<long>(i + MOD_RECORD_KEY_OFFSET, 0); //2718175514169
+            var s_ptr = ui.m.Read<long>(i + MOD_RECORD_KEY_OFFSET, tName, 0); //2718175514169
             //todo sametime null-error  here - need remake this method  
             var mod = ui.m.ReadStringU(s_ptr);
             _ModNamesList.Add(mod);

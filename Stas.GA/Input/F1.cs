@@ -11,21 +11,17 @@ public partial class InputChecker {
                 //ui.test.GetTopElemUnderCursor();
                 //ui.test.GetRootElemUnderCursor();
                 //ui.test.WorlToSPCheck();
-               
             }
             else {
-               
+                #region OLD
                 //var cam = ui.m.Read<CameraOffsets>( ui.camera.Address);
                 //ui.test.FindUiElemNotUnick("Nessa");
                 //ui.test_elem =FindSameUIElement("Decorations", 1)[0].Item1; //660
                 //ui.test_elem =FindSameUIElement("Inventory",1)[0].Item1; //0x568
-                //ui.test_elem = ui.gui;
-                #region OLD
+                //ui.test_elem = ui.gui.large_map;
                 //var elem = new Element("test");
                 //ui.texts.Clear();
                 //elem.Tick(new nint(0x234DE439790));
-
-
                 //GetEntComponetns();
                 //ui.me.GetComp<Positioned>(out var pos);
                 //var skill = ui.worker.jump.skill.CanBeUsed;
@@ -57,77 +53,13 @@ public partial class InputChecker {
             }
         }
     }
-    void TestFlasks() {
-        var flask = ui.flasks[0, 1];
-        flask.GetComp<Charges>(out var charges);
-        flask.GetComp<Mods>(out var mods);
-    }
+   
     void TestCamera() {
         var ptr = ui.camera.Address;
         var co = new CameraOffsets();
         Camera.GetCameraOffsets(ptr, ui.states.ingame_state.Address, ref co);
     }
-    //run after Elem with pattern was open and closed
-    List<(Element, string)> FindSameUIElement(string pattern, int index) {
-        var res = new List<(Element, string)>();
-        foreach (var e_ptr in ui.gui.children_pointers) {
-            var ne = new Element(e_ptr, e_ptr.ToString("X"));
-            ne.Tick(e_ptr, "F1.FindSameUIElement"); //for reload children
-            if (ne.children.Count > index+1) {
-                if (ne.children[index].Text == pattern)
-                    res.Add((ne, get_offs_to_gui(e_ptr)));
-            }
-        }
-        string get_offs_to_gui(IntPtr ptr_i_need) {
-            string res = "";
-            var gui_ptr = ui.gui.Address;
-            for (var i = 0; i < 1600; i += 8) {
-                var c_ptr = ui.m.Read<IntPtr>(gui_ptr + i);//current ptr
-                if (c_ptr == ptr_i_need) {
-                    res = i.ToString("X");
-                    break;
-                }
-            }
-            return res;
-        }
-        return res;
-    }
-    void GetEntComponetns() {
-        ui.me.GetComp<Actor>(out var actor);
-       
-        var start = actor.Address;
-        var list = new Dictionary<IntPtr, string>();
-        for (int off = 0; off < 64; off += 8) {
-            var ne = new Entity(actor.Address + off);
-            var entityData = ui.m.Read<EntityOffsets>(ne.Address);
-           
-            var idata = entityData.ItemBase;
-            var entityComponent = ui.m.ReadStdVector<IntPtr>(idata.ComponentListPtr);
-            var entityDetails = ui.m.Read<EntityDetails>(idata.EntityDetailsPtr);
-            var lookupPtr = ui.m.Read<ComponentLookUpStruct>(entityDetails.ComponentLookUpPtr);
-
-            var namesAndIndexes = ui.m.ReadStdBucket<ComponentNameAndIndexStruct>(lookupPtr.ComponentsNameAndIndex);
-            Debug.Assert(namesAndIndexes.Count < 20);
-            for (var i = 0; i < namesAndIndexes.Count; i++) {
-                var nameAndIndex = namesAndIndexes[i];
-                if (nameAndIndex.Index >= 0 && nameAndIndex.Index < entityComponent.Length) {
-                    var name = ui.m.ReadString(nameAndIndex.NamePtr);
-                    if (!string.IsNullOrEmpty(name)) {
-                        //list.Add(name, entityComponent[nameAndIndex.Index]);
-                    }
-                }
-            }
-            Thread.Sleep(1);
-            ui.AddToLog("sershing...[" + off + "]", MessType.Critical);
-        }
-    }
-
-    void TestSkill() {
-        ui.me.GetComp<Actor>(out var actor);
-        var skill = actor.actor_skills.FirstOrDefault(s => s.Id == 32772);
-        var @in = skill.InternalName;
-        var name = skill.Name;
-    }
+   
     void b_busy_info_crash() {
         var tl = new List<int>();
         int i = 0;

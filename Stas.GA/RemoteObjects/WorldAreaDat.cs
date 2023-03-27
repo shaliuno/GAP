@@ -6,10 +6,8 @@ namespace Stas.GA;
 ///     Points to a row in WorldArea.dat file.
 /// </summary>
 public class WorldAreaDat : RemoteObjectBase {
-    internal WorldAreaDat(IntPtr ptr)  : base(ptr) {
-        _tname = "WorldAreaDat";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    internal WorldAreaDat(IntPtr ptr)  : base(ptr, "WorldAreaDat") {
+     
     }
     //this never update without addres changed
     internal override void Tick(IntPtr ptr, string from = null) {

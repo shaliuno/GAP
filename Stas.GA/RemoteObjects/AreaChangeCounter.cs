@@ -1,13 +1,11 @@
 ﻿using ImGuiNET;
-
 namespace Stas.GA;
 /// <summary>
 /// this 'value' need for preload for cheking version of files
 /// </summary>
 [CodeAtt("Must be updated after each map change")]
 public class AreaChangeCounter : RemoteObjectBase {//core.
-    internal AreaChangeCounter(IntPtr address) : base(address) {
-        _tname = "AreaChangeCounter";
+    internal AreaChangeCounter(IntPtr address) : base(address, "AreaChangeCounter") {
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

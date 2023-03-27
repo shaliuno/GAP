@@ -12,11 +12,13 @@ public partial class ui {
     public static int elem_text_offs = 0x3F8;
     public static int IsVisibleLocalOffs = 0x161;
     static Dictionary<string, MapIconsIndex> Icons;
+    public static Dictionary<string, string> gui_offs_nams = new();
     public static ConcurrentDictionary<IntPtr, DateTime> w8ting_click_until = new();
     /// <summary>
     ///Necessary for fast UpdateComponentData.  Must be cleared for each new map
     /// </summary>
-    public static ConcurrentDictionary<IntPtr, string> string_cashe = new();
+    public static StringCache string_cashe = new();
+    public static IStaticCache<string> StringCache { get; private set; } = new StaticCache<string>(300);
     public static MapIconsIndex IconIndexByName(string name) {
         name = name.Replace(" ", "").Replace("'", "");
         Icons.TryGetValue(name, out var result);
@@ -31,6 +33,7 @@ public partial class ui {
     static Stopwatch sw_main = new Stopwatch();
     public static HotKeysFromGame hot_keys;
     static InputChecker input_check;
+    public static SafeScreen safe_screen;
 
     public static void InitNative(int pid) {
         //ReloadSett();
@@ -60,6 +63,7 @@ public partial class ui {
             hot_keys.use_flask_in_slot3.Key, hot_keys.use_flask_in_slot4.Key,hot_keys.use_flask_in_slot5.Key});
  
         udp_sound = new UdpSound();
+        safe_screen = new SafeScreen();
         StartGameWatcher();
         SetRole();
         looter = new Looter();
@@ -77,22 +81,22 @@ public partial class ui {
                         AddToLog("w8 game not loading... ", MessType.Critical);
                         AddToLog("Use [Alt]+[Shift] to activate this window", MessType.Critical);
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(400);
                     continue;
                 }
                 sw_main.Restart();
                 if(states.b_ready)
-                    states.Tick(states.Address, "frame thread");
+                    states.Tick(states.Address, tName + ".main");
                
                 if (curr_state == gState.InGameState) {
                     foreach (var n in need_upd_per_frame)
-                        n?.Tick(n.Address, "frame thread");
+                        n?.Tick(n.Address, tName + ".main");
                     CheckWorker();
                     //todo: temporary dont need a worker
                     tasker.Tick();
                     if (worker == null) {
                         if(!sett.b_debug_native_dll)
-                            ui.AddToLog("Frame err: worker need be setup", MessType.Warning);
+                            ui.AddToLog(tName + ".main worker need be setup", MessType.Warning);
                         Thread.Sleep(w8);
                         continue;
                     }

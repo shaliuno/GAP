@@ -76,7 +76,7 @@ namespace Stas.GA {
         }
         public static bool b_busy {
             get {
-                if (!gui.b_init || curr_state != gState.InGameState)
+                if (!gui.IsValid || curr_state != gState.InGameState)
                     return true;
                 var res = b_chat_box_inp || gui.b_busy;
                 return res;

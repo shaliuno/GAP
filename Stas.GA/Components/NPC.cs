@@ -5,8 +5,7 @@ using System;
 ///     The <see cref="NPC" /> component in the entity.
 /// </summary>
 public class NPC : EntComp {
-    public NPC(IntPtr address) : base(address) {
-        _tname = "NPC";
+    public NPC(IntPtr address) : base(address, "NPC") {
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;

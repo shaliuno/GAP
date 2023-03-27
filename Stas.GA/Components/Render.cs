@@ -7,14 +7,13 @@ namespace Stas.GA;
 ///     The <see cref="Render" /> component in the entity.
 /// </summary>
 public class Render : EntComp {
-    public Render(IntPtr ptr) : base(ptr) {
-        _tname = "Render";
+    public Render(IntPtr ptr) : base(ptr, "Render") { 
         if (ptr != default)
             Tick(ptr, tName + "()");
     }
   
     internal override void Tick(IntPtr ptr, string from=null) {
-        if (Address == IntPtr.Zero)
+        if (Address == default)
             return;
         var data = ui.m.Read<RenderOffsets>(Address);
         WorldPosition = data.CurrentWorldPosition;

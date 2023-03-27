@@ -1,9 +1,7 @@
 ﻿using ImGuiNET;
 namespace Stas.GA; 
 public class Player : EntComp{
-
-    public Player(IntPtr address)   : base(address) {
-        _tname = "Player";
+    public Player(IntPtr address) : base(address, "Player") {
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

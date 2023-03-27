@@ -1,70 +1,58 @@
-using System.Collections.Generic;
-using System;
+using System.Diagnostics;
+namespace Stas.GA;
 
-namespace Stas.GA {
-    public class ItemsOnGroundLabelElement : RemoteObjectBase {
-        public ItemsOnGroundLabelElement(IntPtr ptr):base(ptr) {
-            _tname = "ItemsOnGroundLabelElement";
-
+public class ItemsOnGroundLabelElement : Element {
+    CachedValue<ItemsOnGroundLabelElementOffsets> _data;
+    public ItemsOnGroundLabelElement(nint ptr, string name = "ItemsOnGroundLabelElement") :base(ptr, name) {
+        _data = new FrameCache<ItemsOnGroundLabelElementOffsets>(() 
+            => ui.m.Read<ItemsOnGroundLabelElementOffsets>(Address)); 
+    }
+    public Element LabelOnHover {
+        get {
+            var readObjectAt = new Element(_data.Value.LabelOnHoverPtr);
+            return readObjectAt.Address == 0 ? null : readObjectAt;
         }
-        internal override void Tick(IntPtr ptr, string from = null) {
-            Address = ptr;
-            if (Address == default) {
-                Clear();
-                return;
-            }
+    }
+
+    public Entity ItemOnHover {
+        get {
+            var ptr = ui.m.Read<IntPtr>(_data.Value.ItemOnHoverPtr);
+            var readObjectAt = new Entity(ptr);
+            return readObjectAt.Address == 0 ? null : readObjectAt;
         }
-        protected override void Clear() {
-        }
-           
-        public Element LabelOnHover {
-            get {
-                var readObjectAt = new Element(Address+ 0x290, "LabelOnHover");
-                return readObjectAt.Address == IntPtr.Zero ? null : readObjectAt;
-            }
-        }
+    }
 
-        public Entity ItemOnHover {
-            get {
-                var readObjectAt = new Entity(Address + 0x298);
-                return readObjectAt.Address == IntPtr.Zero ? null : readObjectAt;
-            }
-        }
+    public string ItemOnHoverPath => ItemOnHover != null ? ItemOnHover.Path : "Null";
+    public string LabelOnHoverText => LabelOnHover != null ? LabelOnHover.Text : "Null";
+    public int CountLabels => ui.m.Read<int>(Address + 0x2B0);
+    public int CountLabels2 => ui.m.Read<int>(Address + 0x2F0);
 
-        public string ItemOnHoverPath => ItemOnHover != null ? ItemOnHover.Path : "Null";
-        public string LabelOnHoverText => LabelOnHover != null ? LabelOnHover.Text : "Null";
-        public int CountLabels => ui.m.Read<int>(Address + 0x2B0);
-        public int CountLabels2 => ui.m.Read<int>(Address + 0x2F0);
+    public List<LabelOnGround> LabelsOnGround {
+        get {
+            var address = ui.m.Read<IntPtr>(Address + 0x2A0);//0x000002b31af74180
+            var result = new List<LabelOnGround>();
 
-        public List<LabelOnGround> LabelsOnGround {
-            get {
-                var address = ui.m.Read<long>(Address + 0x2A8);
+            if (address.ToInt64() <= 0)
+                return new List<LabelOnGround>();
 
-                var result = new List<LabelOnGround>();
+            var limit = 0;
 
-                if (address <= 0)
-                    return new List<LabelOnGround>();
-
-                var limit = 0;
-
-                for (var nextAddress = ui.m.Read<long>(address); nextAddress != address; nextAddress = ui.m.Read<long>(nextAddress)) {
-                    var labelOnGround = new LabelOnGround(new IntPtr(nextAddress));
-
-                    if (labelOnGround?.Label?.IsValid ?? false)
-                        result.Add(labelOnGround);
-
-                    limit++;
-
-                    if (limit > 100000)
-                        return new List<LabelOnGround>();
+            for (var i = ui.m.Read<long>(address); i != address.ToInt64(); i = ui.m.Read<long>(i)) {
+                var labelOnGround = new LabelOnGround(new nint(i), i.ToString());
+                if (labelOnGround?.Label?.IsValid ?? false) {
+                    result.Add(labelOnGround);
+                    var ent = labelOnGround.ItemOnGround;
+                    Debug.Assert(ent != null && ent.IsValid);
                 }
+                   
 
-                return result;
+                limit++;
+
+                if (limit > 100000)
+                    return new List<LabelOnGround>();
             }
+
+            return result;
         }
-       
-
-      
-
     }
 }

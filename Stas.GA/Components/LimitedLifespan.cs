@@ -2,8 +2,7 @@
 
 internal class LimitedLifespan : RemoteObjectBase {
     public Entity parent { get; } = new Entity();
-    public LimitedLifespan(IntPtr ptr):base(ptr) {
-        _tname = "LimitedLifespan";
+    public LimitedLifespan(IntPtr ptr):base(ptr, "LimitedLifespan") {
     }
     public void TryFindeLInkedEnt() {
         var start = Address.ToInt64();

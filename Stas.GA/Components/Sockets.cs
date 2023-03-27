@@ -1,10 +1,9 @@
 ﻿using System.Text;
 namespace Stas.GA;
 public class Sockets : EntComp {
-    public Sockets(IntPtr ptr) : base(ptr) {
-        _tname = "Sockets";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public Sockets(IntPtr ptr) : base(ptr, "Sockets") { 
+        if (ptr != default) 
+            Tick(ptr, tName + "()"); 
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

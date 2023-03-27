@@ -1,9 +1,7 @@
 ﻿namespace Stas.GA; 
 
 public class Stack : EntComp {
-    public Stack(IntPtr ptr) : base(ptr) {
-        _tname = "Stack";
-
+    public Stack(IntPtr ptr) : base(ptr, "Stack") {
     }
     public int Size { get; private set; }
     public CurrencyInfo Info { get; } = new CurrencyInfo(IntPtr.Zero);
@@ -21,8 +19,7 @@ public class Stack : EntComp {
     }
 }
 public class CurrencyInfo : RemoteObjectBase {
-    public CurrencyInfo(IntPtr ptr) : base(ptr) {
-        _tname = "CurrencyInfo";
+    public CurrencyInfo(IntPtr ptr) : base(ptr, "CurrencyInfo") {
     }
     public int MaxStackSize { get; private set; }
     internal override void Tick(IntPtr ptr, string from=null) {

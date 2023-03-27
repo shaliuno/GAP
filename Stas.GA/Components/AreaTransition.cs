@@ -1,7 +1,6 @@
 ﻿namespace Stas.GA;
 internal class AreaTransition: EntComp {
-    public AreaTransition(IntPtr address) : base(address) {
-        _tname = "AreaTransition";
+    public AreaTransition(IntPtr address) : base(address, "AreaTransition") {
     }
 
     internal override void Tick(nint ptr, string from = null) {

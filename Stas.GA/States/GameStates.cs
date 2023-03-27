@@ -9,8 +9,7 @@ namespace Stas.GA;
 /// </summary>
 [CodeAtt("game ctate changer")]
 public class GameStates : RemoteObjectBase {
-    internal GameStates(IntPtr address) : base(address) {
-        _tname = "GameStates";
+    internal GameStates(IntPtr address) : base(address, "GameStates") {
     }
     gState _cgs = gState.GameNotLoaded; //current game state
     gState _old_gs;
@@ -64,15 +63,14 @@ public class GameStates : RemoteObjectBase {
             curr_gState = AllStates[curr_gState_ptr];
             ui.AddToLog(tName + ".curr_gState=>" + _cgs, MessType.Warning);
             if (curr_gState != gState.EscapeState && curr_gState != gState.InGameState) {
-                ingame_state.Tick(default);
+                ingame_state.Tick(default, tName);
                 ui.ResetWorker();
                 ui.nav.b_ready = false; //dont check hero and visited
-                ui.gui.Tick(default, tName + "=>bad stage");
+                ui.gui.Update(default, tName + "=>bad stage");
             }
         }
         Debug.Assert(data.State0 != default && data.State4 != default);
-
-        if (curr_gState == gState.InGameState) {
+        if (curr_gState == gState.InGameState && from=="ui.main") {
             area_loading_state.Tick(data.State0, tName);
             ingame_state.Tick(data.State4, tName);
         }
@@ -84,7 +82,7 @@ public class GameStates : RemoteObjectBase {
         curr_gState = gState.GameNotLoaded;
         AllStates.Clear();
         area_loading_state.Tick(default, tName + ".Cleare");
-        ingame_state.Tick(default);
+        ingame_state.Tick(default, tName);
     }
     /// <summary>
     ///     Gets a dictionary containing all the Game States addresses.

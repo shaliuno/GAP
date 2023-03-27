@@ -93,7 +93,7 @@ namespace Stas.GA {
             var oround = grouts.Where(v => !v.b_visited && v.center.GetDistance(ui.me.gpos) < visited_dist);
             foreach (var gc in oround) {
                 if (!b_ready)
-                    return; //This can happen if we change the map while this function is running.
+                    break; //This can happen if we change the map while this function is running.
                 var sr = 0f; //total(summ) area of all routs
                 var sv = 0f; //total(summ) area of visited routs
                 foreach (var cl in gc.routs) {

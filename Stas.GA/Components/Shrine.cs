@@ -1,13 +1,10 @@
 ﻿using ImGuiNET;
 namespace Stas.GA;
-/// <summary>
-///     The <see cref="Shrine" /> component in the entity.
-/// </summary>
+
 public class Shrine : EntComp {
-    public Shrine(IntPtr ptr) : base(ptr) {
-        _tname = "Shrine";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public Shrine(IntPtr ptr) : base(ptr, "Shrine") {
+        if (ptr != default) 
+            Tick(ptr, tName + "()"); 
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

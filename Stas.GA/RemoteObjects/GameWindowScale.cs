@@ -7,8 +7,7 @@ namespace Stas.GA;
 ///     type of Ui-Elements. Only reads when game window moves/resize.
 /// </summary>
 public class GameWindowScale : RemoteObjectBase {
-    internal GameWindowScale(IntPtr address) : base(address) {
-        _tname = "GameWindowScale";
+    internal GameWindowScale(IntPtr address) : base(address, "GameWindowScale") {
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

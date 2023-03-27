@@ -1,10 +1,6 @@
 ﻿namespace Stas.GA; 
-
 public class WorldItem : EntComp {
-    public WorldItem(IntPtr ptr) : base(ptr) { //1B1DD150C10
-        _tname = "WorldItem";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public WorldItem(IntPtr ptr) : base(ptr, "WorldItem") {
     }
 
     //Size 0x28

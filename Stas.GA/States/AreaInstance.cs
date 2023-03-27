@@ -10,8 +10,7 @@ namespace Stas.GA;
 /// </summary>
 public partial class AreaInstance : RemoteObjectBase {
     #region init
-    internal AreaInstance(IntPtr address) : base(address) {
-        _tname = "AreaInstance";
+    internal AreaInstance(IntPtr address) : base(address, "AreaInstance") {
         environments = new();
         EntityCaches = new() {
             new("Breach", 1104, 1108, this.AwakeEntities),

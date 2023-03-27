@@ -39,13 +39,13 @@ namespace Stas.GA {
         public bool IsWarlord { get; }
         public bool IsWeapon { get; }
         public int ItemLevel { get; }
-       // public Mods mods { get; }
+        public Mods mods { get; }
         public readonly Base @base;
-       // public readonly Sockets sockets;
+        public readonly Sockets sockets;
         public int MapTier { get; }
         public string Path { get; }
         public int Quality { get; }
-        //public ItemRarity Rarity { get; }
+        public ItemRarity Rarity { get; }
         public int Sockets { get; }
         public int Width { get; }
         public bool IsFractured { get; }
@@ -55,47 +55,57 @@ namespace Stas.GA {
         public override string ToString() {
             return log.ToString();
         }
-        public Loot(LabelOnGround _label, Entity item_ent ) {
+        public Loot(LabelOnGround _label, Entity item_ent) {
             log = _label;
             Path = item_ent.Path;
-            //var baseItemType = ui.gc.Files.BaseItemTypes.Translate(Path);
-            //if(baseItemType != null) {
-            //    ClassName = baseItemType.ClassName;
-            //    BaseName = baseItemType.BaseName;
-            //    Width = baseItemType.Width;
-            //    Height = baseItemType.Height;
-            //    //if(weightsRules.TryGetValue(BaseName, out var w)) Weight = w;
-            //}
-        
-            //if(item_ent.GetComp<Quality>(out var quality)) {
-            //    Quality = (quality!=null)? quality.ItemQuality:0;
-            //}
-            //if(item_ent.GetComp<Stack>( out var _stack)) {
-            //    stack_size = _stack.Size;
-            //}
-            //if(item_ent.GetComp<Base>(out @base)) {
-            //    IsElder = @base.isElder;
-            //    IsShaper = @base.isShaper;
-            //    IsHunter = @base.isHunter;
-            //    IsRedeemer = @base.isRedeemer;
-            //    IsCrusader = @base.isCrusader;
-            //    IsWarlord = @base.isWarlord;
-            //}
-            //if(item_ent.GetComp<Mods>(out var _mods)) {
-            //    Rarity = _mods.ItemRarity;
-            //    IsIdentified = _mods.Identified;
-            //    ItemLevel = _mods.ItemLevel;
-            //    IsFractured = _mods.IsFractured;
-            //}
-            //if(item_ent.GetComp<Sockets>(out sockets)) {
-            //    IsRGB = sockets.IsRGB;
-            //    Sockets = sockets.NumberOfSockets;
-            //    LargestLink = sockets.LargestLinkSize;
-            //}
+            var baseItemType = ui.BaseItemTypes.Translate(Path);
+            if (baseItemType != null) {
+                ClassName = baseItemType.ClassName;
+                BaseName = baseItemType.BaseName;
+                Width = baseItemType.Width;
+                Height = baseItemType.Height;
+                //if(weightsRules.TryGetValue(BaseName, out var w)) Weight = w;
+            }
 
-            if(weapons.Any(ClassName.Equals)) 
+            if (item_ent.GetComp<Quality>(out var quality)) {
+                Quality = (quality != null) ? quality.ItemQuality : 0;
+            }
+            if (item_ent.GetComp<Stack>(out var _stack)) {
+                stack_size = _stack.Size;
+            }
+            if (item_ent.GetComp<Base>(out @base)) {
+                IsElder = @base.isElder;
+                IsShaper = @base.isShaper;
+                IsHunter = @base.isHunter;
+                IsRedeemer = @base.isRedeemer;
+                IsCrusader = @base.isCrusader;
+                IsWarlord = @base.isWarlord;
+            }
+            if (item_ent.GetComp<Mods>(out var _mods)) {
+                Rarity = _mods.ItemRarity;
+                IsIdentified = _mods.Identified;
+                ItemLevel = _mods.ItemLevel;
+                IsFractured = _mods.IsFractured;
+            }
+            if (item_ent.GetComp<Sockets>(out sockets)) {
+                IsRGB = sockets.IsRGB;
+                Sockets = sockets.NumberOfSockets;
+                LargestLink = sockets.LargestLinkSize;
+            }
+
+            if (weapons.Any(ClassName.Equals))
                 IsWeapon = true;
         }
     }
 
+    public enum ItemRarity {
+        Normal,
+        Magic,
+        Rare,
+        Unique,
+        Gem,
+        Currency,
+        Quest,
+        Prophecy
+    }
 }

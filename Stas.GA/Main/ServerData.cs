@@ -6,13 +6,12 @@ namespace Stas.GA;
 ///     core.states.ingame_state.curr_area_instance.server_data
 /// </summary>
 public class ServerData : RemoteObjectBase {
+    internal ServerData(IntPtr address) : base(address, "ServerData") {
+        next_upd = DateTime.Now;//.AddMilliseconds(3);
+    }
     public IList<ushort> skill_bar_ids { get; private set; } = new List<ushort>();
     IntPtr last_ptr = default;
     DateTime next_upd;
-    internal ServerData(IntPtr address) : base(address) {
-        _tname = "ServerData";
-        next_upd = DateTime.Now;//.AddMilliseconds(3);
-    }
     bool still_update = false;
     object locker = new();
     internal override void Tick(IntPtr ptr, string from) {

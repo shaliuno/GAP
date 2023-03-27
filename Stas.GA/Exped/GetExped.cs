@@ -8,6 +8,8 @@ public partial class AreaInstance {
     MapItem GetExped(Entity e, MapItem mi) {
         mi.info = pa_info(e);
         var key = e.GetKey;
+        if (mi.info.Contains("ExpeditionStash"))
+            return asStaticMapItem(e, miType.Stash, MapIconsIndex.ExpeditionStash);
         if (mi.info == "ExpeditionDetonator") {
             if (e.IsTargetable)
                 return asStaticMapItem(e, miType.ExpedDeton, MapIconsIndex.ExpeditionDetonator);

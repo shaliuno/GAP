@@ -69,7 +69,8 @@ public abstract partial class aTasker {
             if (this is Slave) {
                 var ll = ui.leader;
                 //For remove grace aura(if present) and visualise bot ready
-                if (ll.b_OK && ll.gdist_to_me < 20 && ui.worker.totem != null) {
+                //TODO[2] worker can be null here after map change
+                if (ll.b_OK && ll.gdist_to_me < 20 && ui.worker?.totem != null) {
                    // ui.tasker.TaskPop(new UseTotems(ll.pos));
                 }
             }

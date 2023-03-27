@@ -1,7 +1,6 @@
 namespace Stas.GA;
 public class Targetable : EntComp {
-    public Targetable(IntPtr ptr) : base(ptr) {
-        _tname = "Targetable";
+    public Targetable(IntPtr ptr) : base(ptr, "Targetable") {
         if (ptr != default)
             Tick(ptr, tName + "()");
     }

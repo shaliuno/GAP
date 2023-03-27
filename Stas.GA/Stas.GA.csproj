@@ -42,11 +42,11 @@
 		<Compile Remove="Draw\DrawAHKSett.cs" />
 		<Compile Remove="Draw\DrawCorutine.cs" />
 		<Compile Remove="Draw\DrawExpedSett.cs" />
+		<Compile Remove="Files\FilesContainer.cs" />
 		<Compile Remove="Input\CursorMover.cs" />
 		<Compile Remove="Inventory\InventSlotItem.cs" />
 		<Compile Remove="Inventory\ServerInventory.cs" />
 		<Compile Remove="Loot\NinjaUnique.cs" />
-		<Compile Remove="Loot\ReadingFrameLoot.cs" />
 		<Compile Remove="Sett\AHK_sett.cs" />
 		<Compile Remove="Tests\tElements.cs" />
 		<Compile Remove="Tests\tMoving.cs" />
@@ -74,7 +74,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ClickableTransparentOverlay\ClickableTransparentOverlay\ClickableTransparentOverlay.csproj" />
+		<ProjectReference Include="..\ClickableTransparentOverlay\ClickableTransparentOverlay.csproj" />
 		<ProjectReference Include="..\Stas.Utils\Stas.Utils.csproj" />
 	</ItemGroup>
 

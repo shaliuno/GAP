@@ -6,8 +6,7 @@ namespace Stas.GA;
 ///     The <see cref="Chest" /> component in the entity.
 /// </summary>
 public class Chest : EntComp {
-    public Chest(IntPtr address) : base(address) {
-        _tname = "Chest";
+    public Chest(IntPtr address) : base(address, "Chest") {
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;

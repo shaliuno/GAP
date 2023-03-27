@@ -1,8 +1,7 @@
 ﻿namespace Stas.GA;
 
 public class Animated : EntComp {
-    public Animated(IntPtr address) : base(address) {
-        _tname = "Animated";
+    public Animated(IntPtr address) : base(address, "Animated") {
         if (address != default)
             Tick(address, tName + "()");
     }

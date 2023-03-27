@@ -11,8 +11,7 @@ public partial class Camera : RemoteObjectBase {
     [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetCameraOffsets")]
     public static extern int GetCameraOffsets(IntPtr cam_ptr, IntPtr ingame_state_ptr,  ref CameraOffsets offs);
 
-    public Camera() : base(IntPtr.Zero) {
-        _tname = "Camera";
+    public Camera() : base(default, "Camera") {
     }
     CameraOffsets data = new CameraOffsets();
     internal override void Tick(IntPtr ptr, string from=null) {

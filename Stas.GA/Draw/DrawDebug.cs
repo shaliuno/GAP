@@ -243,9 +243,9 @@ public partial class DrawMain {
             "tgr=[" + ui.camera.target_ent?.RenderName + "]");
     }
     void DrawSaveScreen() {
-        if (ui.gui.safe_screen == null)
+        if (ui.safe_screen == null)
             return;
-        foreach (var b in ui.gui.safe_screen.Blocks.Values) {
+        foreach (var b in ui.safe_screen.Blocks.Values) {
             if (b != null) {
                 map_ptr.AddQuadFilled(b.a, b.b, b.c, b.d,
                     Color.FromArgb(100, Color.OrangeRed).ToImgui());
@@ -257,7 +257,7 @@ public partial class DrawMain {
         }
     }
     void DrawBadCentr() {
-        var sz = ui.gui.safe_screen;
+        var sz = ui.safe_screen;
         if (sz == null)
             return;
         foreach (var s in sz.Centr) {

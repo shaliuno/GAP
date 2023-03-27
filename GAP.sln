@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stas.GA", "Stas.GA\Stas.GA.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stas.Utils", "Stas.Utils\Stas.Utils.csproj", "{75903800-8AF1-4C61-B50B-53CA92E39AAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeTester", "NativeTester\NativeTester.csproj", "{D480951A-1FC6-4457-B6EA-E3485F276871}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickableTransparentOverlay", "ClickableTransparentOverlay\ClickableTransparentOverlay\ClickableTransparentOverlay.csproj", "{75F4F5DA-A86A-4E4A-AA52-03437DE7AA06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickableTransparentOverlay", "ClickableTransparentOverlay\ClickableTransparentOverlay.csproj", "{34B647EC-C839-4064-836C-7FC064B7C225}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +23,10 @@ Global
 		{75903800-8AF1-4C61-B50B-53CA92E39AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75903800-8AF1-4C61-B50B-53CA92E39AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75903800-8AF1-4C61-B50B-53CA92E39AAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D480951A-1FC6-4457-B6EA-E3485F276871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D480951A-1FC6-4457-B6EA-E3485F276871}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D480951A-1FC6-4457-B6EA-E3485F276871}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D480951A-1FC6-4457-B6EA-E3485F276871}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75F4F5DA-A86A-4E4A-AA52-03437DE7AA06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75F4F5DA-A86A-4E4A-AA52-03437DE7AA06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75F4F5DA-A86A-4E4A-AA52-03437DE7AA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75F4F5DA-A86A-4E4A-AA52-03437DE7AA06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B647EC-C839-4064-836C-7FC064B7C225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B647EC-C839-4064-836C-7FC064B7C225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B647EC-C839-4064-836C-7FC064B7C225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B647EC-C839-4064-836C-7FC064B7C225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

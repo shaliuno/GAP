@@ -4,8 +4,7 @@ namespace Stas.GA;
 public class Life : RemoteObjectBase {
     [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetLifeOffsets")]
     static extern IntPtr GetLifeOffsets(IntPtr ptr, ref LifeOffset offs);
-    public Life(IntPtr address)  : base(address) {
-        _tname = "Life";
+    public Life(IntPtr address)  : base(address, "Life") {
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
@@ -15,10 +14,10 @@ public class Life : RemoteObjectBase {
         GetLifeOffsets(Address, ref data);
       
         owner_addr = data.Header.EntityPtr;
-        this.Health = data.Health;
-        this.EnergyShield = data.EnergyShield;
-        this.Mana = data.Mana;
-        this.IsAlive = data.Health.Current > 0;
+        Health = data.Health;
+        EnergyShield = data.EnergyShield;
+        Mana = data.Mana;
+        IsAlive = data.Health.Current > 0;
     }
    
     public IntPtr owner_addr { get; private set; } = IntPtr.Zero;

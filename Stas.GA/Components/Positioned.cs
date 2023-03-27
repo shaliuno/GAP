@@ -3,14 +3,10 @@ using System.Diagnostics;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
-/// <summary>
-///     The <see cref="Positioned" /> component in the entity.
-/// </summary>
 public class Positioned : EntComp {
-    public Positioned(IntPtr ptr)  : base(ptr) {
-        _tname = "Positioned";
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public Positioned(IntPtr ptr)  : base(ptr, "Positioned") { 
+        if (ptr != default) 
+            Tick(ptr, tName + "()"); 
     }
    
     internal override void Tick(IntPtr ptr, string from=null) {

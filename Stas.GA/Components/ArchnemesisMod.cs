@@ -1,8 +1,7 @@
 ﻿namespace Stas.GA; 
 
 public class ArchnemesisMod : EntComp {
-    public ArchnemesisMod(nint address) : base(address) {
-        _tname = "ArchnemesisMod";
+    public ArchnemesisMod(nint address) : base(address, "ArchnemesisMod") {
     }
 
     internal override void Tick(IntPtr ptr, string from=null) {
