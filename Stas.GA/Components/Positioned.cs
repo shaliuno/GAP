@@ -21,9 +21,9 @@ public class Positioned : EntComp {
         Rotation = data.Rotation;
         Size = data.Size;        
         Scale = data.SizeScale;
-        past_pos = data.past_pos;
+        //past_pos = data.past_pos;
         curr_pos = data.curr_pos;
-        next_pos = data.next_pos;
+        //next_pos = data.next_pos;
         //var less = past_pos.less_or_equal(curr_pos);
         //var greater = next_pos.greater_or_equal(curr_pos);
       
@@ -47,9 +47,9 @@ public class Positioned : EntComp {
     public float Size { get; private set; }
     public float Scale { get; private set; }
     public V2 GridPos { get; private set; }
-    public V2 past_pos { get; private set; }
+    //public V2 past_pos { get; private set; }
     public V2 curr_pos { get; private set; }
-    public V2 next_pos { get; private set; }
+    //public V2 next_pos { get; private set; }
     /// <summary>
     /// entity is friendly or not.
     /// </summary>

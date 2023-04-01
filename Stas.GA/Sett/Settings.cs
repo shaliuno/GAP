@@ -209,7 +209,8 @@ public partial class Settings : iSett {
     ///     the game exit or not.
     /// </summary>
     public bool CloseWhenGameExit = false;
-
+    public Settings() : base("Settings") { 
+    }
 }
 
 public enum MasterNams {

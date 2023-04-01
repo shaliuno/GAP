@@ -54,6 +54,7 @@ public class LootSettings : iSett {
     public bool b_6s_small;
     [JsonInclude]
     public bool b_6l_any;
+    public LootSettings() : base("LootSettings") { }
 }
 //"Claw", "Dagger", "Wand", "Body Armour", "Boots", "Gloves", "Helmet", "Amulet", "Belt", "Ring"
 /*

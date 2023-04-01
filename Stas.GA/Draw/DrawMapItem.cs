@@ -60,12 +60,12 @@ namespace Stas.GA {
                         ami.ent.danger_rt.ToRoundStr(3));
 
                     if (ami.ent.GetComp<Positioned>(out var test)) {
-                        var past = V2.Transform(test.past_pos * ui.worldToGridScale, ui.MTransform());
+                        //var past = V2.Transform(test.past_pos * ui.worldToGridScale, ui.MTransform());
                         var curr = V2.Transform(test.curr_pos * ui.worldToGridScale, ui.MTransform());
-                        var next = V2.Transform(test.next_pos * ui.worldToGridScale, ui.MTransform());
+                        //var next = V2.Transform(test.next_pos * ui.worldToGridScale, ui.MTransform());
 
-                        map_ptr.AddLine(past, curr, Color.Red.ToImgui(), 2);
-                        map_ptr.AddLine(curr, next, Color.Blue.ToImgui(), 2);
+                        //map_ptr.AddLine(past, curr, Color.Red.ToImgui(), 2);
+                        //map_ptr.AddLine(curr, next, Color.Blue.ToImgui(), 2);
                     }
 
                 }

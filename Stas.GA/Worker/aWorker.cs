@@ -95,7 +95,7 @@ public abstract class aWorker :iSett{
     /// </summary>
      #endregion
 
-    public aWorker() {
+    public aWorker():base("worker") {
       
     }
     protected void CountSkills() {

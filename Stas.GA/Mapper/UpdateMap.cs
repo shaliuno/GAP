@@ -2,6 +2,9 @@
 using SixLabors.ImageSharp;
 using System.Diagnostics;
 using Color = System.Drawing.Color;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.IO;
 
 namespace Stas.GA;
 public partial class AreaInstance {
@@ -23,15 +26,15 @@ public partial class AreaInstance {
     public void UpdateMap(object state) {
         ClearOldData();
         UpdMapImage();
-        ui.nav.MakeGridSells();//here first coz ve need cell to dtae quest area
+        ui.nav.b_ready = true;
         if (!ui.b_mine) {
-            ui.nav.LoadVisited();
+            //ui.nav.LoadVisited();
             ui.curr_map.GetTileTgtName();
             ui.LoadQuest();
         }
         ui.area_change_counter.Tick(ui.area_change_counter.Address, "UpdateMap");
         ui.curr_loaded_files.Load(tName);
-        ui.looter.LoadOldLoot();
+        //ui.looter.LoadOldLoot();
     }
     const string map_name = "walkable_map";
     object map_locker = new object();
@@ -79,6 +82,7 @@ public partial class AreaInstance {
         Configuration customConfig = Configuration.Default.Clone();
         customConfig.PreferContiguousImageBuffers = true;
         Image<Rgba32> image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
+        var walkArray = new WalkableFlag[cols, rows];
 #if DEBUG
         for (int y = 0; y < height_data.Length; y++) {
             Run(y);
@@ -113,8 +117,11 @@ public partial class AreaInstance {
                 }
                 else {
                     bit_data[x, y] = bit;
+                    if (bit > 1)
+                        walkArray[x, y] = WalkableFlag.Walkable;
+                    else
+                        walkArray[x, y] = WalkableFlag.NonWalkable;
                     image[x, y] = GetRgba32(bit);
-
                 }
 
                 if (bit == 0)
@@ -126,11 +133,11 @@ public partial class AreaInstance {
 #endif
         ui.draw_main.AddOrGetImagePointer(map_name, image, false, out map_ptr); ;
         image.Dispose();
-
+        ui.nav =new NavGrid(cols, rows, walkArray);
         b_ready = true;
         ui.AddToLog("Map create time=[" + sw.ElapsedTostring() + "]", MessType.Warning);
     }
-
+    
     void ClearOldData() {
         ui.string_cashe.Clear();
         ui.sett.map_scale = ui.sett.map_scale_def;
@@ -157,7 +164,6 @@ public partial class AreaInstance {
         exped_keys.Clear();
         exped_beams.Clear();
         ui.nav.b_ready = false;//for not draw old visited
-        ui.nav.debug_res = null;//same oldes debug must be deleted
         ui.test?.spa?.Clear(); //debug data need only actuale
     }
 

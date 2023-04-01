@@ -29,7 +29,7 @@ public sealed class AreaLoadingState : RemoteObjectBase {
             //save all static items with loot, visited&importend cells, Quest
             if (ui.curr_map_hash > 0) {
                 last_map_hash = ui.curr_map_hash;
-                ui.nav.SaveVisited();
+                //ui.nav.SaveVisited();
                 ui.SaveQuest();
             }
             lastCache = data;

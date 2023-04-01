@@ -2,14 +2,13 @@
 using System.Drawing;
 using V2 = System.Numerics.Vector2;
 using sh = Stas.GA.SpriteHelper;
-
-
 namespace Stas.GA;
 partial class DrawMain {
     //https://github.com/ocornut/imgui/blob/169e3981fdf037b179f1c7296548892ba7837dae/imgui_demo.cpp#L3871-L3978
 
     bool on_top => ui.b_game_top || ui.b_imgui_top;
     bool b_map => ui.curr_map != null && ui.curr_map.b_ready;
+    bool b_league_start = false;
     V2 my_display_res;
     void DrawMap() {
         my_display_res = new V2(ui.game_window_rect.Width, ui.game_window_rect.Height);
@@ -31,16 +30,21 @@ partial class DrawMain {
         if (ui.b_game_top || ui.b_imgui_top) { // && ui.b_debug
             DrawDebug();
         }
-       
-        if (b_map && on_top && !ui.b_busy//&& !ui.sett.test_draw
-            && !ui.sett.b_draw_bad_centr  && !ui.b_draw_save_screen) { 
-            DrawMePos();
+
+        if (b_league_start) {
             DrawMapContent();
-            b_cant_draw_map = false;
         }
         else {
-            b_cant_draw_map = true;
-            ui.AddToLog("can't draw map..", MessType.Warning);
+            if (b_map && on_top && !ui.b_busy//&& !ui.sett.test_draw
+                && !ui.b_draw_bad_centr && !ui.b_draw_save_screen) {
+                DrawMePos();
+                DrawMapContent();
+                b_cant_draw_map = false;
+            }
+            else {
+                b_cant_draw_map = true;
+                ui.AddToLog("can't draw map..", MessType.Warning);
+            }
         }
         ImGui.End();
     }
@@ -58,6 +62,4 @@ partial class DrawMain {
         }
     }
     SW sw_map = new SW("Map");
-    
-   
 }

@@ -26,30 +26,30 @@ public class ServerData : RemoteObjectBase {
         }
         if (DateTime.Now < next_upd )
             return;
-        var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
-        var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
-        next_upd = DateTime.Now.AddMilliseconds(200);
-        //TODO twise load here on start - need fix
-        Debug.Assert(still_update == false);
-        if (still_update) {
-            ui.AddToLog(tName + "still_update == true", MessType.Critical);
-            return;
-        }
-        lock (locker) {
-            still_update = true;
-            this.PlayerInventories.Clear();
-            for (var i = 0; i < inventoryData.Length; i++) {
-                var invName = (InventoryName)inventoryData[i].InventoryId;
-                var invAddr = inventoryData[i].InventoryPtr0;
-                this.PlayerInventories[invName] = invAddr;
-                switch (invName) {
-                    case InventoryName.Flask1:
-                        FlaskInventory.Tick(invAddr, "ServerData.Tick()");
-                        break;
-                }
-            }
-            still_update = false;
-        }
+        //var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
+        //var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
+        //next_upd = DateTime.Now.AddMilliseconds(200);
+        ////TODO twise load here on start - need fix
+        //Debug.Assert(still_update == false);
+        //if (still_update) {
+        //    ui.AddToLog(tName + "still_update == true", MessType.Critical);
+        //    return;
+        //}
+        //lock (locker) {
+        //    still_update = true;
+        //    this.PlayerInventories.Clear();
+        //    for (var i = 0; i < inventoryData.Length; i++) {
+        //        var invName = (InventoryName)inventoryData[i].InventoryId;
+        //        var invAddr = inventoryData[i].InventoryPtr0;
+        //        this.PlayerInventories[invName] = invAddr;
+        //        switch (invName) {
+        //            case InventoryName.Flask1:
+        //                FlaskInventory.Tick(invAddr, "ServerData.Tick()");
+        //                break;
+        //        }
+        //    }
+        //    still_update = false;
+        //}
         
         //GetPlayerInventoryItems(data);
         //GetNerestPlayers(data);

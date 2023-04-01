@@ -88,7 +88,17 @@ public partial class GameUiElements : Element {
     internal PartyPanel party_panel => new PartyPanel(data.party_panel);
     internal Element player_inventory  => new Element(IntPtr.Zero, "player_inventory");
     Element map_root => new Element(data.map_root_ptr, "map_root_ptr");
-    internal Element large_map => map_root == null || map_root.chld_count != 4 ? null : map_root.children[0];
+    internal Element large_map {
+        get {
+            if (map_root == null || map_root.chld_count != 4)
+                return null;
+            else {
+                var res = map_root.children[0];
+                res.Set_tname("Map");
+                return res;
+            }
+        }
+    }
     internal StashElement stash_element => new (data.StashElement);
     internal QuestRewardWindow QuestRewardWindow => new QuestRewardWindow(data.QuestRewardWindow);
     internal WorldMapElement world_map  => new WorldMapElement(data.WorldMap);

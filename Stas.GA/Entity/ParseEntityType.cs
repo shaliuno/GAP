@@ -17,6 +17,10 @@ public partial class Entity : RemoteObjectBase {
             eType = eTypes.Useless;
             return;
         }
+        if (Path.StartsWith("Metadata/Monsters/Daemon/", StringComparison.Ordinal)) {
+            eType = eTypes.Daemon;
+            return;
+        }
         if (!GetComp<Render>(out var _)) {
             this.eType = eTypes.Useless;
         }

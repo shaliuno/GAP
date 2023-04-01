@@ -1,4 +1,6 @@
-﻿namespace Stas.GA;
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Stas.GA;
 public class ExpedSett : iSett {
     public Dictionary<string, int> mods = new();
     public const string prefix = "ExpeditionRelicModifier";
@@ -6,7 +8,7 @@ public class ExpedSett : iSett {
     public int radius_persent = 0;
     [JsonInclude]
     public int range_persent = 0;
-    public ExpedSett() {
+    public ExpedSett(): base("ExpedSett"){ 
         //https://discord.com/channels/1036511025622679582/1036511025622679590/1062412139324784730
         //супер сильно выдели под runic monsters are duplicated
 
@@ -81,6 +83,7 @@ public class ExpedSett : iSett {
         mods.Add("Metadata/Terrain/Doodads/Leagues/Expedition/ChestMarkers", 3);
         mods.Add("Metadata/Terrain/Doodads/Leagues/Expedition/monstermarker_set", 3);
         mods.Add("Metadata/Terrain/Doodads/Leagues/Expedition/elitemarker_set", 3);
+        
     }
     public override string fname => @"exped_settings.sett";
     [JsonInclude]

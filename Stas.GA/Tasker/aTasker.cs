@@ -49,7 +49,7 @@ public abstract partial class aTasker {
     public void Hold(string from = null) {
         //_fh = true;
         Reset("Hold... " + from);
-        ui.nav.SaveVisited();
+        //ui.nav.SaveVisited();
         ui.tasker.TaskPop(new Hold());
     }
     public void Unhold(string from = null) {
@@ -98,8 +98,7 @@ public abstract partial class aTasker {
     }
     public void CleareDebug(aTask task) {
         Remove_iTaskById(task.id);
-        ui.nav.debug_res = null;
-        i_tasks.Clear();
+        ui.nav.b_ready = false;
         ui.test?.gpa?.Clear();
     }
     public void Remove_iTaskById(uint _id) {

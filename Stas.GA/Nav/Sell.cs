@@ -1,13 +1,12 @@
-﻿
-using V2 = System.Numerics.Vector2;
-
+﻿using V2 = System.Numerics.Vector2;
 namespace Stas.GA {
     public class Cell :IEquatable<Cell> {
+        public string tName =>GetType().Name;
         public string info; //for debug ui safe zones
         public bool b_block = false;
         [JsonIgnore]
         public int id { get; set; }
-        public GridCell root;
+        public Cell root;
         public Cell Parent;
         public float DistanceToTarget = -1;
         [JsonIgnore]
@@ -30,7 +29,7 @@ namespace Stas.GA {
         [JsonIgnore]
         public float gdist_to_me => ui.me==null?float.MaxValue: center.GetDistance(ui.me.gpos);
         V2 _min;
-       
+        [JsonInclude]
         public V2 min { get { return _min; } 
             set { _min = value; 
                 b = new V2(_min.X, _max.Y);
@@ -38,7 +37,7 @@ namespace Stas.GA {
                 area = (max.X - min.X) * (max.Y - min.Y);
             } }
         V2 _max;
-       
+        [JsonInclude]
         public V2 max {
             get { return _max; }
             set {
@@ -119,16 +118,44 @@ namespace Stas.GA {
                 return x.id.CompareTo(y.id);
             }
         }
-   
+     
+        //https://stackoverflow.com/questions/3106666/intersection-of-line-segment-with-axis-aligned-box-in-c-sharp
+        //Intersection of line segment with axis-aligned box in C#
         public List<V2> LS_intersection(  V2 ls_start, V2 ls_end) { //working well
-            return default;
+            var beginToEnd = ls_end - ls_start;
+            var beginToMin = min - ls_start;
+            var beginToMax = max - ls_start;
+            var tNear = double.MinValue;
+            var tFar = double.MaxValue;
+            var intersections = new List<V2>();
+            foreach(Axis axis in Enum.GetValues(typeof(Axis))) {
+                if(beginToEnd.GetCoordinate(axis) == 0){ // parallel
+                    if(beginToMin.GetCoordinate(axis) > 0 || beginToMax.GetCoordinate(axis) < 0)
+                        return intersections; // segment is not between planes
+                }
+                else {
+                    var t1 = beginToMin.GetCoordinate(axis) / beginToEnd.GetCoordinate(axis);
+                    var t2 = beginToMax.GetCoordinate(axis) / beginToEnd.GetCoordinate(axis);
+                    var tMin = Math.Min(t1, t2);
+                    var tMax = Math.Max(t1, t2);
+                    if(tMin > tNear) tNear = tMin;
+                    if(tMax < tFar) tFar = tMax;
+                    if(tNear > tFar || tFar < 0)
+                        return intersections;
+                }
+            }
+            if(tNear >= 0 && tNear <= 1) 
+                intersections.Add(ls_start + beginToEnd * (float)tNear);
+            if(tFar >= 0 && tFar <= 1)
+                intersections.Add(ls_start + beginToEnd * (float)tFar);
+            return intersections;
         }
         internal static int LastCellGlobalId = 0;
         public override string ToString() {
             return "id="+id + " min="+min.ToIntString() + " max=" + max.ToIntString();
         }
     }
-
+   
     class VisitedGrid {
         public float min_x { get; set; }
         public float min_y { get; set; }

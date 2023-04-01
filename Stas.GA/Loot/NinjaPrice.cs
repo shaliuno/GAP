@@ -1,9 +1,6 @@
 ﻿using System.IO;
 using System.Net.Http;
 using System.Text.Json;
-
-
-
 namespace Stas.GA;
 //https://github.com/5k-mirrors/misc-poe-tools/blob/master/doc/poe-ninja-api.md
 //https://poe.ninja/swagger/index.html#/Data/Data_CurrencyOverview
@@ -19,7 +16,7 @@ public class PoeNinja : iSett, IDisposable {
     HttpClient client;
     List<(string, string)> priceQueue { get; set; }
     JsonSerializerOptions js_opt;
-    public PoeNinja() {
+    public PoeNinja():base("PoeNinja") {
         js_opt = new JsonSerializerOptions {
             WriteIndented = true, IncludeFields = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault

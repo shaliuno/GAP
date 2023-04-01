@@ -72,6 +72,7 @@ public partial class Entity : RemoteObjectBase {
             ui.AddToLog(tName + ".UpdateComponentData wrong comonent size", MessType.Critical);
             return;
         }
+       
         var entityComponent = ui.m.ReadStdVector<IntPtr>(idata.ComponentListPtr);
         var entityDetails = ui.m.Read<EntityDetails>(idata.EntityDetailsPtr);
 

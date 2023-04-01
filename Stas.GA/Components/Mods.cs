@@ -74,7 +74,7 @@ public class Mods : EntComp {
         }
         var readPointersArray = ui.m.ReadPointersArray(source.First, source.Last, ModsComponentOffsets.StatRecordSize);
         stats.AddRange(readPointersArray.Select(statAddress =>
-            ui.StringCache.Read($"{nameof(Mods)}{statAddress}", () => ui.m.ReadStringU(statAddress))));
+            ui.string_cashe.Read((nint)statAddress, () => ui.m.ReadStringU(statAddress))));
 
         return stats;
     }

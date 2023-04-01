@@ -1,24 +1,20 @@
 namespace Stas.GA;
 public class Targetable : EntComp {
-    public Targetable(IntPtr ptr) : base(ptr, "Targetable") {
-        if (ptr != default)
-            Tick(ptr, tName + "()");
+    public Targetable(IntPtr address) : base(address) {
     }
-    internal override void Tick(IntPtr ptr, string from=null) {
+    TargetableComponentOffsets data;
+    internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
         if (Address == IntPtr.Zero)
             return;
-        var data = ui.m.Read<TargetableComponentOffsets>(this.Address);
-        isTargetable = data.isTargetable;
-        isHighlightable = data.isHighlightable;
-        isTargeted = data.isTargeted;
+        data = ui.m.Read<TargetableComponentOffsets>(this.Address);
     }
-   
-    public bool isTargetable { get; private set; }
-    public bool isHighlightable { get; private set; }
-    public bool isTargeted { get; private set; }
+
+    public bool isTargetable => data.isTargetable;
+    public bool isHighlightable => data.isHighlightable;
+    public bool isTargeted => data.isTargeted;
 
     protected override void Clear() {
-        
+
     }
 }

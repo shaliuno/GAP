@@ -50,6 +50,18 @@ public class Color4 {
     public float Z { get; set; }
 }
 public static partial class EXT {
+    public static float Distance(this Point point1, Point point2) {
+        return MathF.Sqrt(DistanceSquared(point1, point2));
+    }
+
+    public static float DistanceSquared(this Point point1, Point point2) {
+        var vector2 = point1.ToVector2() - point2.ToVector2();
+        return V2.Dot(vector2, vector2);
+    }
+
+    public static V2 ToVector2(this Point point) {
+        return new V2(point.X, point.Y);
+    }
     public static Vector4 ToSysNumV4(this Color4 info) {
         return new Vector4(info.X, info.Y, info.Z, info.W);
     }

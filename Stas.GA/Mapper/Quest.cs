@@ -17,7 +17,7 @@ public class Quest : iSave {
     public List<string> tiles { get; set; }
     public List<Tuple<int, int, DateTime>> Way_points { get; set; }
     public List<Tuple<int, int, DateTime>> Trials { get; set; }
-    public Quest() {
+    public Quest():base("Quest") {
         if (!Directory.Exists("Quests"))
             Directory.CreateDirectory("Quests");
         Tasks = new List<aTask>();

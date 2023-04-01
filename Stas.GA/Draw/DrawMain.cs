@@ -1,7 +1,5 @@
 ﻿using ClickableTransparentOverlay;
 using ImGuiNET;
-using System.IO;
-using System.Reflection;
 using System.Text;
 namespace Stas.GA;
 public partial class DrawMain : Overlay {

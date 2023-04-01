@@ -6,7 +6,7 @@ using sh = Stas.GA.SpriteHelper;
 namespace Stas.GA;
 partial class DrawMain {
     void DrawMapContent() {
-        if (ui.me.Address == default) {
+        if (ui.me.Address == default && !b_league_start) {
             ui.AddToLog("draw Map Err: ui.me==null", MessType.Error);
             return;
         }

@@ -18,7 +18,6 @@ public partial class ui {
     ///Necessary for fast UpdateComponentData.  Must be cleared for each new map
     /// </summary>
     public static StringCache string_cashe = new();
-    public static IStaticCache<string> StringCache { get; private set; } = new StaticCache<string>(300);
     public static MapIconsIndex IconIndexByName(string name) {
         name = name.Replace(" ", "").Replace("'", "");
         Icons.TryGetValue(name, out var result);
@@ -36,7 +35,7 @@ public partial class ui {
     public static SafeScreen safe_screen;
 
     public static void InitNative(int pid) {
-        //ReloadSett();
+        ReloadSett();
         m = new Memory(pid);   
     }
    
@@ -66,7 +65,7 @@ public partial class ui {
         safe_screen = new SafeScreen();
         StartGameWatcher();
         SetRole();
-        looter = new Looter();
+        //looter = new Looter();
         //ahk = new AHK();
         input_check = new InputChecker();
         need_upd_per_frame = new List<RemoteObjectBase>() {   }; //camera//gui
@@ -126,7 +125,7 @@ public partial class ui {
     public static void ReloadSett() {
         sett = new Settings().Load<Settings>();
         //TODO cant use it - w8 GH relise
-        sett.b_use_gh_flask = false; 
+        sett.b_use_gh_flask = false;
         sett.b_use_gh_map = false;
         sett.b_develop = true; //<<==change if you're a developer
         exped_sett = new ExpedSett().Load<ExpedSett>();

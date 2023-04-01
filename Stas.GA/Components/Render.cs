@@ -36,6 +36,14 @@ public class Render : EntComp {
             last_name = DateTime.Now;
         }
     }
+    //model bounding box center
+    public V3 BB_center {
+        get {
+            var res = WorldPosition + ModelBounds / 2f;
+            return res;
+        }
+    }
+
     DateTime last_name = DateTime.MinValue;
     V3 last_pos;
     public bool b_can_move = false;
@@ -54,7 +62,7 @@ public class Render : EntComp {
     /// <summary>
     ///     Gets the position where entity is located on the grid (map).
     /// </summary>
-    public StdTuple3D<float> ModelBounds { get; private set; }
+    public V3 ModelBounds { get; private set; }
 
     /// <summary>
     ///     Gets the postion where entity is rendered in the game world.

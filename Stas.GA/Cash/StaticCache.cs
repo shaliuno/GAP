@@ -11,10 +11,10 @@ public class StaticCache<T> :IStaticCache<T> {
     private readonly MemoryCache cache;
     private bool IsEmpty = true;
 
-    public StaticCache(int lifeTimeForCache = 120, int limit = 30, string name = null) {
+    public StaticCache(string name, int lifeTimeForCache = 120, int limit = 30) {
         _lifeTimeForCache = lifeTimeForCache;
         _limit = limit;
-        this.name = name ?? typeof(T).Name;
+        this.name = name;
         cache = new MemoryCache(this.name);
 
         _policy = new CacheItemPolicy {

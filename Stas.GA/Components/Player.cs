@@ -5,6 +5,7 @@ public class Player : EntComp{
     }
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
+        version = ui.curr_frame;
         if (Address == IntPtr.Zero)
             return;
         var data = ui.m.Read<PlayerOffsets>(this.Address);

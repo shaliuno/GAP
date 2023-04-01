@@ -136,12 +136,12 @@ namespace Stas.GA {
         void SetCell(V2 gpos) {
             if (!ui.nav.b_ready || gpos.X <=0 || gpos.Y <= 0)
                 return;
-            var gc = ui.nav.Get_gc_by_gp(gpos);
-            var cell = gc?.Get_rout_by_gp(gpos);
-            if (cell == null) {
-                return;
-            }
-            danger_cells[cell.id]= cell;
+            //var gc = ui.nav.Get_gc_by_gp(gpos);
+            //var cell = gc?.Get_rout_by_gp(gpos);
+            //if (cell == null) {
+            //    return;
+            //}
+            //danger_cells[cell.id]= cell;
         }
      
     }

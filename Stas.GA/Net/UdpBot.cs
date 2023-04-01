@@ -159,9 +159,9 @@ public class UdpBot : IDisposable {//version=1
                         case Opcode.BotRoleList:
                             //Reply(Opcode.BotRoleList, JSON.ToByte(ui.cb_roles.Items));
                             break;
-                        case Opcode.KeyPress: {
+                        case Opcode.KeyPress: { //worker can be null if map chaged
                                 var key = GetKey();
-                                if (ui.b_game_top) {
+                                if (ui.b_game_top && ui.worker != null) {
                                     if (key == Keys.E) {
                                         if (ui.worker.b_use_low_life)
                                             ui.tasker.UseManaFlask();

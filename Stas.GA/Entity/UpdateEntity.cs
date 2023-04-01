@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using sh = Stas.GA.SpriteHelper;
@@ -43,7 +42,6 @@ public partial class AreaInstance  {
             }
             else {
                 e = new Entity(value.EntityPtr);
-                e.Tick(value.EntityPtr);
                 e_added += 1;
                 if (!string.IsNullOrEmpty(e.Path)) {
                     data[key] = e;

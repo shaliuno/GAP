@@ -100,17 +100,17 @@ public partial class DrawMain {
         }
     }
     void DrawDebugNavCells() {
-        foreach (var c in ui.nav.test_cells)
-            DebugCell(c, _orange, true);
+        //foreach (var c in ui.nav.test_cells)
+        //    DebugCell(c, _orange, true);
     }
     void DrawBadCells() {
         foreach (var c in ui.curr_map.danger_cells.Values)
             DebugCell(c, _orange, true);
     }
     void DebugNotVisited() {
-        var need_check = ui.nav.grouts.Where(gc => !gc.b_visited).ToList();
-        foreach (var n in need_check)
-            DebugCell(n, _red, false);
+        //var need_check = ui.nav.grouts.Where(gc => !gc.b_visited).ToList();
+        //foreach (var n in need_check)
+        //    DebugCell(n, _red, false);
     }
     void DrawSaveCell() {
         if (ui.test.test_cell != null) {
@@ -126,70 +126,70 @@ public partial class DrawMain {
         var ta = ui.quest?.tiles;
         if (ta != null)
             foreach (var t in ta) {
-                var ra = ui.nav.grouts.Where(r => r.fname == t).ToList();
-                foreach (var r in ra)
-                    DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
+                //var ra = ui.nav.grouts.Where(r => r.fname == t).ToList();
+                //foreach (var r in ra)
+                //    DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
             }
     }
     void DrawTiles() {
         if (!ui.b_tile || ui.me == null || !ui.b_alt)
             return;
-        var gc = ui.nav.Get_gc_by_gp(ui.me.gpos);
-        Debug.Assert(gc != null);
-        if (gc.fname == null)
-            DebugCell(gc, Color.FromArgb(80, 200, 0, 15), false, "Error");
-        else {
-            DebugCell(gc, Color.FromArgb(80, 200, 86, 15), false, gc.fname);
-            var ra = ui.nav.grouts.Where(r => r.fname == gc.fname);
-            foreach (var r in ra) {
-                DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
+        //var gc = ui.nav.Get_gc_by_gp(ui.me.gpos);
+        //Debug.Assert(gc != null);
+        //if (gc.fname == null)
+        //    DebugCell(gc, Color.FromArgb(80, 200, 0, 15), false, "Error");
+        //else {
+        //    DebugCell(gc, Color.FromArgb(80, 200, 86, 15), false, gc.fname);
+        //    var ra = ui.nav.grouts.Where(r => r.fname == gc.fname);
+        //    foreach (var r in ra) {
+        //        DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
 
-            }
-        }
+        //    }
+        //}
     }
    
 
     void DebugNavGridCellRouts(V2 gp) {
         //if (!ui.nav.b_ready) return;
-        //var my_gc= ui.nav.Get_gc_by_gp(ui.me.gpos);
+        //var my_gc = ui.nav.Get_gc_by_gp(ui.me.gpos);
         //Draw(my_gc.routs, _green);
 
-        var curs_gc = ui.nav.Get_gc_by_gp(gp);
-        if (curs_gc == null) {
-            ui.AddToLog("ui.nav.Get_gc_by_gp == null", MessType.Error);
-            return;
-        }
-        var cell = curs_gc.Get_rout_by_gp(gp);
-        var info = ui.nav.GetBitByGp(gp).ToString() + " v=" + cell?.b_visited;
+        //var curs_gc = ui.nav.Get_gc_by_gp(gp);
+        //if (curs_gc == null) {
+        //    ui.AddToLog("ui.nav.Get_gc_by_gp == null", MessType.Error);
+        //    return;
+        //}
+        //var cell = curs_gc.Get_rout_by_gp(gp);
+        //var info = ui.nav.GetBitByGp(gp).ToString() + " v=" + cell?.b_visited;
 
-        DebugTgp(gp, info);
-        DebugCell(curs_gc, _orange);
-        DrawCells(curs_gc.routs, _green);
-        DrawCells(curs_gc.blocks, _purple);
+        //DebugTgp(gp, info);
+        //DebugCell(curs_gc, _orange);
+        //DrawCells(curs_gc.routs, _green);
+        //DrawCells(curs_gc.blocks, _purple);
     }
-    void DrawCells(List<Cell> _cells, Color _color) {
-        foreach (var r in _cells) {
-            DebugCell(r, _color, false);
-        }
-    }
+    //void DrawCells(List<Cell> _cells, Color _color) {
+    //    foreach (var r in _cells) {
+    //        DebugCell(r, _color, false);
+    //    }
+    //}
    
    
     void DebugNavPath() {
-        if (ui.nav.debug_res == null)
-            return;
-        var rm = ui.MTransform();
-        var list = ui.nav.debug_res?.path?.ToArray();
-        if (list != null) {
-            for (int i = 0; i < list.Length - 1; i++) {
-                var a = V2.Transform(list[i].v2, rm);
-                var b = V2.Transform(list[i + 1].v2, rm);
-                map_ptr.AddLine(a, b, Color.DarkGreen.ToImgui(), 3);
-                map_ptr.AddText(a.Increase(0, 10), Color.Gray.ToImgui(), i.ToString());
-                var gc = ui.nav.Get_gc_by_gp(list[i].v2);
-                DrawCells(gc.routs, Color.FromArgb(120, Color.Blue));
-                //DebugCell(list[i].cell, Color.FromArgb(120, Color.GreenYellow), true);
-            }
-        }
+        //if (ui.nav.debug_res == null)
+        //    return;
+        //var rm = ui.MTransform();
+        //var list = ui.nav.debug_res?.path?.ToArray();
+        //if (list != null) {
+        //    for (int i = 0; i < list.Length - 1; i++) {
+        //        var a = V2.Transform(list[i].v2, rm);
+        //        var b = V2.Transform(list[i + 1].v2, rm);
+        //        map_ptr.AddLine(a, b, Color.DarkGreen.ToImgui(), 3);
+        //        map_ptr.AddText(a.Increase(0, 10), Color.Gray.ToImgui(), i.ToString());
+        //        var gc = ui.nav.Get_gc_by_gp(list[i].v2);
+        //        DrawCells(gc.routs, Color.FromArgb(120, Color.Blue));
+        //        //DebugCell(list[i].cell, Color.FromArgb(120, Color.GreenYellow), true);
+        //    }
+        //}
     }
   
     void DEbugTriggers() {

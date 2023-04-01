@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 public struct InGameStateOffset {
     [FieldOffset(0x18)] public IntPtr AreaInstanceData;
     [FieldOffset(0x78)] public IntPtr WorldData;
-    [FieldOffset(0x1A0)] public IntPtr UiRootPtr;
+    [FieldOffset(0x1A0)] public IntPtr UiRootPtr;//3.20.1c
     [FieldOffset(0x450)] public IntPtr IngameUi;
     [FieldOffset(0x1D8)] public IntPtr UIHover;
 }

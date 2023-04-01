@@ -5,10 +5,7 @@ using V3 = System.Numerics.Vector3;
 using sh = Stas.GA.SpriteHelper;
 using System.Diagnostics;
 using System.Collections.Concurrent;
-
-
 namespace Stas.GA;
-
 partial class DrawMain {
     const string tName = "DrawMain";
     public ConcurrentDictionary<string, RectangleF> frames = new();
@@ -189,5 +186,4 @@ partial class DrawMain {
             }
         }
     }
-
 }

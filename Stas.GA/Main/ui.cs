@@ -97,7 +97,7 @@ public partial class ui {
     public static uint curr_frame { get; private set; }
     public static SoundPlayer sound_player = new SoundPlayer();
     public static UdpSound udp_sound;
-    public static PoeNinja ninja = new PoeNinja();
+    public static PoeNinja ninja;//= new PoeNinja();
     public static aTasker tasker { get; private set; }
     static UdpListener udp_master;
     static UdpBot udp_bot;
@@ -167,7 +167,7 @@ public partial class ui {
     public static GameUiElements gui => states.ingame_state.gui;
     public static string warning;
     public static Tests test = new Tests();
-    public static NavMesh nav = new NavMesh();
+    public static NavGrid nav = new NavGrid();
     public static Entity me { get { return curr_map.player; } }
     //TileStructure TileToGridConversion & TileToWorldConversion
     public static float gridToWorldScale => 10.869565f;

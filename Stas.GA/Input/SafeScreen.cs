@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Net.Http.Headers;
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 
@@ -60,8 +59,8 @@ public class SafeScreen : iSett {
     Thread worker;
     List<Element> need_init_well;
     bool b_init = false;
-
-    public SafeScreen() {
+    int id = 0;
+    public SafeScreen() : base("SafeScreen") {
         MakePoints();
         var center_updater = new Thread(() => {
             while (true) {
@@ -70,23 +69,24 @@ public class SafeScreen : iSett {
                     Thread.Sleep(500);
                     continue;
                 }
-
                 foreach (var p in CentrPoints) {
                     Centr[p.Item1] = new Cell(ui.me.gpos.Increase(p.Item2),
                         ui.me.gpos.Increase(p.Item3)) { b_block = true };
+                    id++;
                 }
                 foreach (var p in RoutPoints) {
                     if (p.Item1 == null)
                         continue;
                     Rounts[p.Item1] = new Cell(ui.me.gpos.Increase(p.Item2),
                         ui.me.gpos.Increase(p.Item3)) { b_block = false };
+                    id++;
                 }
                 Thread.Sleep(1000 / 60);
             }
         });
         center_updater.IsBackground = true;
         center_updater.Start();
-
+        
         worker = new Thread(() => {
             while (ui.b_running) {
                 if (!b_init) {//dont init here
@@ -214,7 +214,7 @@ public class SafeScreen : iSett {
         b_init = true;
 
     }
-
+  
     int last_party_count = 0;
     protected void UpdateFrames() {
         var curr_buff = ui.gui.MyBuffPanel;//.children[6];
@@ -230,7 +230,7 @@ public class SafeScreen : iSett {
             for (int i = 0; i < party_elem.members.Count; i++) {
                 var p = party_elem.members[i];
                 if (p.face_icon == null) {
-                    ui.AddToLog(tname + ".UpdateFrames face_icon==null", MessType.Error);
+                    ui.AddToLog(tname+ ".UpdateFrames face_icon==null", MessType.Error);
                     continue;
                 }
                 if (i == 0)
@@ -264,14 +264,14 @@ public class SafeScreen : iSett {
             left_panel = new Cell(lpr.X, lpr.Y, lpr.X + lpr.Width, lpr.Y + lpr.Height);
         }
         else {
-            left_panel.min = left_panel.max = default;
+            left_panel.min =  left_panel.max = default;
         }
         if (ui.gui.open_right_panel.IsVisible) {
             var rpr = ui.gui.open_right_panel.get_client_rectangle();
             right_panel = new Cell(rpr.X, rpr.Y, rpr.X + rpr.Width, rpr.Y + rpr.Height);
         }
         else {
-            right_panel.min = right_panel.max = default;
+            right_panel.min = right_panel.max =default;
         }
     }
     bool b_last_flares_state;
@@ -292,14 +292,14 @@ public class SafeScreen : iSett {
             }
         }
     }
-
-
+    
+   
     void CheckSameElement(Element elem, ref Cell cell) {
         if (elem.IsVisible) {
             var rect = elem.get_client_rectangle();
             var min = new V2(rect.X, rect.Y);
             var max = new V2(rect.X + rect.Width, rect.Y + rect.Height);
-            if (cell == null || cell.min != min || cell.max != max)
+            if (cell == null || cell.min != min ||  cell.max!=max)
                 cell = new Cell(min, max);
         }
         else {

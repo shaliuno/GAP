@@ -8,10 +8,14 @@ public abstract class ObjectBase {
     /// this.Type.Name for show in debug
     /// </summary>
     protected string _tname;
+    public void Set_tname(string name) {
+        _tname = name;
+    }
     /// <summary>
     /// this.Type.Name for show in debug
     /// </summary>
     public string tName => _tname;
+
     public IntPtr Address { get; protected private set; }
 
 
@@ -22,7 +26,7 @@ public abstract class ObjectBase {
     public ObjectBase(IntPtr ptr, string tname = null) {
         Address = ptr;
         if (tname == null)
-            _tname = GetType().Name;
+            _tname = "same ObjectBase...";
         else
             _tname = tname;
     }

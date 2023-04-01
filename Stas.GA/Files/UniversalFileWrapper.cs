@@ -3,7 +3,6 @@ namespace Stas.GA;
 public class UniversalFileWrapper<T> :FileInMemory  where T : RemoteObjectBase, new() {
     public UniversalFileWrapper(Func<long> address) : base(address) {
     }
-
     //We mark this fields as private coz we don't allow to read them directly dut to optimisation. Use EntriesList and methods instead.
     protected Dictionary<long, T> EntriesAddressDictionary { get; set; } = new Dictionary<long, T>();
     protected List<T> CachedEntriesList { get; set; } = new List<T>();

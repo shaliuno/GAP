@@ -1,5 +1,4 @@
-﻿
-
+﻿using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 
 public abstract class aTask {
@@ -27,6 +26,31 @@ public abstract class aTask {
             _error = value;
         }
     }
+    V3 last_my_pos;
+    protected bool b_moving {
+        get {
+            var cp = ui.me.pos;
+            if (last_my_pos != cp)
+                return false;
+            last_my_pos = cp;
+            if (ui.worker.b_moving) {
+                Mouse.LeftUp(t_name + ".b_moving");
+                AddTryCount("w8 b_busy...");
+                return true;
+            }
+            return false;
+        }
+    }
+    protected bool b_ui_busy {
+        get {
+            if (ui.b_busy) {
+                Keyboard.KeyPress(Keys.Space);
+                AddTryCount("w8 b_busy...");
+                return true;
+            }
+            return false;
+        }
+    }
     string _le;
     public string last_error { get { return _le == null ? error.ToString() : _le; } set { _le = value; } }
     public bool b_done = false;
@@ -39,7 +63,7 @@ public abstract class aTask {
     public bool b_debug = false;
     [JsonIgnore]
     public virtual string id_name => id + ".." + (short_name == null ? GetType().Name : short_name);
-    public virtual string tname => short_name == null ? GetType().Name : short_name;
+    public virtual string t_name => short_name == null ? GetType().Name : short_name;
 
     public uint id { get; }
     [JsonIgnore]

@@ -66,13 +66,13 @@ public class ItemMod : RemoteObjectBase {
 
     private void ParseName() {
         var addr = ui.m.Read<long>(Address + 0x18, tName, 0);
-        _RawName = ui.StringCache.Read($"{nameof(ItemMod)}{addr}", () => ui.m.ReadStringU(addr));
+        _RawName = ui.string_cashe.Read((nint)addr, () => ui.m.ReadStringU(addr));
 
-        _DisplayName = ui.StringCache.Read($"{nameof(ItemMod)}{addr + (_RawName.Length + 2) * 2}",
+        _DisplayName = ui.string_cashe.Read((nint)(addr + (_RawName.Length + 2) * 2),
             () => ui.m.ReadStringU(addr + (_RawName.Length + 2) * 2));
 
         _Name = _RawName.Replace("_", ""); // Master Crafted mod can have underscore on the end, need to ignore
-        _Group = ui.StringCache.Read($"{nameof(ItemMod)}{Address + 0x18}",
+        _Group = ui.string_cashe.Read(Address + 0x18,
             () => ui.m.ReadStringU(ui.m.Read<long>(Address + 0x18, tName, 0x70)));
         var ixDigits = _Name.IndexOfAny("0123456789".ToCharArray());
 
