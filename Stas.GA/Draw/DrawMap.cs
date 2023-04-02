@@ -8,7 +8,6 @@ partial class DrawMain {
 
     bool on_top => ui.b_game_top || ui.b_imgui_top;
     bool b_map => ui.curr_map != null && ui.curr_map.b_ready;
-    bool b_league_start = false;
     V2 my_display_res;
     void DrawMap() {
         my_display_res = new V2(ui.game_window_rect.Width, ui.game_window_rect.Height);
@@ -31,7 +30,7 @@ partial class DrawMain {
             DrawDebug();
         }
 
-        if (b_league_start) {
+        if (ui.sett.b_league_start) {
             DrawMapContent();
         }
         else {

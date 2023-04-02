@@ -77,12 +77,16 @@ namespace Stas.GA {
             ImGui.SameLine();
             ImGui.Button("mem=" + ui.mem.ToRoundStr());
 
-          //new line here
+            //new line here
             if (ui.looter != null && ImGui.Button(ui.looter.debug_info)) {
                 ui.looter.LoadSett();
+                ImGuiExt.ToolTip("all/close/I need... " +
+             "\nClick to reload the filter after changing the loot settings");
             }
-            ImGuiExt.ToolTip("all/close/I need... " +
-              "\nClick to reload the filter after changing the loot settings");
+            else {
+                ImGui.Button("loot");
+                ImGuiExt.ToolTip("Not available");
+            }
 
             if (ui.curr_map != null) {
                 ImGui.SameLine();

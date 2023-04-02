@@ -1,6 +1,8 @@
 ﻿namespace Stas.GA;
 
 public partial class Settings : iSett {
+    [JsonInclude]
+    public bool b_league_start = false;
     public float loot_dist { get; set; } = 60;
     //use for debug same, like native dll
     public bool b_debug_native_dll { get; set; } = false;

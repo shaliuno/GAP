@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 public partial class InputChecker {
@@ -9,10 +10,11 @@ public partial class InputChecker {
             if (ui.b_alt) {
                 //ui.test.uiElementFinder();
                 //ui.test.GetTopElemUnderCursor();
-                //ui.test.GetRootElemUnderCursor();
+                ui.test.GetRootElemUnderCursor(1);
                 //ui.test.WorlToSPCheck();
             }
             else {
+                ui.test_elem = ui.gui.map_root;
                 #region OLD
                 //var cam = ui.m.Read<CameraOffsets>( ui.camera.Address);
                 //ui.test.FindUiElemNotUnick("Nessa");

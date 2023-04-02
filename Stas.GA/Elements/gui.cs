@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
@@ -10,6 +11,10 @@ namespace Stas.GA;
 public partial class GameUiElements : Element {
 
     Thread worker;
+    [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetGuiOffsets")]
+    public static extern int GetGuiOffsets(IntPtr gui_ptr, ref guiOffset offs);
+    internal guiOffset data = new guiOffset();
+
     internal GameUiElements() : base(default, "gui" ) {
         worker = new Thread(() => {
             while (ui.b_running) { //0x000001dd1e44b6c0
@@ -17,7 +22,7 @@ public partial class GameUiElements : Element {
                     Thread.Sleep(ui.w8 * 10);
                     continue;
                 }
-                data = ui.m.Read<guiOffset>(this.Address);//0x000001908173afe0
+                GetGuiOffsets(Address, ref data);
                 Debug.Assert(data.map_root_ptr != default);//alt+f4 on poe window = frbug here
                 if (data.map_root_ptr == default) {
                     ui.AddToLog(tName + "data.map_root_ptr = def\n" +
@@ -42,22 +47,7 @@ public partial class GameUiElements : Element {
         });
         worker.IsBackground = true;
         worker.Start();
-   
     }
-    public guiOffset data { get; private set; }
-    nint old_ptr = default;//==>it only updates if you change the character/like relogin
-    //public override void Update(nint ptr, string from) {
-    //    base.Update(ptr, from);
-    //    if (old_ptr != ptr && ptr != default) {
-    //        old_ptr = ptr;
-    //    }
-    //}
-
-  
-    IntPtr esc_ptr = default;
-    IntPtr pi_ptr = default;
-
-
     void FindlargeMap(guiOffset data) {
         var elem_found = new Dictionary<string, Element>();
         var m_ptr = data.map_root_ptr;
@@ -87,7 +77,8 @@ public partial class GameUiElements : Element {
     internal SkillBarElement SkillBar => new SkillBarElement(data.ui_skills);
     internal PartyPanel party_panel => new PartyPanel(data.party_panel);
     internal Element player_inventory  => new Element(IntPtr.Zero, "player_inventory");
-    Element map_root => new Element(data.map_root_ptr, "map_root_ptr");
+    internal Element map_root => 
+        new Element(data.map_root_ptr, "map_root_ptr");
     internal Element large_map {
         get {
             if (map_root == null || map_root.chld_count != 4)

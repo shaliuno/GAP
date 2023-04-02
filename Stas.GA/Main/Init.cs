@@ -33,9 +33,10 @@ public partial class ui {
     public static HotKeysFromGame hot_keys;
     static InputChecker input_check;
     public static SafeScreen safe_screen;
-
+    static int init_count = 0;
     public static void InitNative(int pid) {
-        ReloadSett();
+        Console.WriteLine("InitNative started=[" + (init_count++) + "]");
+        //ReloadSett();
         m = new Memory(pid);   
     }
    
