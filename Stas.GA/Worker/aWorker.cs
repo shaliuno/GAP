@@ -5,6 +5,9 @@ using V3 = System.Numerics.Vector3;
 namespace Stas.GA; 
 
 public abstract class aWorker :iSett{
+    public aWorker(string name) : base(name) {
+
+    }
     #region fields
     [JsonInclude]
     public bool b_use_life_flask = true;
@@ -71,8 +74,10 @@ public abstract class aWorker :iSett{
     public aMark mark { get; set; }
     public string test { get; set; }
     public Stopwatch sw = new Stopwatch();
-
-    //TODO  at some point there were doubts about the correctness of the operation of this method for the left mouse button, but obviously it works and the problem in simultaneous calls from different places can be
+    [JsonInclude]//only one party member can pull and be a tank
+    public bool b_can_pull_alone;
+    [JsonInclude]
+    public bool b_open_door;
     [JsonIgnore]
     public bool b_moving => Mouse.IsButtonDown(Keys.LButton);
     public string my_log_id;
@@ -95,16 +100,14 @@ public abstract class aWorker :iSett{
     /// </summary>
      #endregion
 
-    public aWorker():base("worker") {
-      
-    }
+   
     protected void CountSkills() {
         foreach (var s in all_skills)
             if (s != null) {
                 my_skills.Add(s);
                 my_keys.Add(s.key);
             }
-        if (ui.sett.b_can_pull_alone) {
+        if (b_can_pull_alone) {
             var pull = my_skills.FirstOrDefault(s => s.b_can_pull);
             Debug.Assert(pull != null);
         }

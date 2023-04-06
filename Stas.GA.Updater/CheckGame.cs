@@ -7,11 +7,10 @@ public partial class ui {
     static void StartCheckGame() {
         //var sw = new Stopwatch();
        
-
         var poew_thread = new Thread(async () => {
             while (b_running) {
                 try {
-                    if (state != State.Authorized) {
+                    if (curr_state != State.Authorized) {
                         ui.AddToLog("Waiting for authorization...");
                         Thread.Sleep(500);
                         continue;

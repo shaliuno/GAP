@@ -1,6 +1,6 @@
 ﻿namespace Stas.GA;
 
-public partial class Settings : iSett {
+public partial class Settings  {
     [JsonInclude]
     public bool b_use_gh_flask = true;
     [JsonInclude]

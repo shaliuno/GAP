@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-
 namespace Stas.Utils;
 
 public class RSA {
@@ -15,8 +14,7 @@ public class RSA {
             var encr_param = RSA.ExportParameters(false);
             encryptedData = RSAEncrypt(dataToEncrypt, encr_param, false);
             decryptedData = RSADecrypt(encryptedData, RSA.ExportParameters(true), false);
-
-           var res = ByteConverter.GetString(decryptedData);
+            var res = ByteConverter.GetString(decryptedData);
         }
     }
 

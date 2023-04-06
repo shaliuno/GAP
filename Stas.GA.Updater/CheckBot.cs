@@ -7,7 +7,7 @@ public partial class ui {
     static void StartCheckBot() {
         var work_thread = new Thread(async () => {
             while (b_running) {
-                if (state != State.Authorized) {
+                if (curr_state != State.Authorized) {
                     ui.AddToLog("Waiting for authorization...");
                     Thread.Sleep(500);
                     continue;

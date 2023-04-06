@@ -9,7 +9,7 @@ public partial class ui {
     static void StartGameWatcher() {
         game_check_thread = new Thread(() => {
             while (b_running) {
-                if (!sett.b_debug_native_dll && !DrawMain.b_ready) {
+                if (!sett.b_native_dll && !DrawMain.b_ready) {
                     AddToLog("w8 DrawMain b_ready...", MessType.Warning);
                     Thread.Sleep(w8 * 2);
                 }

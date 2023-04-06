@@ -12,10 +12,13 @@ public partial class ui {
     }
     static Player curr_player;
     static void CheckWorker() {
-        if (me.Address == default || b_worker_err! || !me.GetComp<Player>(out var _cp) || string.IsNullOrEmpty(_cp.Name)) {
+        if (curr_role != Role.None)
+            return;
+        if (me.Address == default || b_worker_err! || !me.GetComp<Player>(out var _cp) 
+            || string.IsNullOrEmpty(_cp.Name)) {
             //Address== defaul possible if relogin fast - debug here mb
-            if(!ui.sett.b_debug_native_dll)
-                ui.AddToLog(tName + ".CheckWorker err get curr player", MessType.Error);
+            if(!sett.b_native_dll)
+                AddToLog(tName + ".CheckWorker get bad condition", MessType.Error);
             return;
         }
         if (worker == null || curr_player == null || _cp.Name != curr_player.Name) {
@@ -48,8 +51,8 @@ public partial class ui {
                     err += (string)re.Matches(ex.Message)[0].Groups[1].Value;
                 else
                     err += "=>" + ex.Message;
-                if (!ui.sett.b_debug_native_dll)//dont spam here in console
-                    ui.AddToLog(err, MessType.Critical);
+                if (!sett.b_native_dll)//dont spam here in console
+                    AddToLog(err, MessType.Critical);
                 return null;
             }
         }

@@ -15,10 +15,10 @@
 
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>$(SolutionDir)bin\Updater\</OutputPath>
+		<OutputPath>$(SolutionDir)bin</OutputPath>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>$(SolutionDir)bin\Updater\</OutputPath>
+		<OutputPath>$(SolutionDir)bin</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<Using Remove="System.Net.Http" />

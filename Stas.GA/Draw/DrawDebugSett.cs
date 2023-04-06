@@ -38,7 +38,7 @@ namespace Stas.GA {
             }
             ImGuiExt.ToolTip("show ent update drawing fps\noptimal value (for drawing without jerks) 200+ fps");
 
-            ImGui.SameLine();
+            ///===================== new line ====================
             if (ImGui.Checkbox("Over", ref ui.sett.b_show_info_over)) {
                 ui.sett.Save();
             }
@@ -49,16 +49,14 @@ namespace Stas.GA {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("puts the editor into developer mode\r\nShows a lot of garbage for debugging\r\nNot necessary for ordinary users");
-            
-            ///===================== new line ====================
+
+            ImGui.SameLine();
             if (ImGui.Checkbox("MouseMoving", ref ui.sett.b_draw_mouse_moving)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("draw mouse moving traces");
 
-          
-
-            ImGui.SameLine();
+            ///===================== new line ====================
             ImGui.Checkbox("Cells", ref ui.b_show_cell);
             ImGuiExt.ToolTip("Show Nav map cells...");
 
@@ -79,8 +77,6 @@ namespace Stas.GA {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("draw Useles as debug enetity(alot spam on map)");
-
-           
             
             ImGui.SameLine();
             if (ImGui.Checkbox("Targ", ref ui.sett.b_show_iTask)) {

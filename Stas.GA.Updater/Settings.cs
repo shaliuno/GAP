@@ -9,7 +9,7 @@ public class Settings :iSave{
     /// <summary>
     /// this IP is pinned in #authorization chanel
     /// </summary>
-    public string srv_ip { get; set; } = "91.77.161.16";
+    public string srv_ip { get; set; } = "95.165.27.166";
     public int srv_port { get; set; } = 4444;
    
     public int log_size { get; set; }=15;
@@ -37,10 +37,8 @@ public class Settings :iSave{
     ///// restart game if it not loaded
     ///// </summary>
     //public bool b_auto_login = true;
-    readonly string _fname;
-    public override string fname => _fname;
-    public Settings() {
-        _fname = GetType().FullName+".sett";
+    public Settings():base("Stas.Ga.Updater.Settings") {
+        
     }
     public Settings Load(bool reload = false) {
         if(!File.Exists(fname) || reload) {

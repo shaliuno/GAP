@@ -1,8 +1,4 @@
-﻿using Stas.Utils;
-using System.Diagnostics;
-using static System.Formats.Asn1.AsnWriter;
-
-namespace Stas.GA.Updater;
+﻿namespace Stas.GA.Updater;
 
 public partial class ui {
    

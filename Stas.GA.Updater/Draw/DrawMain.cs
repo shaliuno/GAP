@@ -1,8 +1,5 @@
-﻿
-using ImGuiNET;
-using Stas.Utils;
+﻿using ImGuiNET;
 using System.Drawing;
-using System.Text;
 namespace Stas.GA.Updater;
 partial class DrawMain : Overlay {
     public IntPtr icons;
@@ -12,14 +9,14 @@ partial class DrawMain : Overlay {
         _title = title;
     }
     int fi = 0;
-    protected override Task Render() {
+    protected override void Render() {
         if (!ui.b_running)
-            return Task.CompletedTask;
+            return;
         var isMainMenuExpanded = ImGui.Begin(_title!, ImGuiWindowFlags.AlwaysAutoResize  | ImGuiWindowFlags.NoFocusOnAppearing);
         //ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.MenuBar
         if (!isMainMenuExpanded) {
             ImGui.End();
-            return Task.CompletedTask;
+            return;
         }
         info_ptr = ImGui.GetWindowDrawList();
         if (ImGui.CollapsingHeader("Setup information - study pls")) {
@@ -40,6 +37,8 @@ partial class DrawMain : Overlay {
                 ui.sett = new Settings().Load<Settings>();
             }
             ToolTip("click this to load the current value from the settings file");
+
+
         }
 
         ImGui.Separator();
@@ -86,7 +85,6 @@ partial class DrawMain : Overlay {
         //new line
         DrawLog(ui.log);
         ImGui.End();
-        return Task.CompletedTask;
     }
     public static uint ImGuiColor(uint r, uint g, uint b, uint a) {
         return (a << 24) | (b << 16) | (g << 8) | r;

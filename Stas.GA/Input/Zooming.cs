@@ -38,10 +38,10 @@ public partial class InputChecker {
                 ui.sett.map_angle = ui.sett.map_angle -= 0.05f;
             }
             if (Keyboard.IsKeyDown(Keys.NumPad1, "ICh zoom_in")) {
-                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.01f, 0.5f, 20);
+                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.01f, 0.5f, 30);
             }
             if (Keyboard.IsKeyDown(Keys.NumPad3, "ICh zoom_out")) {
-                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.01f, 0.5f, 20);
+                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.01f, 0.5f, 30);
             }
         }
         else {

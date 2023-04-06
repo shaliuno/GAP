@@ -91,12 +91,13 @@ public partial class ui {
                 if (curr_state == gState.InGameState) {
                     foreach (var n in need_upd_per_frame)
                         n?.Tick(n.Address, tName + ".main");
+                   
                     CheckWorker();
                     //todo: temporary dont need a worker
                     tasker.Tick();
                     if (worker == null) {
-                        if(!sett.b_debug_native_dll)
-                            ui.AddToLog(tName + ".main worker need be setup", MessType.Warning);
+                        if(curr_role != Role.None && !sett.b_native_dll)
+                            AddToLog(tName + ".main worker need be setup", MessType.Critical);
                         Thread.Sleep(w8);
                         continue;
                     }

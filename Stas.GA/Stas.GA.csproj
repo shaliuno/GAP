@@ -56,6 +56,7 @@
 		<Compile Remove="Tests\tScreen.cs" />
 		<Compile Remove="Tests\tServerData.cs" />
 		<Compile Remove="Tests\tStash.cs" />
+		<Compile Remove="Worker\MyWorkers.cs" />
 	</ItemGroup>
 
 

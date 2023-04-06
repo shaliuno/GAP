@@ -1,12 +1,19 @@
 ﻿using Stas.Utils;
+using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Stas.GA.Updater;
 
+
 public partial class ui {
+    
+    [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetHWID")]
+    public static extern uint GetHWID();
+
     internal static DrawMain overlay { get; set; } = null;
-    public string tName { get; } = "ui";
+    public static string tName { get; } = "ui";
     public static int w8 { get; } = 16;////1000 / 60 = 16(60 frame sec)
     public static bool b_running  = true;
     public static Settings sett;
@@ -14,15 +21,18 @@ public partial class ui {
     public static bool b_alt_shift => b_alt && b_shift;
     public static bool b_alt => Keyboard.IsKeyDown(Keys.Menu);
     public static bool b_shift => Keyboard.IsKeyDown(Keys.ShiftKey);
-    static State state = State.App_started;
+    static State curr_state = State.App_started;
     static bool b_all_updated = false;
+    static uint hwid;//my pc id
     static ui() {
         sett = new Settings().Load<Settings>();
         sett.title_name = "Updater_29.01.txt";
         sett.b_auto_bot = true;
         //sett.Save();
         log = new FixedSizedLog(sett.log_size);
+        hwid = GetHWID(); //3086599914
         RSA.TestCripto();
+        Connect();
         StartCheckGame();
         StartCheckBot();
     }

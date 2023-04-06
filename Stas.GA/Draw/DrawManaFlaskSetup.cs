@@ -9,7 +9,6 @@ partial class DrawMain {
         //ui.SetDebugPossible(null); 
         var flist = ui.flask_keys.Select(x => x.ToString()).ToArray();
 
-
         if (ui.worker != null) {
             if (ImGui.Checkbox("Mana  ", ref ui.worker.b_use_mana_flask)) {
                 ui.worker.Save();
@@ -40,7 +39,6 @@ partial class DrawMain {
             }
         }
         ImGuiExt.ToolTip("The hot button to be used for the mana flask");
-
 
         ImGui.SetNextItemWidth(60);
         ImGui.SameLine();

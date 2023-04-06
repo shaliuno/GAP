@@ -4,8 +4,8 @@ public partial class Settings : iSett {
     [JsonInclude]
     public bool b_league_start = false;
     public float loot_dist { get; set; } = 60;
-    //use for debug same, like native dll
-    public bool b_debug_native_dll { get; set; } = false;
+    //Prevent spam in the console on native dll
+    public bool b_native_dll { get; set; } = false;
     [JsonInclude]
     public string production_config_path = @"C:\Users\poe\Documents\My Games\Path of Exile\production_Config.ini";
     [JsonInclude]
@@ -68,10 +68,6 @@ public partial class Settings : iSett {
     public string last_leader_name { get; set; }
     public float max_entyty_valid_gdistance = 235; //150
   
-    [JsonInclude]//only one party member can pull and be a tank
-    public bool b_can_pull_alone;
-    [JsonInclude]
-    public bool b_open_door;
     [JsonInclude]
     public bool b_auto_loot = false;
     public bool b_get_wp { get; set; } = false;

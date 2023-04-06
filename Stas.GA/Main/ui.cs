@@ -159,7 +159,7 @@ public partial class ui {
             }
         }
     }
-    public static aWorker worker { get; private set; }
+    public static aWorker worker { get; private set; } 
     public static gState curr_state => states.curr_gState;
     public static Role curr_role { get; }
     public static int max_pp { get; private set; }

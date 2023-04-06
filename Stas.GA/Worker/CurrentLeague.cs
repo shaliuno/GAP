@@ -1,7 +1,6 @@
 ﻿namespace Stas.GA;
-
-public class Default : aWorker {
-    public Default() {
+public class LowLevel : aWorker {
+    public LowLevel():base("LowLevel") {
         //b_use_low_life = true;
         //max_danger = 10; //must stop and cleare if use faster navigation algoritm
         //main = new Frenzy(Keys.D1, 80, 15, 480);
@@ -31,7 +30,7 @@ public class Default : aWorker {
     }
 }
 public class CurseBot : aWorker {
-    public CurseBot() {
+    public CurseBot():base("CurseBot") {
         b_use_low_life = true;
         max_danger = 10; //must stop and cleare if use fater navigation algoritm
         //main = new Frenzy(Keys.D1, 80, 15, 480);
@@ -57,7 +56,7 @@ public class CurseBot : aWorker {
 }
 
 public class ManaGuard : aWorker {
-    public ManaGuard() {
+    public ManaGuard():base("ManaGuard") {
         b_use_low_life = true;
         main = new Smite(Keys.D1, 30, 6);
         jump = new JumpSkill(Keys.D2, 45, 11, 150, 2210);
@@ -76,8 +75,8 @@ public class ManaGuard : aWorker {
     }
 }
 
-public class Balista : aWorker { 
-    public Balista() {
+public class Balista : aWorker {
+    public Balista():base("Balista") {
         b_use_low_life = true;
         main = new Frenzy(Keys.D1, 80, 15, 480);
         //main = new EtherealKnives(Keys.D1, 75, 19, 460);
@@ -100,7 +99,7 @@ public class Balista : aWorker {
 }
 
 public class AuraBot : aWorker {
-    public AuraBot() {
+    public AuraBot() :base("AuraBot") {
         b_use_low_life = true;
         main = new WinterOrb(Keys.D1, 70, 5, 240);
         jump = new JumpSkill(Keys.D2, 45, 10, 150, 2290); //dash no supprt

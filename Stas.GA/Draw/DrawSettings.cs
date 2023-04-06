@@ -46,14 +46,15 @@ namespace Stas.GA {
             if (ui.curr_role == Role.Master) {
                 ImGui.Checkbox("bots", ref ui.b_draw_bots);
                 ImGuiExt.ToolTip("show/hide botts F12");
+               
+            }
+            if (ui.worker != null) {
                 ImGui.SameLine();
+                if (ImGui.Checkbox("Door", ref ui.worker.b_open_door)) {
+                    ui.sett.Save();
+                }
+                ImGuiExt.ToolTip("Open doors");
             }
-
-            if (ImGui.Checkbox("Door", ref ui.sett.b_open_door)) {
-                ui.worker.Save();
-            }
-            ImGuiExt.ToolTip("Open doors");
-
             ImGui.SameLine();
             if (ImGui.Checkbox("Loot", ref ui.sett.b_auto_loot)) {
                 ui.sett.Save();
@@ -109,8 +110,8 @@ namespace Stas.GA {
 
             //================>new line
             if (ui.worker != null) {
-                if (ImGui.Checkbox("Pull", ref ui.sett.b_can_pull_alone)) {
-                    if (!ui.sett.b_can_pull_alone) {
+                if (ImGui.Checkbox("Pull", ref ui.worker.b_can_pull_alone)) {
+                    if (!ui.worker.b_can_pull_alone) {
                         ui.sett.b_get_next_pack = false;
                         ui.sett.b_get_not_visited = false;
                     }
@@ -118,7 +119,7 @@ namespace Stas.GA {
                 }
                 ImGuiExt.ToolTip("Can body pull/move to closest danger enemy...");
 
-                if (ui.sett.b_can_pull_alone) {
+                if (ui.worker.b_can_pull_alone) {
                     ImGui.SameLine();
                     if (ImGui.Checkbox("Next", ref ui.sett.b_get_next_pack)) {
                         ui.sett.Save();

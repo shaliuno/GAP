@@ -7,6 +7,11 @@ using Color = System.Drawing.Color;
 namespace Stas.GA {
     partial class DrawMain {
         void DrawLootSett() {
+            if (ui.looter == null) {
+                ImGui.Text("Temporarily unavailable");
+                return; 
+            }
+               
             if (ImGui.Checkbox("Quest", ref ui.looter.sett.b_quest)) {
                 ui.looter.sett.Save();
                 ui.looter.LoadSett();
