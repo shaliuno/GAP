@@ -3,9 +3,9 @@
     using System.Runtime.InteropServices;
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
-    public struct BuffsOffsets {
+    public struct BuffsOffsets { //3.21
         [FieldOffset(0x000)] public ComponentHeader Header;
-        [FieldOffset(0x158)] public StdVector StatusEffectPtr;
+        [FieldOffset(0x160)] public StdVector StatusEffectPtr;
     }
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]

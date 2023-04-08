@@ -9,10 +9,10 @@ public class Life : RemoteObjectBase {
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
         if (Address == IntPtr.Zero)
-            return;        
-        var data = new LifeOffset();
-        GetLifeOffsets(Address, ref data);
-      
+            return;
+        //var data = new LifeOffset();
+        //GetLifeOffsets(Address, ref data);
+        var data = ui.m.Read<LifeOffset>(this.Address);
         owner_addr = data.Header.EntityPtr;
         Health = data.Health;
         EnergyShield = data.EnergyShield;

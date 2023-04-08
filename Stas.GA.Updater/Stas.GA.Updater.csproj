@@ -12,8 +12,8 @@
 		<StartupObject>Stas.GA.Updater.Starter</StartupObject>
 		<AssemblyName>NoteUpd</AssemblyName>
 		<ApplicationIcon>notepad.ico</ApplicationIcon>
-
 	</PropertyGroup>
+	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>$(SolutionDir)bin</OutputPath>
 	</PropertyGroup>

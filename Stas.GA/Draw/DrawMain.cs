@@ -48,7 +48,7 @@ public partial class DrawMain : Overlay {
         if (!ui.b_ingame) sp_warn.Append("NOT in game... ");
 
         ui.warning = sp_warn.ToString();
-        if ((on_top && !ui.b_busy) || ui.b_show_info_over)
+        if ((on_top && !ui.b_busy) || ui.b_show_info_over  || ui.sett.b_league_start)
             DrawInfo();
     }
 }

@@ -92,7 +92,7 @@ public partial class ui {
                     foreach (var n in need_upd_per_frame)
                         n?.Tick(n.Address, tName + ".main");
                    
-                    CheckWorker();
+                    //CheckWorker();
                     //todo: temporary dont need a worker
                     tasker.Tick();
                     if (worker == null) {

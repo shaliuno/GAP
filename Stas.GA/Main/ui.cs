@@ -223,7 +223,7 @@ public partial class ui {
     public static void AddToLog(string str, MessType _mt = MessType.Ok) {
         log.Add(str, _mt);
 #if DEBUG
-        if(sett !=null && sett.b_debug_native_dll)
+        if(sett !=null && sett.b_native_dll)
             Console.WriteLine("["+ _mt + "] "+ str);
 #endif
     }

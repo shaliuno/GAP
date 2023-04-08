@@ -14,7 +14,7 @@ public partial class GameUiElements : Element {
     [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetGuiOffsets")]
     public static extern int GetGuiOffsets(IntPtr gui_ptr, ref guiOffset offs);
     internal guiOffset data = new guiOffset();
-
+    bool need_check_was_init=false;
     internal GameUiElements() : base(default, "gui" ) {
         worker = new Thread(() => {
             while (ui.b_running) { //0x000001dd1e44b6c0
@@ -42,6 +42,7 @@ public partial class GameUiElements : Element {
                 need_check_vis["AtlasSkillPanel"] = AtlasSkillPanel;
                 need_check_vis["DelveWindow"] = DelveWindow;
                 need_check_vis["TempleOfAtzoatl"] = TempleOfAtzoatl;
+                need_check_was_init = true;
                 Thread.Sleep(100);
             }
         });

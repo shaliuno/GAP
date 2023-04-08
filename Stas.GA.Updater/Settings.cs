@@ -1,17 +1,17 @@
-﻿using System.Text.Json.Serialization;
-
+﻿using Stas.Utils;
+using System.Text.Json.Serialization;
 namespace Stas.GA.Updater;
 
 public class Settings :iSave{
-
-    public string boosty_name { get; set; } = "free";
+    public string boosty_mail { get; set; } = "free";
     public string discord_name { get; set; } = "free";
     /// <summary>
     /// this IP is pinned in #authorization chanel
     /// </summary>
     public string srv_ip { get; set; } = "95.165.27.166";
     public int srv_port { get; set; } = 4444;
-   
+    public bool b_tester { get; set; } = false;
+
     public int log_size { get; set; }=15;
     [JsonInclude]
     public bool b_log_info = false;

@@ -136,7 +136,6 @@ public partial class Entity : RemoteObjectBase {
                         return Path;
                 }
             }
-
             return _metadata;
         }
     }

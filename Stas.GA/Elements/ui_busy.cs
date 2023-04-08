@@ -26,6 +26,8 @@ public partial class GameUiElements : Element {
     public bool b_busy {
         get {
             _bbi = false;
+            if (!need_check_was_init)//dict making not done// first cold call
+                return false;
             lock (locker) {// we need lock sb from multy thread reading
                 sb.Clear();
                 foreach (var e in need_check_vis.Values) {

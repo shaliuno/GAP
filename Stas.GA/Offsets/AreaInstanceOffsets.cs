@@ -7,8 +7,8 @@ public struct AreaInstanceOffsets {//3.20
     [FieldOffset(0xE4)] public uint CurrentAreaHash;
 
     // Env which are activated. Keys can be found in Environments.dat file.
-    [FieldOffset(0x748)] public StdVector Environments;
-    [FieldOffset(0x778)] public IntPtr ServerDataPtr;
+    [FieldOffset(0x720)] public StdVector Environments;
+    [FieldOffset(0x750)] public IntPtr ServerDataPtr;
     [FieldOffset(0x758)] public IntPtr LocalPlayerPtr; 
     [FieldOffset(0x818)] public StdMap SmallEntityList; 
     [FieldOffset(0x808)] public StdMap AwakeEntities;

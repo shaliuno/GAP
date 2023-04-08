@@ -11,7 +11,7 @@ public partial class ui {
     
     [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetHWID")]
     public static extern uint GetHWID();
-
+  
     internal static DrawMain overlay { get; set; } = null;
     public static string tName { get; } = "ui";
     public static int w8 { get; } = 16;////1000 / 60 = 16(60 frame sec)
@@ -21,7 +21,7 @@ public partial class ui {
     public static bool b_alt_shift => b_alt && b_shift;
     public static bool b_alt => Keyboard.IsKeyDown(Keys.Menu);
     public static bool b_shift => Keyboard.IsKeyDown(Keys.ShiftKey);
-    static State curr_state = State.App_started;
+    public static State curr_state = State.App_started;
     static bool b_all_updated = false;
     static uint hwid;//my pc id
     static ui() {
@@ -31,7 +31,7 @@ public partial class ui {
         //sett.Save();
         log = new FixedSizedLog(sett.log_size);
         hwid = GetHWID(); //3086599914
-        RSA.TestCripto();
+        //RSA.TestCripto();
         Connect();
         StartCheckGame();
         StartCheckBot();

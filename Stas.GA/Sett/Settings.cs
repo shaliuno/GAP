@@ -2,7 +2,7 @@
 
 public partial class Settings : iSett {
     [JsonInclude]
-    public bool b_league_start = false;
+    public bool b_league_start = true;
     public float loot_dist { get; set; } = 60;
     //Prevent spam in the console on native dll
     public bool b_native_dll { get; set; } = false;

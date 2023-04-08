@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Stas.Utils;
+using System.Diagnostics;
 namespace Stas.GA.Updater;
 
 public partial class ui {
@@ -7,11 +8,11 @@ public partial class ui {
     static void StartCheckGame() {
         //var sw = new Stopwatch();
        
-        var poew_thread = new Thread(async () => {
+        var poe_thread = new Thread(async () => {
             while (b_running) {
                 try {
                     if (curr_state != State.Authorized) {
-                        ui.AddToLog("Waiting for authorization...");
+                        ui.AddToLog("poe_thread.w8 for authorization...");
                         Thread.Sleep(500);
                         continue;
                     }
@@ -29,8 +30,8 @@ public partial class ui {
                 Thread.Sleep(100);
             }
         });
-        poew_thread.IsBackground = true;
-        poew_thread.Start();
+        poe_thread.IsBackground = true;
+        poe_thread.Start();
     }
 
     static  void StartGame() {

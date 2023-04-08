@@ -2,9 +2,6 @@
 using SixLabors.ImageSharp;
 using System.Diagnostics;
 using Color = System.Drawing.Color;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.IO;
 
 namespace Stas.GA;
 public partial class AreaInstance {
@@ -55,17 +52,7 @@ public partial class AreaInstance {
         }
         terr_meta_data = data.TerrainMetadata;
         walkable_data = ui.m.ReadStdVector<byte>(terr_meta_data.GridWalkableData);
-        height_data = GetTerrainHeight();
-        List<byte> valid = new List<byte>();
-        for (byte f = 0; f <= 5; f++) {
-            for (byte s = 0; s <= 5; s++) {
-                byte res = (byte)((f << 4) | s);
-                //var res_h = res.ToString("X");
-                //var res_b = Convert.ToString(res, 2);
-                //Console.WriteLine(res_h + "=" + res_b);
-                valid.Add(res);
-            }
-        }
+       
         sw.Restart();
         var td = terr_meta_data;
         cols = (int)td.TotalTiles.X * 23;
@@ -83,51 +70,23 @@ public partial class AreaInstance {
         customConfig.PreferContiguousImageBuffers = true;
         Image<Rgba32> image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
         var walkArray = new WalkableFlag[cols, rows];
-#if DEBUG
-        for (int y = 0; y < height_data.Length; y++) {
-            Run(y);
-        }
-#else
-        Parallel.For(0, height_data.Length, y => {
-            Run(y);
-        });
-#endif
-        void Run(int y) {
-            for (var x = 1; x < height_data[y].Length - 1; x++) {
-                var index = (y * bytesPerRow) + (x / 2); // (x / 2) => since there are 2 data points in 1 byte.
-                var shift = x % 2 == 0 ? 0 : 4;
-                var both = walkable_data[index];
-                Debug.Assert(valid.Contains(both));
-                var bit = both >> shift & 0xF;
-                var h = (int)(height_data[y][x] / 21.91f);
+        var dataIndex = 0;
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x += 2) { //1794
+                var b = walkable_data[dataIndex + (x >> 1)];
+                var cp = b & 0xf;
+                bit_data[x, y] = cp;
+                image[x, y] = GetRgba32(cp);
 
-                if (ui.sett.b_use_gh_map) {
-                    var cond_one = x - h >= 0 && bit_data.GetLength(0) > x - h;
-                    if (!cond_one) {
-                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
-                        continue;
-                    }
-                    var cond_two = y - h >= 0 && bit_data.GetLength(1) > y - h;
-                    if (!cond_two) {
-                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
-                        continue;
-                    }
-                    bit_data[x - h, y - h] = bit;
-                    image[x - h, y - h] = GetRgba32(bit);
-                }
-                else {
-                    bit_data[x, y] = bit;
-                    if (bit > 1)
-                        walkArray[x, y] = WalkableFlag.Walkable;
-                    else
-                        walkArray[x, y] = WalkableFlag.NonWalkable;
-                    image[x, y] = GetRgba32(bit);
-                }
-
-                if (bit == 0)
-                    continue;
+                cp = (b >> 4);
+                bit_data[(x + 1), y] = cp;
+                image[x + 1, y] = GetRgba32(cp);
             }
+            dataIndex += td.BytesPerRow;//897;
+            progress = (float)y / rows;
+
         }
+
 #if DEBUG
         //image.Save("current_map_" + ui.curr_map_hash + ".jpeg");
 #endif

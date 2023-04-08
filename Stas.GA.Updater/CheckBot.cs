@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Stas.Utils;
+using System.Diagnostics;
 namespace Stas.GA.Updater;
 
 public partial class ui {
@@ -8,7 +9,7 @@ public partial class ui {
         var work_thread = new Thread(async () => {
             while (b_running) {
                 if (curr_state != State.Authorized) {
-                    ui.AddToLog("Waiting for authorization...");
+                    ui.AddToLog("work_thread.w8 for authorization...");
                     Thread.Sleep(500);
                     continue;
                 }

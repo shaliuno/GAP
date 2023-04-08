@@ -1,10 +1,8 @@
 ﻿using ImGuiNET;
-namespace Stas.GA; 
+namespace Stas.GA;
 
 public class ObjectMagicProperties : EntComp {
-    public ObjectMagicProperties(IntPtr ptr) : base(ptr, "OMP") {
-        if (ptr != default) 
-            Tick(ptr, tName + "()"); 
+    public ObjectMagicProperties(IntPtr address) : base(address) {
     }
     internal override void Tick(IntPtr ptr, string from = null) {
         Address = ptr;
@@ -12,21 +10,27 @@ public class ObjectMagicProperties : EntComp {
             return;
         }
         var data = ui.m.Read<ObjectMagicPropertiesOffsets>(this.Address);
-        Rarity = (Rarity)data.Rarity;
-        GetMods(data);
+        var props = data.props;
+        Rarity = (Rarity)props.Rarity;
+        GetMods(props);
     }
     public Rarity Rarity { get; private set; } = Rarity.Normal;
     public List<string> Mods { get; private set; } = new List<string>();
 
     long last_hash;
-    void GetMods(ObjectMagicPropertiesOffsets data) {
-        var hash = data.Mods.GetHashCode();
+
+    /// TODO need totale reworking
+    void GetMods(ModsAndObjectMagicProperties detal) {
+        var emods = detal.Mods.ExplicitMods;
+
+        var hash = emods.GetHashCode();
         if (hash == last_hash) {//not need update
             return;
         }
-        var first = data.Mods.First.ToInt64();
-        var last = data.Mods.Last.ToInt64();
-        var end = data.Mods.First.ToInt64() + 256 * MOD_RECORD_SIZE;
+
+        var first = emods.First.ToInt64();
+        var last = emods.Last.ToInt64();
+        var end = emods.First.ToInt64() + 256 * MOD_RECORD_SIZE;
 
         if (first == 0 || last == 0 || last < first) {
             Mods = new List<string>();
@@ -46,11 +50,11 @@ public class ObjectMagicProperties : EntComp {
         last_hash = hash;
         Mods = _ModNamesList;
     }
-   
+
     const int MOD_RECORDS_OFFSET = 0x18;
     const int MOD_RECORD_SIZE = 0x38;
     const int MOD_RECORD_KEY_OFFSET = 0x10;
-    readonly List<string> _ModNamesList = new ();
+    readonly List<string> _ModNamesList = new();
 
     internal override void ToImGui() {
         base.ToImGui();

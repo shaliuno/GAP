@@ -1,5 +1,9 @@
-﻿using ImGuiNET;
+﻿using ClickableTransparentOverlay;
+using ImGuiNET;
+using Stas.Utils;
 using System.Drawing;
+using System.Numerics;
+
 namespace Stas.GA.Updater;
 partial class DrawMain : Overlay {
     public IntPtr icons;
@@ -12,8 +16,9 @@ partial class DrawMain : Overlay {
     protected override void Render() {
         if (!ui.b_running)
             return;
-        var isMainMenuExpanded = ImGui.Begin(_title!, ImGuiWindowFlags.AlwaysAutoResize  | ImGuiWindowFlags.NoFocusOnAppearing);
-        //ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.MenuBar
+        var isMainMenuExpanded = ImGui.Begin(_title!, ImGuiWindowFlags.AlwaysAutoResize 
+            | ImGuiWindowFlags.NoFocusOnAppearing);
+           //ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.MenuBar
         if (!isMainMenuExpanded) {
             ImGui.End();
             return;
@@ -26,7 +31,7 @@ partial class DrawMain : Overlay {
 
             ImGui.Text("Your name on boosty.to/gameassist");
             ImGui.SameLine();
-            if (ImGui.Button(ui.sett.boosty_name)) {
+            if (ImGui.Button(ui.sett.boosty_mail)) {
                 ui.sett = new Settings().Load<Settings>();
             }
             ToolTip("click this to load the current value from the settings file");
@@ -38,10 +43,21 @@ partial class DrawMain : Overlay {
             }
             ToolTip("click this to load the current value from the settings file");
 
-
         }
 
         ImGui.Separator();
+        if (ui.curr_state >= State.Connected) {
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Green.ToImgui());
+            ImGui.Button("Conn ok");
+        }
+        if (ui.curr_state != State.Auth_ok) {
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.ToImgui());
+        }
+        else
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Green.ToImgui());
+        ImGui.Button(ui.curr_state.ToString());
+        ImGui.PopStyleColor();
+
         // DrawDisabledButton("Sign UP");
         if (ImGui.Button("sign up")) {
             ui.SetDebugPossible(() => {
@@ -84,6 +100,20 @@ partial class DrawMain : Overlay {
         ImGui.Separator();
         //new line
         DrawLog(ui.log);
+        ImGui.Separator();
+        //ImGui.NewLine();
+        if (File.Exists("image.png")) {
+            AddOrGetImagePointer(
+                "image.png",
+                false,
+                out IntPtr imgPtr,
+                out uint w,
+                out uint h);
+            ImGui.Image(imgPtr, new Vector2(w, h));
+        }
+        else {
+            ImGui.Text("advertising spot");
+        }
         ImGui.End();
     }
     public static uint ImGuiColor(uint r, uint g, uint b, uint a) {
