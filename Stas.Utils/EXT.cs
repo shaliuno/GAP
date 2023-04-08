@@ -7,6 +7,7 @@ using System.Text;
 using V3 = System.Numerics.Vector3;
 using V2 = System.Numerics.Vector2;
 using System.Threading;
+using System.Net;
 
 namespace Stas.Utils;
 
@@ -50,6 +51,17 @@ public class Color4 {
     public float Z { get; set; }
 }
 public static partial class EXT {
+    public static uint ToIpAddrUint(this string ipString) {
+        IPAddress ipAddress = IPAddress.Parse(ipString);
+        byte[] bytes = ipAddress.GetAddressBytes();
+        var res = BitConverter.ToUInt32(bytes, 0);
+        return res;
+    }
+    public static string ToIpAddrString(this uint ipInt) {
+        var ipAddress = new IPAddress(ipInt);
+        var res = ipAddress.ToString();
+        return res;
+    }
     public static float Distance(this Point point1, Point point2) {
         return MathF.Sqrt(DistanceSquared(point1, point2));
     }
