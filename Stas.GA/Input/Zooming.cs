@@ -38,27 +38,29 @@ public partial class InputChecker {
                 ui.sett.map_angle = ui.sett.map_angle -= 0.05f;
             }
             if (Keyboard.IsKeyDown(Keys.NumPad1, "ICh zoom_in")) {
-                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.01f, 0.5f, 30);
+                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.01f, 0.1f, 10);
+                ui.AddToLog("mzoom=[" + ui.sett.map_scale + "]");
             }
             if (Keyboard.IsKeyDown(Keys.NumPad3, "ICh zoom_out")) {
-                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.01f, 0.5f, 30);
+                ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.01f, 0.1f, 10);
+                ui.AddToLog("mzoom=[" + ui.sett.map_scale + "]");
             }
         }
         else {
             if (ui.sett.b_use_keybord_for_zoom) {
                 if (Keyboard.IsKeyDown(ui.sett.zoom_in, "ICh zoom_in")) {
-                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.01f, 0.5f, 20);
+                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.02f, 0.25f, 15);
                 }
                 if (Keyboard.IsKeyDown(ui.sett.zoom_out, "ICh zoom_out")) {
-                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.01f, 0.5f, 20);
+                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.02f, 0.25f, 15);
                 }
             }
             else {
                 if (Mouse.IsButtonDown(Keys.XButton1)) {
-                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.04f, 0.5f, 20);
+                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale += 0.04f, 0.1f, 10);
                 }
                 if (Mouse.IsButtonDown(Keys.XButton2)) {
-                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.04f, 0.5f, 20);
+                    ui.sett.map_scale = Math.Clamp(ui.sett.map_scale -= 0.04f, 0.1f, 10);
                 }
             }
             

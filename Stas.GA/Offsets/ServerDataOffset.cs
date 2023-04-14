@@ -4,11 +4,11 @@ namespace Stas.GA {
 
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
-    public struct ServerDataStructure {
+    public struct ServerDataStructure { //3.21
         public const int SKIP = 0x8000; // for reducing struct size.
-        [FieldOffset(0x1818)] public StdVector PlayerInventories; //0x1818  3.20
-        [FieldOffset(0x9288 + 0x160 - SKIP)] public readonly SkillBarIdsStruct SkillBarIds;
-        [FieldOffset(0x1240)] public readonly StdVector NearestPlayers; // 3.20
+        [FieldOffset(0x1DC8)] public StdVector PlayerInventories; 
+        [FieldOffset(0x6792)] public readonly SkillBarIdsStruct SkillBarIds;
+        [FieldOffset(0x1AE8)] public readonly StdVector NearestPlayers; 
     }
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]

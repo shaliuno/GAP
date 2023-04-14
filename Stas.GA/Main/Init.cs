@@ -127,7 +127,6 @@ public partial class ui {
     public static void ReloadSett() {
         sett = new Settings().Load<Settings>();
         //TODO cant use it - w8 GH relise
-        sett.b_use_gh_flask = false;
         sett.b_use_gh_map = false;
         sett.b_develop = true; //<<==change if you're a developer
         exped_sett = new ExpedSett().Load<ExpedSett>();

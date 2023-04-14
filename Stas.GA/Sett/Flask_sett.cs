@@ -2,8 +2,6 @@
 
 public partial class Settings  {
     [JsonInclude]
-    public bool b_use_gh_flask = true;
-    [JsonInclude]
     public bool b_use_left_flasks = false;
     [JsonInclude]
     public bool b_use_right_flasks = false;

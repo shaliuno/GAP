@@ -25,19 +25,8 @@ public abstract partial class aTasker {
     List<double> elapsed = new();
     public void Tick() {
         if (ui.life != null) {
-            //todo dont use it at all now
-            if (!ui.sett.b_use_gh_flask) {
-                UseLifeFlask();
-                UseManaFlask();
-            }
-            else {
-                //var cp = ui.ahk.sett.CurrentProfile;
-                //if (cp != null && ui.ahk.sett.Profiles.ContainsKey(cp) )
-                //foreach (var rule in ui.ahk.sett.Profiles[cp].Rules) {
-                //    //ui.SetDebugPossible(null);
-                //    rule.Execute(ui.ahk.DebugLog);
-                //}
-            }
+            UseLifeFlask();
+            UseManaFlask();
         }
         while (ui.worker == null) {//it's possible right after the program start
             return;

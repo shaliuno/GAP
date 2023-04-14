@@ -18,7 +18,9 @@ public partial class GameUiElements : Element {
     internal GameUiElements() : base(default, "gui" ) {
         worker = new Thread(() => {
             while (ui.b_running) { //0x000001dd1e44b6c0
-                if (Address == default || ui.curr_state != gState.InGameState) {
+                if (Address == default 
+                || ui.curr_state != gState.InGameState 
+                || ui.sett.b_league_start) {
                     Thread.Sleep(ui.w8 * 10);
                     continue;
                 }

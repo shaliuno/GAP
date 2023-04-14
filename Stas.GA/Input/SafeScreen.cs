@@ -169,7 +169,7 @@ public class SafeScreen : iSett {
     /// </summary>
     void Init() {
         int ni = 0;
-        if (ui.gui == null || !ui.gui.IsValid)
+        if (ui.gui == null || !ui.gui.IsValid || ui.sett.b_league_start)
             return;
         Width = ui.game_window_rect.Width;
         Height = ui.game_window_rect.Height;

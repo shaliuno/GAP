@@ -66,5 +66,5 @@ public enum Opcode : byte {
     NewImagePart,
     PlaySound,
     ResetState, NavGo, FallowHard, Jump, LinkMe, ResurectCheckPoint, ResurectTown, UseTotem, Exit,
-    FocusGP, SetUltim, UseTNT, CheckHwid
+    FocusGP, SetUltim, UseTNT
 }

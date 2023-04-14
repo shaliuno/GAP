@@ -20,7 +20,6 @@ partial class DrawMain {
             ImGuiExt.ToolTip("Show/hide log lines");
         }
         if (ImGui.BeginTabBar("Tabs", ImGuiTabBarFlags.AutoSelectNewTabs)) {// | ImGuiTabBarFlags.Reorderable
-         
             if (ui.sett.b_draw_log_first) {
                 _draw_log();
                 _draw_alert();
@@ -30,27 +29,11 @@ partial class DrawMain {
                 _draw_log();
             }
            
-            var f_title = "Flasks";
-            if (ui.sett.b_use_gh_flask)
-                f_title = "AHK";
-            if (ImGui.BeginTabItem(f_title)) {
-                //if (ui.sett.b_use_gh_flask) {
-                //    DrawAHKSettings();
-                //    DrawAHK();
-                //}
-                //else
-                    DrawFlasks();
+            if (ImGui.BeginTabItem("Flasks")) {
+                DrawFlasks();
                 ImGui.EndTabItem();
             }
-            ImGuiExt.ToolTip("Show/hide "+ f_title + " panel");
-
-            DrawExpedSett();
-
-            if (ImGui.BeginTabItem("Sett")) {
-                DrawSettings();
-                ImGui.EndTabItem();
-            }
-            ImGuiExt.ToolTip("Show/hide settings panel");
+            ImGuiExt.ToolTip("Show/hide Flasks panel");
 
             if (ImGui.BeginTabItem("Loot")) {
                 DrawLootSett();
@@ -58,11 +41,17 @@ partial class DrawMain {
             }
             ImGuiExt.ToolTip("Show/hide loot settings");
 
-            //if (ImGui.BeginTabItem("Exped")) {
-            //    DrawExpedSett();
-            //    ImGui.EndTabItem();
-            //}
-            //ImGuiExt.ToolTip("Show/hide exped settings");
+            if (ImGui.BeginTabItem("Exped")) {
+                DrawExpedSett();
+                ImGui.EndTabItem();
+            }
+            ImGuiExt.ToolTip("Show/hide exped settings");
+
+            if (ImGui.BeginTabItem("Sett")) {
+                DrawSettings();
+                ImGui.EndTabItem();
+            }
+            ImGuiExt.ToolTip("Show/hide settings panel");
 
             if (ImGui.BeginTabItem("Visual")) {
                 DrawVisual();
@@ -76,7 +65,7 @@ partial class DrawMain {
             }
             ImGuiExt.ToolTip("Show/hide debug setting");
 
-            DrawDebugInfo();
+            DrawSameTest();
             
             ImGui.EndTabBar();
         }

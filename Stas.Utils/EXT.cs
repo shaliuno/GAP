@@ -282,7 +282,7 @@ public static partial class EXT {
         if (str == null)
             return new byte[] { 0, 0 };
         var ba = Encoding.UTF8.GetBytes(str);
-        Debug.Assert(ba.Length < 256);
+        Debug.Assert(ba.Length < short.MaxValue);
         return BYTE.Concat(BitConverter.GetBytes((short)ba.Length), ba);
     }
     public static string ToElapsedString(this Stopwatch sw) {

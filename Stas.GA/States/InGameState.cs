@@ -16,13 +16,12 @@ public class InGameState : RemoteObjectBase {
             return;
         }
         data = ui.m.Read<InGameStateOffset>(Address);
-        //for debug info only
-        var gst = (gState)ui.m.Read<byte>(Address + 0x0B);
         world_data.Tick(data.WorldData);
         area_instance.Tick(data.AreaInstanceData, tName);
         gui.Update(data.IngameUi, tName + ".Tick");
         ui_root.Update(data.UiRootPtr, tName + ".Tick");
-        UIHover.Update(data.UIHover, tName + ".Tick");
+        ui_hover.Update(data.UIHover, tName + ".Tick");
+        ui_hover_elem.Update(data.UIHoverElement, tName + ".Tick");
     }
     protected override void Clear() {
         //TODO debug where and when it is called from!
@@ -45,7 +44,8 @@ public class InGameState : RemoteObjectBase {
 
     public WorldData world_data { get; } = new(IntPtr.Zero);
     public AreaInstance area_instance { get; } = new(default);
-    public Element UIHover = new Element(default, "UIHover");
+    public Element ui_hover = new Element(default, "ui_hover");
+    public Element ui_hover_elem = new Element(default, "ui_hover_elem");
     internal Element ui_root = new Element(default, "UiRoot");
     public GameUiElements gui = new GameUiElements();
 

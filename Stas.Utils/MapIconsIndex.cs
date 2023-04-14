@@ -149,7 +149,7 @@ public enum MapIconsIndex {
     socets_6 = 137,
     unknow = 138,
     FrameArrow = 139,
-    unk_140 = 140,
+    Aura_life_es_leech = 140,
 
     DangerArea = 141,                     //start row index = 10
     HarvestCollectorBlue1 = 142,

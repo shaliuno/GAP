@@ -26,8 +26,8 @@ public class ServerData : RemoteObjectBase {
         }
         if (DateTime.Now < next_upd )
             return;
-        //var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
-        //var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
+        var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
+        var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
         //next_upd = DateTime.Now.AddMilliseconds(200);
         ////TODO twise load here on start - need fix
         //Debug.Assert(still_update == false);
@@ -50,9 +50,9 @@ public class ServerData : RemoteObjectBase {
         //    }
         //    still_update = false;
         //}
-        
-        //GetPlayerInventoryItems(data);
-        //GetNerestPlayers(data);
+
+        GetPlayerInventoryItems(data);
+        GetNerestPlayers(data);
     }
 
     public List<Player> nearest_players { get; private set; } = new();

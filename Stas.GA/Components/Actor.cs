@@ -1,4 +1,6 @@
 ﻿using ImGuiNET;
+using System.Runtime.InteropServices;
+
 namespace Stas.GA;
 
 public class Actor : EntComp {
@@ -6,11 +8,15 @@ public class Actor : EntComp {
     }
     DateTime next_upd = DateTime.Now;
     DateTime next_totems_upd = DateTime.Now;
+
+    [DllImport("Stas.GA.Native.dll", SetLastError = true, EntryPoint = "GetActorOffsets")]
+    public static extern int GetActorOffsets(IntPtr ingame_ptr, ref ActorOffset offs);
     internal override void Tick(IntPtr ptr, string from=null) {
         Address = ptr;
         if (Address == IntPtr.Zero)
             return;
-        var data = ui.m.Read<ActorOffset>(Address); //27D98FF37B0
+        var data = new ActorOffset();
+        GetActorOffsets(Address, ref data); 
         actor_ent.Tick(data.ent_ptr);
         Animation = (Animation)data.AnimationId;
         Action = (ActionFlags)data.ActionId;

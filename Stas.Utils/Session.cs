@@ -46,7 +46,7 @@ public partial class Session : IEquatable<Session> {
                     Thread.Sleep(3000); //poll interval 
                     ut.AddToLog(tName + "... "+ex.Message, MessType.Error);
                 }
-                Thread.Sleep(500); //poll interval 
+                Thread.Sleep(900); //poll interval 
             }
         });
         pull.IsBackground = true;

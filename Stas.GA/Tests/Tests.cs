@@ -92,7 +92,7 @@ public partial class Tests {
             ui.test_elem = res[1].Parent.Parent; //8b8
     }
     public void GetTopElemUnderCursor() {//9b8
-        ui.test_elem = ui.states.ingame_state.UIHover;
+        ui.test_elem = ui.states.ingame_state.ui_hover;
         //Element last_elem = null;
         //Element last_elem2 = null;
         //while (ui.test_elem.Parent != null) {
@@ -103,7 +103,7 @@ public partial class Tests {
         //ui.test_elem = last_elem2;
     }
     public void GetRootElemUnderCursor(int parent_count = 0) {//9b8
-        ui.test_elem = ui.states.ingame_state.UIHover;
+        ui.test_elem = ui.states.ingame_state.ui_hover;
         var curr_parent = 0;
         while (curr_parent < parent_count) {
             if (ui.test_elem.Parent == null) {

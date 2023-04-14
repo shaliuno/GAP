@@ -92,8 +92,11 @@ namespace Stas.GA {
         public static float Get_H_from_gp(V2 gp) {
             var h = (me != null) ? me.pos.Z : 0;//TODO: this old not correct method
             var ghd = curr_map.height_data;
-            if (ghd == null)
+            //TODO gh from map not ready
+            if (ghd == null || ghd.Length == 0 || ghd[0].Length == 0) {
+                AddToLog("Get_H_from_gp => not hight data", MessType.Error);
                 return h;
+            }
             if (gp.X > curr_map.cols || gp.Y > curr_map.rows || gp.X < 0 || gp.Y < 0) {
                 AddToLog("Get_H_from_gp => gp out of Map", MessType.Error);
                 return h;

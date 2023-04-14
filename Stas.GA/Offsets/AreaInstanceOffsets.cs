@@ -1,20 +1,17 @@
 using System.Runtime.InteropServices;
-namespace Stas.GA; 
- 
+namespace Stas.GA;
+
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
-public struct AreaInstanceOffsets {//3.20
-    [FieldOffset(0xA8)] public byte MonsterLevel; 
-    [FieldOffset(0xE4)] public uint CurrentAreaHash;
-
-    // Env which are activated. Keys can be found in Environments.dat file.
-    [FieldOffset(0x720)] public StdVector Environments;
-    [FieldOffset(0x750)] public IntPtr ServerDataPtr;
-    [FieldOffset(0x758)] public IntPtr LocalPlayerPtr; 
-    [FieldOffset(0x818)] public StdMap SmallEntityList; 
-    [FieldOffset(0x808)] public StdMap AwakeEntities;
-    [FieldOffset(0x998)] public TerrainStruct TerrainMetadata; 
+public struct AreaInstanceOffsets { //3.21
+    [FieldOffset(0xA8)] public byte MonsterLevel;
+    [FieldOffset(0xEC)] public uint CurrentAreaHash;
+    [FieldOffset(1832)] public StdVector Environments;   
+    [FieldOffset(1880)] public IntPtr ServerDataPtr;
+    [FieldOffset(1888)] public IntPtr LocalPlayerPtr; 
+    [FieldOffset(2080)] public StdMap SmallEntityList; 
+    [FieldOffset(2064)] public StdMap AwakeEntities;
+    [FieldOffset(2464)] public TerrainStruct TerrainMetadata; 
 }
-
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct EnvironmentStruct
 {

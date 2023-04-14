@@ -18,6 +18,7 @@ public partial class ui {
         var srv_info = " "+srv_ip + ":" + sett.srv_port+" ";
         if (!ui.sett.b_tester)
             srv_info = "";
+        DateTime last_login = default;
         var con_thread = new Thread(async () => {
             while (b_running) {
                 try {
@@ -38,14 +39,23 @@ public partial class ui {
                             var localAddr = ((IPEndPoint)tc.Client.LocalEndPoint).Address.ToString();
                             sess = new Session(tc, Decode, localAddr, null);
                             curr_state = State.hwid_check;
-                            sess.SendBa(Opcode.CheckHwid, BitConverter.GetBytes(hwid));
-                            AddToLog("Sending CheckHwid OK");
+                            break;
+                        case State.Login:
+                            if (last_login.AddSeconds(1) < DateTime.Now) {
+                                var ba = BYTE.Concat(BitConverter.GetBytes(hwid), 
+                                    sett.boosty_mail.To_UTF8_Byte(), 
+                                    sett.discord_name.To_UTF8_Byte());
+                                sess.SendBa(Opcode.Login, ba);
+                                AddToLog("Sending Login OK");
+                                last_login = DateTime.Now;
+                            }
                             break;
                         case State.Hwid_ok:
                             var lba = new byte[] { 1, 2, 3, 4, 5, 6, 7, 9 };
                             sess.SendBa(Opcode.Login, lba);
                             AddToLog("Sending Login OK");
                             break;
+                     
                         case State.Auth_ok:
                             sess.SendOpc(Opcode.Ping);
                             AddToLog("Sending Ping OK");

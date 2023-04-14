@@ -25,13 +25,10 @@ public partial class ui {
                     //    sess.Send(Opcode.Message, "Неправильная комбинация: " + STR.eof + mail + "+" + pass);
                     //}
                     break;
-
                 case Opcode.Message:
                     break;
                 case Opcode.Ping:
                     break;
-
-
                 default:
                     //Disconnect(this.name + "Кикнут - неизвестный опкод - типа хакер?");
                     //throw new Exception("Неизвестный опкод " + opc);

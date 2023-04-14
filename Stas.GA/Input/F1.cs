@@ -14,8 +14,11 @@ public partial class InputChecker {
                 //ui.test.WorlToSPCheck();
             }
             else {
-                ui.me.GetComp<Life>(out var life); //0x000001aa183445c0
-               //ui.test_elem = ui.gui.map_root;
+                //ui.me.GetComp<Life>(out var life); //0x000001aa183445c0
+                //ui.test_elem = ui.gui.map_root;
+                if (ui.me.GetComp<Actor>(out var actor)) {
+                    var skills = actor.actor_skills;
+                }
                 #region OLD
                 //var cam = ui.m.Read<CameraOffsets>( ui.camera.Address);
                 //ui.test.FindUiElemNotUnick("Nessa");
