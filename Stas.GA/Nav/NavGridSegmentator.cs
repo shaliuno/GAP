@@ -4,12 +4,10 @@ namespace Stas.GA;
 public class NavGridSegmentator {
     private readonly NavGrid _navGrid;
     private readonly int _segmentSquareSize;
-    private readonly Settings _settings;
 
-    public NavGridSegmentator(NavGrid navGrid, Settings settings) {
-        _settings = settings;
+    public NavGridSegmentator(NavGrid navGrid) {
         _navGrid = navGrid;
-        _segmentSquareSize = settings.SegmentationSquareSize / 2;
+        _segmentSquareSize = ui.sett.SegmentationSquareSize / 2;
     }
 
     public void Process(Point startPoint, Graph graph) {
@@ -36,7 +34,7 @@ public class NavGridSegmentator {
             currentNode.Stack.Push(possibleSectorPos);
 
             try {
-                _navGrid.WalkArray[currentNode.Pos.X, currentNode.Pos.Y] = WalkableFlag.PossibleSegment;
+                _navGrid.WalkArray[(int)currentNode.Pos.X, (int)currentNode.Pos.Y] = WalkableFlag.PossibleSegment;
             }
             catch (Exception e) {
                 throw new ArgumentOutOfRangeException(
@@ -79,7 +77,6 @@ public class NavGridSegmentator {
         }
 
         var value = _navGrid.WalkArray[point.X, point.Y];
-
         if (value.Contain(WalkableFlag.NonWalkable)) {
             _navGrid.WalkArray[point.X, point.Y] = value | WalkableFlag.Passed;
 
@@ -96,7 +93,6 @@ public class NavGridSegmentator {
                     }
                 }
             }
-
             return;
         }
 
@@ -127,7 +123,7 @@ public class NavGridSegmentator {
 
         _navGrid.WalkArray[point.X, point.Y] = value | WalkableFlag.Passed;
 
-        if (!_settings.FastSegmentationThroughOnePoint) {
+        if (!ui.sett.FastSegmentationThroughOnePoint) {
             node.Stack.Push(point with { X = point.X + 1 });
             node.Stack.Push(point with { X = point.X - 1 });
             node.Stack.Push(point with { Y = point.Y + 1 });

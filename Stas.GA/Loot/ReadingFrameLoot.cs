@@ -3,6 +3,7 @@ using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 
 public partial class Looter {
+
     //internal IList<LabelOnGround> ItemsOnGroundLabels =>labels_on_ground_elem.LabelsOnGround;
     internal IList<LabelOnGround> ItemsOnGroundLabels => labels_on_ground_elem.LabelsOnGround.Where(x => x.Address != default && x.IsVisible).ToList();
     ItemsOnGroundLabelElement labels_on_ground_elem  => new ItemsOnGroundLabelElement(ui.gui.data.itemsOnGroundLabelRoot);

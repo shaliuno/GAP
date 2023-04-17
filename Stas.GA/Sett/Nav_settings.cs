@@ -1,5 +1,7 @@
 ﻿namespace Stas.GA;
 public partial class Settings {
+    [JsonInclude]
+    public bool b_debug_nav_node  = true;
     /// <summary>
     /// The minimum square size of segment.
     /// All smaller square size segments will be removed.
@@ -7,9 +9,9 @@ public partial class Settings {
     public int SegmentationMinSegmentSize { get; set; } = 300;
 
     /// <summary>
-    /// The player look radius
+    /// The player look radius, same max skill distation
     /// </summary>
-    public float PlayerVisibilityRadius { get; set; } = 50;
+    public float PlayerVisibilityRadius { get; set; } = 90; 
 
     /// <summary>
     /// The maximum size of square segment during segmentation
@@ -19,12 +21,14 @@ public partial class Settings {
     /// <summary>
     /// The range of selecting nearest node from nodes in this radius from player
     /// Note: radius mean amount of nodes from players, not distance
-    /// Nodes in range of "LocalSelectNearNodeRange" will be chosed and from them the nearest node to player will be selected
+    /// Nodes in range of "LocalSelectNearNodeRange" will be chosed 
+    /// and from them the nearest node to player will be selected
     /// </summary>
     public float LocalSelectNearNodeRange { get; set; } = 20;
 
     /// <summary>
-    /// The distance from last algorithm update pos in which the GraphMapExplorer.Update will not trigger algorithm
+    /// The distance from last algorithm update pos in which the GraphMapExplorer.
+    /// Update will not trigger algorithm
     /// </summary>
     public float OptimizationMoveDist { get; } = 5;
 

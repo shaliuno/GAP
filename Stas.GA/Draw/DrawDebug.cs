@@ -11,6 +11,10 @@ public partial class DrawMain {
     Color _orange = Color.FromArgb(100, Color.Orange);
     Color _red = Color.FromArgb(100, Color.Red);
     Color _green = Color.FromArgb(100, Color.Green);
+    Color _purple2 = Color.FromArgb(200, Color.Purple);
+    Color _orange2 = Color.FromArgb(200, Color.Orange);
+    Color _red2 = Color.FromArgb(200, Color.Red);
+    Color _green2 = Color.FromArgb(200, Color.Green);
 
     void DrawDebug() {
         //draw here not ingame debug info
@@ -23,7 +27,9 @@ public partial class DrawMain {
 
         if (ui.b_show_cell)
             DebugNavGridCellRouts(ui.MapPixelToGP);
-        if (ui.nav.b_ready) {
+        if (ui.nav.b_ready && !ui.b_busy) {
+            if(ui.sett.b_develop)
+                DrawNavDebug();
             //DebugNavMesh();
             DebugNavPath();
             //DebugNavGP();

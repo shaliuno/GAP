@@ -45,16 +45,17 @@ namespace Stas.GA {
             ImGuiExt.ToolTip("draw this[GA.Info panel] alvays over(for debug samping mb)[Ctrl+F12]");
 
             ImGui.SameLine();
-            if (ImGui.Checkbox("Develop", ref ui.sett.b_develop)) {
-                ui.sett.Save();
-            }
-            ImGuiExt.ToolTip("puts the editor into developer mode\r\nShows a lot of garbage for debugging\r\nNot necessary for ordinary users");
-
-            ImGui.SameLine();
             if (ImGui.Checkbox("MouseMoving", ref ui.sett.b_draw_mouse_moving)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("draw mouse moving traces");
+
+            ImGui.SameLine();
+            if (ImGui.Checkbox("Node", ref ui.sett.b_debug_nav_node)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("draw navigation nodes");
+
 
             ///===================== new line ====================
             ImGui.Checkbox("Cells", ref ui.b_show_cell);

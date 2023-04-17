@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
-
 using ImGuiNET;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 namespace Stas.GA;

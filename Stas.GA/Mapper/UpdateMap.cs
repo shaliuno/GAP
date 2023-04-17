@@ -23,7 +23,6 @@ public partial class AreaInstance {
     public void UpdateMap(object state) {
         ClearOldData();
         UpdMapImage();
-        ui.nav.b_ready = true;
         if (!ui.b_mine) {
             //ui.nav.LoadVisited();
             ui.curr_map.GetTileTgtName();
@@ -33,8 +32,9 @@ public partial class AreaInstance {
         ui.curr_loaded_files.Load(tName);
         //ui.looter.LoadOldLoot();
     }
-    const string map_name = "walkable_map";
+    public const string map_name = "walkable_map";
     object map_locker = new object();
+    public Image<Rgba32> image { get; private set; }
     void UpdMapImage() {
         int curr_w8 = 0;
         int w8 = 3;
@@ -68,7 +68,7 @@ public partial class AreaInstance {
         bit_data = new int[cols, rows];
         Configuration customConfig = Configuration.Default.Clone();
         customConfig.PreferContiguousImageBuffers = true;
-        Image<Rgba32> image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
+        image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
         var walkArray = new WalkableFlag[cols, rows];
         var dataIndex = 0;
         for (int y = 0; y < rows; y++) {
@@ -77,22 +77,23 @@ public partial class AreaInstance {
                 var cp = b & 0xf;
                 bit_data[x, y] = cp;
                 image[x, y] = GetRgba32(cp);
+                walkArray[x, y] = GetWlkFlag(cp);
 
                 cp = (b >> 4);
                 bit_data[(x + 1), y] = cp;
                 image[x + 1, y] = GetRgba32(cp);
+                walkArray[x+1, y] = GetWlkFlag(cp);
             }
             dataIndex += td.BytesPerRow;//897;
             progress = (float)y / rows;
-
         }
 
 #if DEBUG
         //image.Save("current_map_" + ui.curr_map_hash + ".jpeg");
 #endif
-        ui.draw_main.AddOrGetImagePointer(map_name, image, false, out map_ptr); ;
-        image.Dispose();
-        ui.nav =new NavGrid(cols, rows, walkArray);
+        ui.draw_main.AddOrGetImagePointer(map_name, image, false, out map_ptr);
+       // image.Dispose();
+        ui.nav.GenerateNavGrid(cols, rows, walkArray);
         b_ready = true;
         ui.AddToLog("Map create time=[" + sw.ElapsedTostring() + "]", MessType.Warning);
     }
@@ -100,6 +101,7 @@ public partial class AreaInstance {
     void ClearOldData() {
         ui.string_cashe.Clear();
         ui.sett.map_scale = ui.sett.map_scale_def;
+        image = null;
         //quest_ent.Clear(); //mb don't
         b_ready = false;
         ui.w8ting_click_until.Clear();
@@ -125,7 +127,16 @@ public partial class AreaInstance {
         ui.nav.b_ready = false;//for not draw old visited
         ui.test?.spa?.Clear(); //debug data need only actuale
     }
-
+    //Dictionary<int, int> values = new(); //same test values
+    WalkableFlag GetWlkFlag(int i) {
+        //if (values.ContainsKey(i))
+        //    values[i] += 1;
+        //else
+        //    values[i] = 1;
+        if (i >= 2)
+            return WalkableFlag.Walkable;
+        return WalkableFlag.NonWalkable;
+    }
     internal static Rgba32 GetRgba32(int i) {
         Rgba32 res;
         switch (i) {

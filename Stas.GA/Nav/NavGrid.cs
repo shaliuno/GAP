@@ -3,40 +3,22 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using V2 = System.Numerics.Vector2;
 using System.Collections.Concurrent;
+using System.Runtime;
 
 namespace Stas.GA;
 public class NavGrid {
-    string tName = "NavGrid";
+    public NavGrid(int width, int height, WalkableFlag[,] walkArray) {
+        Width = width;
+        Height = height;
+        WalkArray = walkArray;
+    }
     public const int gcs = 23;
     public int lcid = 0; //last cell id
 
     public readonly int Height;
     public readonly int Width;
     public readonly WalkableFlag[,] WalkArray;
-    public bool b_ready = false;
-    public bool b_can_hit(Entity e) {
-        return true;
-    }
-    public bool b_can_hit(V2 tgp) {
-        return true;
-    }
-    public ConcurrentBag<GridCell> grid_cells = new ConcurrentBag<GridCell>();
-    public GridCell Get_gc_by_gp(V2 tgp) {
-        return null;
-    }
-    public void SaveVisited(bool _b_rewrite = false) { 
-        
-    }
-    public NavGrid() {
-        b_ready = false;
-    }
-
-    public NavGrid(int width, int height, WalkableFlag[,] walkArray) {
-        Width = width;
-        Height = height;
-        WalkArray = walkArray;
-        b_ready = true;
-    }
+  
 }
 [Flags]
 public enum WalkableFlag : byte {

@@ -23,14 +23,8 @@ namespace Stas.GA {
             }
             ImGuiExt.ToolTip("Auto rise after death");
 
-            //ImGui.SameLine();
-            //if (ImGui.Checkbox("Alt", ref ui.sett.b_alt_reset)) {
-            //    ui.sett.Save();
-            //}
-            //ImGuiExt.ToolTip("Alt downing stop curr_task /reset tasker...");
-
             ImGui.SameLine();
-            if (ImGui.Checkbox("Close modal", ref ui.sett.b_auto_close_modals)) {
+            if (ImGui.Checkbox("Use modal", ref ui.sett.b_auto_close_modals)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("Auto close same modals dialog like esc menu");
@@ -40,22 +34,15 @@ namespace Stas.GA {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("play sounds on this PC, otherwise on master server");
-                      
 
-            //================>new line
-            if (ui.curr_role == Role.Master) {
-                ImGui.Checkbox("bots", ref ui.b_draw_bots);
-                ImGuiExt.ToolTip("show/hide botts F12");
-               
-            }
-            if (ui.worker != null) {
-                ImGui.SameLine();
-                if (ImGui.Checkbox("Door", ref ui.worker.b_open_door)) {
-                    ui.sett.Save();
-                }
-                ImGuiExt.ToolTip("Open doors");
-            }
-            ImGui.SameLine();
+            //ImGui.SameLine();
+            //if (ImGui.Checkbox("Alt", ref ui.sett.b_alt_reset)) {
+            //    ui.sett.Save();
+            //}
+            //ImGuiExt.ToolTip("Alt downing stop curr_task /reset tasker...");
+
+            //======================= new  line ============================
+         
             if (ImGui.Checkbox("Loot", ref ui.sett.b_auto_loot)) {
                 ui.sett.Save();
             }
@@ -79,6 +66,18 @@ namespace Stas.GA {
             }
             ImGuiExt.ToolTip("smooth out map panning");
 
+            if (ui.curr_role == Role.Master) {
+                ImGui.SameLine();
+                ImGui.Checkbox("bots", ref ui.b_draw_bots);
+                ImGuiExt.ToolTip("show/hide botts F12");
+            }
+            if (ui.worker != null) {
+                ImGui.SameLine();
+                if (ImGui.Checkbox("Door", ref ui.worker.b_open_door)) {
+                    ui.sett.Save();
+                }
+                ImGuiExt.ToolTip("Open doors");
+            }
             //================>new line
             if (ImGui.Checkbox("KbrdZoom", ref ui.sett.b_use_keybord_for_zoom)) {
                 ui.sett.Save();
@@ -108,6 +107,13 @@ namespace Stas.GA {
             }
             ImGuiExt.ToolTip("Display enemies on the in-game map: Ggame Helper(C) style");
 
+            ImGui.SameLine();
+            if (ImGui.Checkbox("Develop", ref ui.sett.b_develop)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("puts the editor into developer mode" +
+                "\nShows a lot of garbage for debugging" +
+                "\nNot necessary for ordinary users");
             //================>new line
             if (ui.worker != null) {
                 if (ImGui.Checkbox("Pull", ref ui.worker.b_can_pull_alone)) {
@@ -132,6 +138,8 @@ namespace Stas.GA {
                     }
                     ImGuiExt.ToolTip("Auto get not visited...");
                 }
+
+              
             }
 
             //================>new line

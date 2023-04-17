@@ -21,12 +21,7 @@ public partial class ui {
     public static void ResetNextTaskId() { next_task_id = 0; }
     public static ICollection<Entity> entities => curr_map.AwakeEntities.Values;
     public static Entity curr_link;
-    [Obsolete("try use b_can_safe_hit_ent")]
-    public static bool b_can_safe_hit_gp(V2 tgp) {
-        var isee = b_i_see_safe_tgp(tgp);
-        var can_hit = nav.b_can_hit(tgp);
-        return isee && can_hit;
-    }
+   
     /// <summary>
     /// Use only for a certain place and always remove it from production
     /// </summary>
@@ -115,7 +110,6 @@ public partial class ui {
         quest?.Save();
     } 
     #endregion
-   
     public static AreaInstance curr_map => states.ingame_state.area_instance;
     public static WorldData curr_world => states.ingame_state.world_data;
     public static string curr_map_id {
@@ -167,7 +161,6 @@ public partial class ui {
     public static GameUiElements gui => states.ingame_state.gui;
     public static string warning;
     public static Tests test = new Tests();
-    public static NavGrid nav = new NavGrid();
     public static Entity me { get { return curr_map.player; } }
     //TileStructure TileToGridConversion & TileToWorldConversion
     public static float gridToWorldScale => 10.869565f;
@@ -220,6 +213,9 @@ public partial class ui {
         log.Clear();
     }
 
+    public void i_AddToLog(string str, MessType _mt = MessType.Ok) {
+        AddToLog(str, _mt);
+    }
     public static void AddToLog(string str, MessType _mt = MessType.Ok) {
         log.Add(str, _mt);
 #if DEBUG
@@ -227,8 +223,7 @@ public partial class ui {
             Console.WriteLine("["+ _mt + "] "+ str);
 #endif
     }
-#endregion
-
+    #endregion
     internal static Settings sett { get; private set; }
     internal static ExpedSett exped_sett { get; private set; }
     /// <summary>

@@ -157,7 +157,6 @@ public class PoeNinja : iSett, IDisposable {
         public string tradeId;
     }
 
-
     public class SparkLineInfo {
         public float?[] data;
         public float number;

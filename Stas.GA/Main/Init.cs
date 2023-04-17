@@ -34,6 +34,7 @@ public partial class ui {
     static InputChecker input_check;
     public static SafeScreen safe_screen;
     static int init_count = 0;
+    public static Nav nav = new Nav();
     public static void InitNative(int pid) {
         Console.WriteLine("InitNative started=[" + (init_count++) + "]");
         //ReloadSett();

@@ -1,19 +1,19 @@
 ﻿using System.Drawing;
+using System.Numerics;
+using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
 public class GraphMapExplorer {
-    private readonly Settings _settings;
     private readonly INextNodeSelector _nodeSelector;
     private readonly List<GraphPart> _graphParts = new List<GraphPart>();
     private readonly NavGridSegmentator _segmentator;
     private int _passedNodesCount;
     private Point _playerCachedPos;
 
-    public GraphMapExplorer(NavGrid navGrid, Settings settings, INextNodeSelector? nodeSelector = null) {
-        _settings = settings;
+    public GraphMapExplorer(NavGrid navGrid, INextNodeSelector? nodeSelector = null) {
         Graph = new Graph(navGrid);
-        _nodeSelector = nodeSelector ?? new DefaultNextNodeSelector(settings);
-        _segmentator = new NavGridSegmentator(navGrid, _settings);
+        _nodeSelector = nodeSelector ?? new DefaultNextNodeSelector();
+        _segmentator = new NavGridSegmentator(navGrid);
     }
 
     public Graph Graph { get; }
@@ -21,21 +21,22 @@ public class GraphMapExplorer {
     public Node? NextRunNode { get; private set; }
     public bool HasLocation => NextRunNode != null;
     public float PercentComplete => (float)_passedNodesCount / Graph.Nodes.Count * 100;
-
-    public void Update(Point playerPos) {
-        if (!(_playerCachedPos.Distance(playerPos) > _settings.OptimizationMoveDist)
+    public void Update(V2 gpos) {
+        Update(new Point((int)gpos.X, (int)gpos.Y));
+    }
+    public void Update(Point gpos) {
+        if (!(_playerCachedPos.Distance(gpos) > ui.sett.OptimizationMoveDist)
             && NextRunNode is { IsVisited: false, Unwalkable: false }
-            && !(NextRunNode.Pos.Distance(playerPos) < _settings.PlayerVisibilityRadius / 2)) {
+            && !(NextRunNode.Pos.Distance(gpos) < ui.sett.PlayerVisibilityRadius / 2)) {
             return;
         }
 
-        _playerCachedPos = playerPos;
+        _playerCachedPos = gpos;
         var seenNodes = new List<Node>();
 
         foreach (var node in Graph.Nodes) {
-            if (node.IsVisited
-                || node.Unwalkable
-                || playerPos.Distance(node.Pos) > _settings.PlayerVisibilityRadius) {
+            if (node.IsVisited || node.Unwalkable
+                    || gpos.Distance(node.Pos) > ui.sett.PlayerVisibilityRadius) {
                 continue;
             }
 
@@ -43,11 +44,14 @@ public class GraphMapExplorer {
             seenNodes.Add(node);
         }
 
-        NextRunNodeFromSeenNodes(seenNodes, playerPos);
+        NextRunNodeFromSeenNodes(seenNodes, gpos);
     }
 
     public void ResetUnwalkable() {
         Graph.Nodes.ForEach(x => x.Unwalkable = false);
+    }
+    public void ProcessSegmentation(Vector2 gp) {
+        ProcessSegmentation(new Point((int)gp.X, (int)gp.Y));
     }
 
     /// <summary>
@@ -74,7 +78,7 @@ public class GraphMapExplorer {
 
     private void StartSegmentation(Point segmentationStartPoint) {
         _segmentator.Process(segmentationStartPoint, Graph);
-        NavGridOptimizer.OptimizeGraph(Graph, _settings.SegmentationMinSegmentSize);
+        NavGridOptimizer.OptimizeGraph(Graph, ui.sett.SegmentationMinSegmentSize);
 
         if (Graph.Nodes.Count == 0) {
             return;

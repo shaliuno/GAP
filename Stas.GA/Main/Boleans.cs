@@ -8,16 +8,28 @@ using V3 = System.Numerics.Vector3;
 
 namespace Stas.GA {
     public partial class ui {
+        [Obsolete("try use b_can_safe_hit_ent")]
+        public bool b_can_safe_hit_gp(V2 tgp) {
+            var isee = ui.b_i_see_safe_tgp(tgp);
+            var can_hit = b_can_hit(tgp);
+            return isee && can_hit;
+        }
+        public static bool b_can_hit(Entity e) {
+            return true;
+        }
+        public static bool b_can_hit(V2 tgp) {
+            return true;
+        }
         public static bool b_i_see_safe_ent_pos(V3 pos) {
             var sp = WorldTPToSP(pos);
             return b_sp_is_safe(sp);
         }
         public static bool b_can_safe_hit_ent(Entity ent) {
             var isee = b_i_see_safe_ent_pos(ent.pos);
-            var can_hit = nav.b_can_hit(ent);
+            var can_hit = b_can_hit(ent);
             return isee && can_hit;
         }
-        public static bool b_running = true, b_draw_bots = true, b_pause, b_tile, b_info_clickable,  b_appl_started, b_minimize, b_show_info_over,
+        public static bool b_running =true, b_draw_bots = true, b_pause, b_tile, b_info_clickable,  b_appl_started, b_minimize, b_show_info_over,
             b_vs, b_edit_sett, b_show_cell, b_only_unknow, b_draw_bad_centr, b_draw_save_screen;
         public static bool b_trade_top { get; private set; }
         //public bool b_modal => gui == null ? false : gui.Ultimatum.IsVisible || gui.modal_dialog.IsVisible || gui.esc_dialog.IsVisible;

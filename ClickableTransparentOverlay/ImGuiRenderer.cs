@@ -1,5 +1,4 @@
-﻿namespace ClickableTransparentOverlay
-{
+﻿namespace ClickableTransparentOverlay {
     using ImGuiNET;
     using ImDrawIdx = System.UInt16;
     using Vortice.DXGI;
@@ -15,8 +14,7 @@
     using SixLabors.ImageSharp.PixelFormats;
     using System.Buffers;
 
-    unsafe internal sealed class ImGuiRenderer : IDisposable
-    {
+    unsafe internal sealed class ImGuiRenderer : IDisposable {
         const int VertexConstantBufferSize = 16 * 4;
 
         ID3D11Device device;
@@ -36,8 +34,7 @@
         int vertexBufferSize = 5000, indexBufferSize = 10000;
         readonly Dictionary<IntPtr, ID3D11ShaderResourceView> textureResources = new();
 
-        public ImGuiRenderer(ID3D11Device device, ID3D11DeviceContext deviceContext, int width, int height)
-        {
+        public ImGuiRenderer(ID3D11Device device, ID3D11DeviceContext deviceContext, int width, int height) {
             this.device = device;
             this.deviceContext = deviceContext;
 
@@ -54,13 +51,11 @@
             this.CreateDeviceObjects();
         }
 
-        public void Start()
-        {
+        public void Start() {
             ImGui.NewFrame();
         }
 
-        public void Update(float deltaTime, Action DoRender)
-        {
+        public void Update(float deltaTime, Action DoRender) {
             var io = ImGui.GetIO();
             io.DeltaTime = deltaTime;
             ImGui.NewFrame();
@@ -68,8 +63,7 @@
             ImGui.Render();
         }
 
-        public void Render()
-        {
+        public void Render() {
             ImDrawDataPtr data = ImGui.GetDrawData();
             // Avoid rendering when minimized
             if (data.DisplaySize.X <= 0.0f || data.DisplaySize.Y <= 0.0f)
@@ -77,8 +71,7 @@
 
             ID3D11DeviceContext ctx = deviceContext;
 
-            if (vertexBuffer == null || vertexBufferSize < data.TotalVtxCount)
-            {
+            if (vertexBuffer == null || vertexBufferSize < data.TotalVtxCount) {
                 vertexBuffer?.Release();
 
                 vertexBufferSize = data.TotalVtxCount + 5000;
@@ -90,8 +83,7 @@
                 vertexBuffer = device.CreateBuffer(desc);
             }
 
-            if (indexBuffer == null || indexBufferSize < data.TotalIdxCount)
-            {
+            if (indexBuffer == null || indexBufferSize < data.TotalIdxCount) {
                 indexBuffer?.Release();
 
                 indexBufferSize = data.TotalIdxCount + 10000;
@@ -110,8 +102,7 @@
             var indexResource = ctx.Map(indexBuffer, 0, MapMode.WriteDiscard, Vortice.Direct3D11.MapFlags.None);
             var vertexResourcePointer = (ImDrawVert*)vertexResource.DataPointer;
             var indexResourcePointer = (ImDrawIdx*)indexResource.DataPointer;
-            for (int n = 0; n < data.CmdListsCount; n++)
-            {
+            for (int n = 0; n < data.CmdListsCount; n++) {
                 var cmdlList = data.CmdListsRange[n];
 
                 var vertBytes = cmdlList.VtxBuffer.Size * sizeof(ImDrawVert);
@@ -150,26 +141,21 @@
             // (Because we merged all buffers into a single one, we maintain our own offset into them)
             int global_idx_offset = 0;
             int global_vtx_offset = 0;
-            for (int n = 0; n < data.CmdListsCount; n++)
-            {
+            for (int n = 0; n < data.CmdListsCount; n++) {
                 var cmdList = data.CmdListsRange[n];
-                for (int i = 0; i < cmdList.CmdBuffer.Size; i++)
-                {
+                for (int i = 0; i < cmdList.CmdBuffer.Size; i++) {
                     var cmd = cmdList.CmdBuffer[i];
-                    if (cmd.UserCallback != IntPtr.Zero)
-                    {
+                    if (cmd.UserCallback != IntPtr.Zero) {
                         throw new NotImplementedException("user callbacks not implemented");
                     }
-                    else
-                    {
+                    else {
                         ctx.RSSetScissorRect(
                             (int)cmd.ClipRect.X,
                             (int)cmd.ClipRect.Y,
                             (int)(cmd.ClipRect.Z - cmd.ClipRect.X),
                             (int)(cmd.ClipRect.W - cmd.ClipRect.Y));
 
-                        if (textureResources.TryGetValue(cmd.GetTexID(), out var texture))
-                        {
+                        if (textureResources.TryGetValue(cmd.GetTexID(), out var texture)) {
                             ctx.PSSetShaderResource(0, texture);
                         }
 
@@ -183,8 +169,7 @@
             //RestoreDX11State(ctx); // only required if imgui is injected + drawn on existing process.
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             if (device == null)
                 return;
 
@@ -203,13 +188,11 @@
             vertexShaderBlob?.Release();
         }
 
-        public void Resize(int width, int height)
-        {
+        public void Resize(int width, int height) {
             ImGui.GetIO().DisplaySize = new Vector2(width, height);
         }
 
-        public IntPtr CreateImageTexture(Image<Rgba32> image, Format format)
-        {
+        public IntPtr CreateImageTexture(Image<Rgba32> image, Format format) {
             var texDesc = new Texture2DDescription(format, image.Width, image.Height, 1, 1);
             if (!image.DangerousTryGetSinglePixelMemory(out Memory<Rgba32> memory)) {
                 throw new Exception("Make sure to initialize MemoryAllocator.Default!");
@@ -222,22 +205,18 @@
             return RegisterTexture(device.CreateShaderResourceView(texture, resViewDesc));
         }
 
-        public bool RemoveImageTexture(IntPtr handle)
-        {
+        public bool RemoveImageTexture(IntPtr handle) {
             using var tex = this.DeRegisterTexture(handle);
             return tex != null;
         }
 
-        public void UpdateFontTexture(string fontPathName, float fontSize, ushort[]? fontCustomGlyphRange, FontGlyphRangeType fontLanguage)
-        {
+        public void UpdateFontTexture(string fontPathName, float fontSize, ushort[]? fontCustomGlyphRange, FontGlyphRangeType fontLanguage) {
             var io = ImGui.GetIO();
             this.DeRegisterTexture(io.Fonts.TexID)?.Dispose();
             io.Fonts.Clear();
             var config = ImGuiNative.ImFontConfig_ImFontConfig();
-            if (fontCustomGlyphRange == null)
-            {
-                switch (fontLanguage)
-                {
+            if (fontCustomGlyphRange == null) {
+                switch (fontLanguage) {
                     case FontGlyphRangeType.English:
                         io.Fonts.AddFontFromFileTTF(fontPathName, fontSize, config, io.Fonts.GetGlyphRangesDefault());
                         break;
@@ -266,10 +245,8 @@
                         throw new Exception($"Font Glyph Range (${fontLanguage}) is not supported.");
                 }
             }
-            else
-            {
-                fixed (ushort* p = &fontCustomGlyphRange[0])
-                {
+            else {
+                fixed (ushort* p = &fontCustomGlyphRange[0]) {
                     io.Fonts.AddFontFromFileTTF(fontPathName, fontSize, config, new IntPtr(p));
                 }
             }
@@ -278,8 +255,7 @@
             ImGuiNative.ImFontConfig_destroy(config);
         }
 
-        void SetupRenderState(ImDrawDataPtr drawData, ID3D11DeviceContext ctx)
-        {
+        void SetupRenderState(ImDrawDataPtr drawData, ID3D11DeviceContext ctx) {
             var viewport = new Viewport(0f, 0f, drawData.DisplaySize.X, drawData.DisplaySize.Y, 0f, 1f);
             ctx.RSSetViewport(viewport);
             int stride = sizeof(ImDrawVert);
@@ -301,8 +277,7 @@
             ctx.RSSetState(rasterizerState);
         }
 
-        void CreateFontsTexture()
-        {
+        void CreateFontsTexture() {
             var io = ImGui.GetIO();
             io.Fonts.GetTexDataAsRGBA32(out byte* pixels, out var width, out var height);
             var texDesc = new Texture2DDescription(Format.R8G8B8A8_UNorm, width, height, 1, 1);
@@ -318,8 +293,7 @@
             io.Fonts.ClearTexData();
         }
 
-        void CreateFontSampler()
-        {
+        void CreateFontSampler() {
             var samplerDesc = new SamplerDescription(
                 Filter.MinMagMipLinear,
                 TextureAddressMode.Wrap,
@@ -334,33 +308,27 @@
             this.fontSampler = device.CreateSamplerState(samplerDesc);
         }
 
-        IntPtr RegisterTexture(ID3D11ShaderResourceView texture)
-        {
+        IntPtr RegisterTexture(ID3D11ShaderResourceView texture) {
             var imguiID = texture.NativePointer;
             textureResources.TryAdd(imguiID, texture);
             return imguiID;
         }
 
-        ID3D11ShaderResourceView? DeRegisterTexture(IntPtr texturePtr)
-        {
-            if (textureResources.Remove(texturePtr, out var texture))
-            {
+        ID3D11ShaderResourceView? DeRegisterTexture(IntPtr texturePtr) {
+            if (textureResources.Remove(texturePtr, out var texture)) {
                 return texture;
             }
 
             return null;
         }
 
-        void DeRegisterAllTexture()
-        {
-            foreach (var key in textureResources.Keys.ToArray())
-            {
+        void DeRegisterAllTexture() {
+            foreach (var key in textureResources.Keys.ToArray()) {
                 this.DeRegisterTexture(key)?.Release();
             }
         }
 
-        void CreateDeviceObjects()
-        {
+        void CreateDeviceObjects() {
             var vertexShaderCode =
                 @"
                     cbuffer vertexBuffer : register(b0)
@@ -437,8 +405,7 @@
             var blendDesc = new BlendDescription(Blend.SourceAlpha, Blend.InverseSourceAlpha, Blend.One, Blend.InverseSourceAlpha);
             blendState = device.CreateBlendState(blendDesc);
 
-            var rasterDesc = new RasterizerDescription(CullMode.None, FillMode.Solid)
-            {
+            var rasterDesc = new RasterizerDescription(CullMode.None, FillMode.Solid) {
                 MultisampleEnable = false,
                 ScissorEnable = true
             };

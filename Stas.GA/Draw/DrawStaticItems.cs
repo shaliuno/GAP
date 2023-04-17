@@ -14,7 +14,7 @@ partial class DrawMain {
             if (exped && ui.curr_map.danger > 0)
                 continue;
             if (!mi.WasDeleted())
-                DrawMapItem(mi);
+                DrawMapItem(mi, mi.uv, mi.size);
         }
     }
 }

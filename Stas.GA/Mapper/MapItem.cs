@@ -7,6 +7,7 @@ namespace Stas.GA {
   
     public abstract class aMapItem {
         public RectangleF uv;
+        public RectangleF uv2;
         /// <summary>
         /// icon size
         /// </summary>

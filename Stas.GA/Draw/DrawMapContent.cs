@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
 using V2 = System.Numerics.Vector2;
 using sh = Stas.GA.SpriteHelper;
-
-
 namespace Stas.GA;
 partial class DrawMain {
+    List<MapItem> double_icons = new();
     void DrawMapContent() {
+        double_icons.Clear();
         if (ui.me.Address == default && !ui.sett.b_league_start) {
             ui.AddToLog("draw Map Err: ui.me==null", MessType.Error);
             return;
@@ -29,7 +29,15 @@ partial class DrawMain {
         DrawNavVisited();
         var mia = ui.curr_map.map_items.OrderBy(e => e.priority);
         foreach (var mi in mia) {
-            DrawMapItem(mi);
+            if (mi.priority == IconPriority.Double) {
+                DrawMapItem(mi, mi.uv2, mi.size);
+                double_icons.Add(mi);
+            }
+            else
+                DrawMapItem(mi, mi.uv, mi.size);
+        }
+        foreach (var mi in double_icons) {
+            DrawMapItem(mi, mi.uv, AreaInstance.GetIconSizeByRarity(mi.ent.rarity));
         }
 
         if (ui.b_contrl) {

@@ -49,7 +49,7 @@ namespace Stas.GA {
             //if(!ui.nav.b_can_hit(i.ent))
             //   continue;
             iTask new_it = null;
-            if (e.Path.Contains("Necromancer") && ui.nav.b_can_hit(e)) {
+            if (e.Path.Contains("Necromancer") && ui.b_can_hit(e)) {
                 new_it = new EnemyTask(e.id, e, default,  "Necro");
                 danger_enemy.Add(e);
                 curr_danger += e.danger_rt;

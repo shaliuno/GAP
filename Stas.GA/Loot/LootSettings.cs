@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Stas.GA;
+﻿namespace Stas.GA;
 
 public class LootSettings : iSett {
     [JsonInclude]

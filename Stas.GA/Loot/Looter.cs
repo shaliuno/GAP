@@ -7,7 +7,6 @@ using System.IO;
 namespace Stas.GA;
 
 public partial class Looter {
-
     public string fname => @"c:\log\loot_settings.sett";
     public LootSettings sett;
     public string debug_info = "Looter info";

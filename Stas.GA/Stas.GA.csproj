@@ -46,7 +46,6 @@
 		<Compile Remove="Input\CursorMover.cs" />
 		<Compile Remove="Inventory\InventSlotItem.cs" />
 		<Compile Remove="Inventory\ServerInventory.cs" />
-		<Compile Remove="Loot\NinjaUnique.cs" />
 		<Compile Remove="Sett\AHK_sett.cs" />
 		<Compile Remove="Tests\tElements.cs" />
 		<Compile Remove="Tests\tMoving.cs" />
@@ -62,6 +61,7 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
 		<PackageReference Include="ImGui.NET" Version="1.89.4" />
 		<PackageReference Include="NAudio" Version="2.1.0" />
 		<PackageReference Include="ProcessMemoryUtilities.Net" Version="1.3.4" />

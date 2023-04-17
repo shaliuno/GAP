@@ -24,5 +24,5 @@ public enum IconPriority : byte {
     High,
     VeryHigh,
     Critical,
-    Debug
+    Double
 }
