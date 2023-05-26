@@ -34,7 +34,7 @@ public partial class ui {
     static InputChecker input_check;
     public static SafeScreen safe_screen;
     static int init_count = 0;
-    public static Nav nav = new Nav();
+    public static NavMesh nav; //need settings loaded
     public static void InitNative(int pid) {
         Console.WriteLine("InitNative started=[" + (init_count++) + "]");
         //ReloadSett();
@@ -49,7 +49,10 @@ public partial class ui {
             Icons[icon.ToString()] = (MapIconsIndex)icon;
         }
         sett = new Settings().Load<Settings>();
+        exped_sett = new ExpedSett().Load<ExpedSett>();
         hot_keys = new HotKeysFromGame();
+        ut.SetLog(log);
+        nav = new NavMesh();
         var elaps = 0; var add_w8 = 5; var max_w8 = 50;
         while (hot_keys.use_bound_skill1.Key == Keys.None) {
             Thread.Sleep(add_w8);

@@ -39,7 +39,7 @@ public class ObjectMagicProperties : EntComp {
 
     public bool IsIdentified {
         get {
-            return base.Address == 0L || this.data.IsIdentified == 1;
+            return base.Address == default || this.data.IsIdentified == 1;
         }
     }
     public List<string> ModNams => Mods;

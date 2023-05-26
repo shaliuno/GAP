@@ -86,12 +86,24 @@ namespace Stas.GA {
                 return false;
             }
         }
+        /// <summary>
+        ///signals the presence of an active interface element, which blocks the interaction 
+        ///of the mouse with the landscape and cardinally changes its behavior. 
+        ///For example, you can unintentionally remove the desired item from the hero and throw it on the ground
+        /// </summary>
         public static bool b_busy {
             get {
+                //we need block any uncontrolled mouse movement
                 if (!gui.IsValid || curr_state != gState.InGameState)
                     return true;
                 var res = b_chat_box_inp || gui.b_busy;
                 return res;
+            }
+        }
+        //TODO: a paid option - you need to turn it on for subscribers if you want
+        public static bool b_bad_ent_over_mouse {
+            get {
+                return false;
             }
         }
         public static bool b_chat_box_inp {

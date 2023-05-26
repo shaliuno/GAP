@@ -161,82 +161,85 @@ public partial class AreaInstance : RemoteObjectBase {
             }
         }
     }
-    float[][] GetTerrainHeight() {
-        var bad_ptr = 0;
-        var rotationHelper = ui.RotationSelector.Values;
-        var rotatorMetrixHelper = ui.RotatorHelper.Values;
-        var tileData = ui.m.ReadStdVector<TileStructure>(this.terr_meta_data.TileDetailsPtr);
-        var tileHeightCache = new ConcurrentDictionary<IntPtr, sbyte[]>();
-        if (tileData.Length == 0) { //may occur when changing locations during debugging
-            ui.AddToLog(tName + "GetTerrainHeight err: tileData Length==0", MessType.Error);
-            return default;
-        }
-        //for (int i = 0; i < tileData.Length; i++) {//for debug only
-
-        //}
-        Parallel.For(0, tileData.Length, i => {
-            var val = tileData[i];
-            tileHeightCache.AddOrUpdate(val.SubTileDetailsPtr,
-                addr => {
-                    if (addr == IntPtr.Zero) {
-                        bad_ptr += 1;
-                    }
-                    var subTileData = ui.m.Read<SubTileStruct>(addr);
-                    var subTileHeightData = ui.m.ReadStdVector<sbyte>(subTileData.SubTileHeight);
-                    if (subTileHeightData.Length > TileStructure.TileToGridConversion * TileStructure.TileToGridConversion) {
-                        ui.AddToLog($"found new length [" + subTileHeightData.Length + "] ");
-                    }
-                    return subTileHeightData;
-                }, (addr, data) => data);
-        });
-
-        var gridSizeX = (int)this.terr_meta_data.TotalTiles.X * TileStructure.TileToGridConversion;
-        var gridSizeY = (int)this.terr_meta_data.TotalTiles.Y * TileStructure.TileToGridConversion;
-        Debug.Assert(gridSizeX > 0 && gridSizeY > 0 && gridSizeX < 10000 && gridSizeY < 10000);
-        var result = new float[gridSizeY][];
-        Parallel.For(0, gridSizeY, y => {
+    private float[][] GetTerrainHeight() {
+        byte[] rotationSelector = ui.RotationSelector.Values;
+        byte[] rotationHelper = ui.RotatorHelper.Values;
+        TileStructure[] tileData = ui.m.ReadStdVector<TileStructure>(terr_meta_data.TileDetailsPtr);
+        var tileHeightCache = (from addr in tileData.Select((TileStructure x) => x.SubTileDetailsPtr).Distinct().AsParallel()
+                               select new {
+                                   addr = addr,
+                                   data = ui.m.ReadStdVector<sbyte>(ui.m.Read<SubTileStructure>(addr).SubTileHeight)
+                               }).ToDictionary(x => x.addr, x => x.data);
+        int gridSizeX = terr_meta_data.NumCols * 23;
+        int num = terr_meta_data.NumRows * 23;
+        float[][] result = new float[num][];
+        Parallel.For(0, num, delegate (int y) {
             result[y] = new float[gridSizeX];
-            for (var x = 0; x < gridSizeX; x++) {
-                var tileDataIndex = y / TileStructure.TileToGridConversion *
-                    (int)this.terr_meta_data.TotalTiles.X + x / TileStructure.TileToGridConversion;
-                var mytiledata = tileData[tileDataIndex];
-                var mytileHeight = tileHeightCache[mytiledata.SubTileDetailsPtr];
-                var exactHeight = 0;
-                if (mytileHeight.Length > 0) {
-                    var gridXremaining = x % TileStructure.TileToGridConversion;
-                    var gridYremaining = y % TileStructure.TileToGridConversion;
-                    var tmp = TileStructure.TileToGridConversion - 1;
-                    var rotatorMetrix = new int[4]
-                    {
-                        tmp - gridXremaining,
-                        gridXremaining,
-                        tmp - gridYremaining,
-                        gridYremaining
-                    };
-
-                    var rotationSelected = rotationHelper[mytiledata.RotationSelector] * 3;
-                    int rotatedX0 = rotatorMetrixHelper[rotationSelected];
-                    int rotatedX1 = rotatorMetrixHelper[rotationSelected + 1];
-                    int rotatedY0 = rotatorMetrixHelper[rotationSelected + 2];
-                    var rotatedY1 = 0;
-                    if (rotatedX0 == 0) {
-                        rotatedY1 = 2;
-                    }
-
-                    var finalRotatedX = rotatorMetrix[rotatedX0 * 2 + rotatedX1];
-                    var finalRotatedY = rotatorMetrix[rotatedY0 + rotatedY1];
-                    var mytileHeightIndex = finalRotatedY * TileStructure.TileToGridConversion + finalRotatedX;
-                    exactHeight = mytileHeight[mytileHeightIndex];
+            for (int i = 0; i < gridSizeX; i++) {
+                int num2 = y / 23 * terr_meta_data.NumCols + i / 23;
+                if (num2 < 0 || num2 >= tileData.Length) {
+                    ui.AddToLog($"Tile data array length is {tileData.Length}, index was {num2}", MessType.Error);
+                    result[y][i] = 0f;
                 }
-
-                result[y][x] = mytiledata.TileHeight * (float)this.terr_meta_data.TileHeightMultiplier + exactHeight;
-                result[y][x] = result[y][x] * TerrainStruct.TileHeightFinalMultiplier * -1;
+                else {
+                    TileStructure tileStructure = tileData[num2];
+                    sbyte[] array = tileHeightCache[tileStructure.SubTileDetailsPtr];
+                    int num3 = 0;
+                    if (array.Length == 1) {
+                        num3 = array[0];
+                    }
+                    else if (array.Length != 0) {
+                        int num4 = i % 23;
+                        int num5 = y % 23;
+                        int num6 = 22;
+                        int[] obj = new int[4]
+                        {
+                            num6 - num4,
+                            num4,
+                            num6 - num5,
+                            num5
+                        };
+                        int num7 = rotationSelector[tileStructure.RotationSelector] * 3;
+                        int num8 = rotationHelper[num7];
+                        int num9 = rotationHelper[num7 + 1];
+                        int num10 = rotationHelper[num7 + 2];
+                        int num11 = obj[num8 * 2 + num9];
+                        int index = obj[num10 + (1 - num8) * 2] * 23 + num11;
+                        num3 = GetTileHeightFromPackedArray(array, index);
+                    }
+                    result[y][i] = 0f - (float)((double)(tileStructure.TileHeight * terr_meta_data.TileHeightMultiplier + num3) * 7.8125);
+                }
             }
         });
-
         return result;
     }
-
+    private unsafe static int GetTileHeightFromPackedArray(sbyte[] tileHeightArray, int index) {
+        object obj = tileHeightArray.Length switch {
+            69 => (3, 2, 7, 1, 1, true),
+            137 => (2, 4, 3, 2, 3, true),
+            281 => (1, 16, 1, 4, 15, true),
+            _ => default((int, int, int, int, int, bool)),
+        };
+        var (num, num2, num3, num4, num5, _) = ((int, int, int, int, int, bool))obj;
+        if (!((ValueTuple<int, int, int, int, int, bool>*)(&obj))->Item6) {
+            if (index >= 0 && index < tileHeightArray.Length) {
+                return tileHeightArray[index];
+            }
+            ui.AddToLog($"Tile height array length is {tileHeightArray.Length}, index (0) was {index}", MessType.Error);
+        }
+        int num6 = (index >> num) + num2;
+        if (num6 < 0 || num6 >= tileHeightArray.Length) {
+            ui.AddToLog($"Tile height array length is {tileHeightArray.Length}, index (1) was {num6}", MessType.Error);
+        }
+        else {
+            int num7 = ((byte)tileHeightArray[num6] >> (index & num3) * num4) & num5;
+            if (num7 >= 0 && num7 < tileHeightArray.Length) {
+                return tileHeightArray[num7];
+            }
+            ui.AddToLog($"Tile height array length is {tileHeightArray.Length}, index (2) was {num6}, {num7}", MessType.Error);
+        }
+        return 0;
+    }
     void EntitiesWidget(string label, ConcurrentDictionary<EntityNodeKey, Entity> data) {
         if (ImGui.TreeNode($"{label} Entities ({data.Count})###${label} Entities")) {
             if (ImGui.RadioButton("Filter by Id           ", this.filterByPath == false)) {

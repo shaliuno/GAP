@@ -4,17 +4,25 @@ using V3 = System.Numerics.Vector3;
 using sh = Stas.GA.SpriteHelper;
 
 namespace Stas.GA;
+public class ExpedKey {
+    public ExpedKey(V3 pos, uint id) {
+        this.pos = pos;
+        this.id = id;
+        var k = ui.worldToGridScale;
+        gpos = new V2(pos.X * k, pos.Y * k);
+    }
+    public V3 pos { get; }
+    public V2 gpos { get; }
+    public uint id { get; }
+}
 public partial class AreaInstance {
-    List<Entity> exped_key_frame = new List<Entity>();
-    List<Entity> exped_beams_frame = new List<Entity>();
+    Dictionary<uint, ExpedKey> exped_key_frame = new();
+    Dictionary<uint, Beam> beams_frame = new();
     public StaticMapItem exped_detonator => static_items.Values.FirstOrDefault(i => i.m_type == miType.ExpedDeton);
     //TODO exped_key_frame нужно сделать в кеш, чтобы они не пропадали если их не видно 
     public void CalcExped() {
         if (exped_detonator == null)
             return;
-        if (exped_keys.Count != exped_key_frame.Count) {
-            exped_keys = new(exped_key_frame);
-            exped_beams = new(exped_beams_frame);
-        }
+     
     }
 }

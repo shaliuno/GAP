@@ -12,7 +12,7 @@ using V2 = System.Numerics.Vector2;
 
 namespace Stas.GA {
     partial class DrawMain {
-        SW sw_vis = new SW("vizit");
+        SW sw_vis = new SW("Visited");
         public void DrawNavVisited() {
             if (!ui.nav.b_ready || ui.b_contrl || ui.b_alt)  //&& ui.b_draw_debug) || ui.b_alt
                 return;
@@ -49,7 +49,8 @@ namespace Stas.GA {
                     vrc += 1;
                 }
             }
-            sw_vis.Print("["+ ui.nav.grid_cells.Count+"] rout=[" + rc + "] visited=[" + vrc + "]");
+            ui.AddToLog("grid_cells=[" + ui.nav.grid_cells.Count + "] rout=[" + rc + "] visited=[" + vrc + "]");
+            sw_vis.Print();
         }
     }
 }

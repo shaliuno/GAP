@@ -23,13 +23,17 @@ public partial class AreaInstance {
     public void UpdateMap(object state) {
         ClearOldData();
         UpdMapImage();
-        if (!ui.b_mine) {
-            //ui.nav.LoadVisited();
+     
+        if (!ui.b_mine) {//mine not need height/title data 
+            ui.nav.MakeGridSells();
+            //TODO nav must be reload visited from disk/net cashe
+            ui.nav.LoadVisited();
             ui.curr_map.GetTileTgtName();
             ui.LoadQuest();
         }
         ui.area_change_counter.Tick(ui.area_change_counter.Address, "UpdateMap");
         ui.curr_loaded_files.Load(tName);
+        //TODO loot must be reload here from disk/net cashe
         //ui.looter.LoadOldLoot();
     }
     public const string map_name = "walkable_map";
@@ -52,7 +56,7 @@ public partial class AreaInstance {
         }
         terr_meta_data = data.TerrainMetadata;
         walkable_data = ui.m.ReadStdVector<byte>(terr_meta_data.GridWalkableData);
-       
+        height_data = GetTerrainHeight();
         sw.Restart();
         var td = terr_meta_data;
         cols = (int)td.TotalTiles.X * 23;
@@ -69,23 +73,38 @@ public partial class AreaInstance {
         Configuration customConfig = Configuration.Default.Clone();
         customConfig.PreferContiguousImageBuffers = true;
         image = new(customConfig, bytesPerRow * 2, walkable_data.Length / bytesPerRow);
-        var walkArray = new WalkableFlag[cols, rows];
         var dataIndex = 0;
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x += 2) { //1794
-                var b = walkable_data[dataIndex + (x >> 1)];
-                var cp = b & 0xf;
-                bit_data[x, y] = cp;
-                image[x, y] = GetRgba32(cp);
-                walkArray[x, y] = GetWlkFlag(cp);
+        for (int y = 0; y < height_data.Length; y++) {
+            for (var x = 1; x < height_data[y].Length - 1; x++) {
+                var index = (y * bytesPerRow) + (x / 2); // (x / 2) => since there are 2 data points in 1 byte.
+                var shift = x % 2 == 0 ? 0 : 4;
+                var both = walkable_data[index];
+                var bit = both >> shift & 0xF;
+                var h = (int)(height_data[y][x] / 21.91f);
 
-                cp = (b >> 4);
-                bit_data[(x + 1), y] = cp;
-                image[x + 1, y] = GetRgba32(cp);
-                walkArray[x+1, y] = GetWlkFlag(cp);
+                if (ui.sett.b_use_gh_map) {
+                    var cond_one = x - h >= 0 && bit_data.GetLength(0) > x - h;
+                    if (!cond_one) {
+                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
+                        continue;
+                    }
+                    var cond_two = y - h >= 0 && bit_data.GetLength(1) > y - h;
+                    if (!cond_two) {
+                        ui.AddToLog(tName + ".UpdMapImage: bad pixel", MessType.Critical);
+                        continue;
+                    }
+                    bit_data[x - h, y - h] = bit;
+                    image[x - h, y - h] = GetRgba32(bit);
+                }
+                else {
+                    bit_data[x, y] = bit;
+                    image[x, y] = GetRgba32(bit);
+                    // walkArray[x, y] = GetWlkFlag(bit);
+                }
+
+                if (bit == 0)
+                    continue;
             }
-            dataIndex += td.BytesPerRow;//897;
-            progress = (float)y / rows;
         }
 
 #if DEBUG
@@ -93,7 +112,6 @@ public partial class AreaInstance {
 #endif
         ui.draw_main.AddOrGetImagePointer(map_name, image, false, out map_ptr);
        // image.Dispose();
-        ui.nav.GenerateNavGrid(cols, rows, walkArray);
         b_ready = true;
         ui.AddToLog("Map create time=[" + sw.ElapsedTostring() + "]", MessType.Warning);
     }
@@ -127,16 +145,7 @@ public partial class AreaInstance {
         ui.nav.b_ready = false;//for not draw old visited
         ui.test?.spa?.Clear(); //debug data need only actuale
     }
-    //Dictionary<int, int> values = new(); //same test values
-    WalkableFlag GetWlkFlag(int i) {
-        //if (values.ContainsKey(i))
-        //    values[i] += 1;
-        //else
-        //    values[i] = 1;
-        if (i >= 2)
-            return WalkableFlag.Walkable;
-        return WalkableFlag.NonWalkable;
-    }
+   
     internal static Rgba32 GetRgba32(int i) {
         Rgba32 res;
         switch (i) {

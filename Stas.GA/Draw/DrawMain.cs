@@ -41,7 +41,7 @@ public partial class DrawMain : Overlay {
         DrawMap(); //we need init map_ptr for debug same on it window, so check map visible cond insade
         sw_main.MakeRes();
         sp_warn.Clear();
-        var me_wrong = ui.me == null || ui.me.Address == 0 || !ui.me.IsValid;
+        var me_wrong = ui.me == null || ui.me.Address == default || !ui.me.IsValid;
         if (!on_top) sp_warn.Append("NOT on top... ");
         if (me_wrong) sp_warn.Append("me is Wrong... ");
         if (ui.sett.b_debug) sp_warn.Append("w8 debug... ");

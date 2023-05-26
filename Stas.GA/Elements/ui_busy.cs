@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using Vortice.Direct3D11;
+
 namespace Stas.GA;
 
 public partial class GameUiElements : Element {
@@ -52,4 +54,5 @@ public partial class GameUiElements : Element {
             return _bbi;
         }
     }
+   
 }

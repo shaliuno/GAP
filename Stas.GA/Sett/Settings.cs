@@ -2,6 +2,12 @@
 
 public partial class Settings : iSett {
     [JsonInclude]
+    public int map_alpha = 255;
+    [JsonInclude]
+    public int map_icon_alpha = 255;
+    [JsonInclude]
+    public bool b_auto_start_poe = true;
+    [JsonInclude]
     public bool b_league_start = false;
     public float loot_dist { get; set; } = 60;
     //Prevent spam in the console on native dll

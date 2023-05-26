@@ -68,7 +68,7 @@ public class NetworkObject : IEquatable<NetworkObject> {
         return !Equals(left, right);
     }
     internal NetworkObject ConvertNetworkObject() {
-        if (ew == null || ew.Address == 0L) {
+        if (ew == null || ew.Address == default) {
             return null;
         }
         return this;

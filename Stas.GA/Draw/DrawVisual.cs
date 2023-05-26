@@ -7,20 +7,33 @@ using Color = System.Drawing.Color;
 namespace Stas.GA {
     partial class DrawMain {
         void DrawVisual() {
-            ImGui.SetNextItemWidth(60);
-            if (ImGui.SliderFloat("icons", ref ui.sett.icon_size, 8, 20)) {
+            ImGui.SetNextItemWidth(50);
+            if (ImGui.SliderFloat("<=IS", ref ui.sett.icon_size, 8, 20)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("Change base icon size. it also depends on the degree of magnification of the map");
 
             ImGui.SameLine();
-            ImGui.SetNextItemWidth(60);
-            if (ImGui.SliderInt("Visited", ref ui.sett.visited_persent, 5, 30)) {
+            ImGui.SetNextItemWidth(30);
+            if (ImGui.SliderInt("<=Vis", ref ui.sett.visited_persent, 5, 30)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("the transparency regulator for the seeded areas - I will make the color later");
 
-           
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(50);
+            if (ImGui.SliderInt("<=Map", ref ui.sett.map_alpha, 50, 255)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("transparency of the map... [default=255]");
+
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(50);
+            if (ImGui.SliderInt("<=Icons", ref ui.sett.map_icon_alpha, 50, 255)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("transparency of map icons... [default=255]");
+            
             //================> new line
             ImGui.SetNextItemWidth(60);
             if (ImGui.Checkbox("PlPos", ref ui.sett.b_draw_me_pos)) {

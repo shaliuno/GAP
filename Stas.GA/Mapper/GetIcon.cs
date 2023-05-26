@@ -8,9 +8,20 @@ public partial class AreaInstance {
             ui.AddToLog("MinimapIcon is invalid", MessType.Error);
             return null;
         }
-        if (e.GetComp<AreaTransition>(out var transit)) { //AbyssSubAreaTransition
-            return asStaticMapItem(e, miType.transit, MapIconsIndex.Green_door);
-
+        //TODO: same doors cam be not seee here
+        if (!icon.IsVisible) {
+            if (mi.info == ("Monolith") || mi.info == "TangleAltar")
+                return null;
+        }
+        if (e.GetComp<AreaTransition>(out var transit)) {
+            if (e.Path.Contains("IncursionPortal")) {
+                if (e.IsTargetable)
+                    return asStaticMapItem(e, miType.IncursionPortal, MapIconsIndex.IncursionCraftingBench); //IncursionDoorOpen                }
+                else
+                    return null;
+            }
+            else
+                return asStaticMapItem(e, miType.transit, MapIconsIndex.Green_door);
         }
         var name = icon.name;
         if (string.IsNullOrEmpty(name))

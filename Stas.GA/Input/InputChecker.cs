@@ -66,10 +66,11 @@ public partial class InputChecker : aMouseChecker {
                     }
                 }
                 if (Keyboard.b_Try_press_key(Keys.F4, "InputChecker")) {
-                    ui.tasker?.Hold();
                     if (ui.curr_role == Role.Master) {
                         ui.SendToBots(Opcode.Hold);
                     }
+                    else//hold for manual f4 pressed on any bot host
+                        ui.tasker?.Hold();
                 }
                 if (Keyboard.b_Try_press_key(Keys.F, "InputChecker")) {
                     ui.tasker?.Unhold();//if this run directly on a bot PC, for example for testing purposes

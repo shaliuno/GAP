@@ -188,6 +188,7 @@ namespace Stas.GA {
                 //ui.AddToLog("SetCursor...["+ tp .ToIntString()+ "] low start delta", MessType.Warning);
                 return;
             }
+             
             bool cond_err(out string res) {
                 sb_cond.Clear();
                 if (ui.b_alt)
@@ -202,6 +203,8 @@ namespace Stas.GA {
                     sb_cond.Append("TP out of game window");
                 if (must_be_safe && !ui.b_sp_is_safe(tp))
                     sb_cond.Append("TP outside the safe zone");
+                if(ui.b_bad_ent_over_mouse)
+                    sb_cond.Append("Bad ent over mouse");
                 res = sb_cond.ToString();
                 return sb_cond.Length > 0;
             }

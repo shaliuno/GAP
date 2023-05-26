@@ -98,6 +98,8 @@ public struct EntityNodeValue
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
 public struct TerrainStruct
 {
+    public ushort NumCols => (ushort)TotalTiles.X;
+    public ushort NumRows => (ushort)TotalTiles.Y;
     //[FieldOffset(0x08)] public IntPtr Unknown0;
     [FieldOffset(0x18)] public StdTuple2D<long> TotalTiles;
 
@@ -134,8 +136,7 @@ public struct TileStructure // size 0x38
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct SubTileStruct
-{
+public struct SubTileStructure {
     public StdVector SubTileHeight; // tile has 23x23 subtiles.
 }
 

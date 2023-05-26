@@ -1,11 +1,6 @@
-﻿using Stas.Utils;
-using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-
 namespace Stas.GA.Updater;
-
 
 public partial class ui {
     
@@ -18,9 +13,6 @@ public partial class ui {
     public static bool b_running  = true;
     public static Settings sett;
     static string bot_p_name => Path.GetFileNameWithoutExtension(sett.bot_exe_name);
-    public static bool b_alt_shift => b_alt && b_shift;
-    public static bool b_alt => Keyboard.IsKeyDown(Keys.Menu);
-    public static bool b_shift => Keyboard.IsKeyDown(Keys.ShiftKey);
     public static State curr_state = State.App_started;
     static bool b_all_updated = false;
     static uint hwid;//my pc id
@@ -31,19 +23,16 @@ public partial class ui {
         //sett.Save();
         log = new FixedSizedLog(sett.log_size);
         hwid = GetHWID(); //3086599914
-        //RSA.TestCripto();
+        RSA.TestCripto();
         Connect();
         StartCheckGame();
         StartCheckBot();
     }
   
     static bool b_must_be_transperent = false;
-    public static void SetDebugPossible(Action act) {
-        b_must_be_transperent = true;
-        //while () { 
-            
-        //}
-        act?.Invoke();
+    public static void SetDebugPossible() {
+        ui.overlay.SetOverlayClickable(false, false);
+        Thread.Sleep(100);
     }
    
     static bool bad_process {

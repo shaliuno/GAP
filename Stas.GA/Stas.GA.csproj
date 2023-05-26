@@ -23,8 +23,11 @@
 	
 	<ItemGroup>
 	  <Compile Remove="AHK\**" />
+	  <Compile Remove="NavExplorer\**" />
 	  <EmbeddedResource Remove="AHK\**" />
+	  <EmbeddedResource Remove="NavExplorer\**" />
 	  <None Remove="AHK\**" />
+	  <None Remove="NavExplorer\**" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="Stas.Utils" />

@@ -25,20 +25,25 @@ public class SW : Stopwatch {
         }
     }
     int max_coolect = 100;
-    public SW(string _name, int max_coolect=100) {
+    public SW(string _name, int max_coolect = 100) {
         name = _name;
         this.max_coolect = max_coolect;
         registred[name] = this;
     }
-    public (string, MessType) GetRes => res; 
-    int error_count = 0;
-    public void Print(string add = null) {
-        MakeRes(add);
-        ut.AddToLog(res.Item1, res.Item2);
+    /// <summary>
+    /// only returns the last value calculated in MakeRes.
+    /// U need call MakeRes() same frame befor call here</summary>
+    public string GetRes => res;
+    /// <summary>
+    /// MakeRes +AddToLog
+    /// </summary>
+    public void Print() {
+        MakeRes();
+        ut.AddToLog(res, MessType.TimeDebug);
     }
-    (string, MessType) res;
-    public void MakeRes(string add = null) {
-        var plus = string.IsNullOrEmpty(add) ? " " : "=>" + add + " ";
+    string res;
+    //we need this method to calculate the value separately and output it for debugging
+    public void MakeRes() {
         var elaps = Elapsed.TotalMilliseconds;
 
         lock (elapsed) {
@@ -46,20 +51,11 @@ public class SW : Stopwatch {
             if (elapsed.Count > max_coolect)
                 elapsed.RemoveAt(0);
             var ft = elapsed.Sum() / elapsed.Count;//frame time
-
-            var fps = (1000f / ft).ToRoundStr(0);
             if (ft > max_ft) {
                 max_ft = ft;
             }
-            if (ft > ut.w8) {
-                error_count += 1;
-                //ui.AddToLog(name + " to slow", MessType.Error);
-                res = (name + plus + "max=[" + max_ft.ToRoundStr(3) + "]ms curr=[" + ft.ToRoundStr(3) + "]ms fps=[" + fps + "] count=[" + error_count + "]",  MessType.Error);
-               
-            }
-            else {
-                res = (name + plus + "max=[" + max_ft.ToRoundStr(3) + "]ms curr=[" + ft.ToRoundStr(2) + "]ms fps=[" + fps + "]", MessType.Ok);
-            }
+            var fps = (1000f / ft).ToRoundStr(0);
+            res = (name + " max=[" + max_ft.ToRoundStr(3) + "]ms curr=[" + ft.ToRoundStr(3) + "]ms fps=[" + fps + "]");
         }
     }
 }

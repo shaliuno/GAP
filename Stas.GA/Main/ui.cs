@@ -225,7 +225,7 @@ public partial class ui {
     }
     #endregion
     internal static Settings sett { get; private set; }
-    internal static ExpedSett exped_sett { get; private set; }
+    internal static ExpedSett exped_sett;
     /// <summary>
     ///     Gets the GameStates instance [0]
     /// </summary>

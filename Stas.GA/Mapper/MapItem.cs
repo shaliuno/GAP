@@ -68,28 +68,7 @@ namespace Stas.GA {
             size = 16;
             key = _ent.GetKey;
         }
-        public bool WasDeleted() {
-            switch (m_type) {
-                case miType.Archnemesis:
-                    if ((ent.IsValid && ent.IsDead) || !ent.IsValid) //
-                        return ui.curr_map.static_items.TryRemove(key, out _);
-                    break;
-                case miType.IncursionPortal:
-                    if (ent.GetComp<MinimapIcon>(out var icon) && icon.IsHide) {
-                        return ui.curr_map.static_items.TryRemove(key, out _);
-                    }
-                    break;
-                case miType.Sulphite:
-                case miType.portal:
-                    if (!ent.IsTargetable)
-                        return ui.curr_map.static_items.TryRemove(key, out _);
-                    break;
-                case miType.Chest:
-                default:
-                    break;
-            }
-            return false;
-        }
+        
         public override string ToString() {
             string add = "";
             if (ui.me != null)

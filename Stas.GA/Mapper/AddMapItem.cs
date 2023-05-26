@@ -3,6 +3,7 @@ using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 using sh = Stas.GA.SpriteHelper;
 using System.IO;
+using System.Diagnostics;
 
 namespace Stas.GA;
 public partial class AreaInstance {
@@ -33,6 +34,12 @@ public partial class AreaInstance {
         if (e.id == debug_id) {//debug_id
                                  //  System.Diagnostics.Debugger.Break();
         }
+        if (e.GetComp<Beam>(out var beam)) {
+            Debug.Assert(e.eType == eTypes.Exped || e.eType == eTypes.LimitedLife);
+            beams_frame.Add(e.id, beam);
+            return null;
+        }
+
         var mi = new MapItem(e, info);
         SetRarity(mi);
         switch (e.eType) { //order is importand here - > fallow GO

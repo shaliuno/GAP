@@ -185,12 +185,12 @@ public partial class AreaInstance  {
         frame_items.Clear();
         frame_blight.Clear();
         exped_key_frame.Clear();
-        exped_beams_frame.Clear();
+        beams_frame.Clear();
         frame_trigger.Clear();
         danger_enemy.Clear();
         enemy.Clear();
         curr_danger = 0;
-        //curr_marked = null;
+        marked = null;
         frame_di = null;
         danger_cells.Clear();
         //frame_debug.Clear();

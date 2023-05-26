@@ -8,14 +8,27 @@ using sh = Stas.GA.SpriteHelper;
 namespace Stas.GA;
 public partial class DrawMain {
     void DrawExpedSett() {
-        var deton = ui.curr_map.exped_detonator;
-        if (deton == null)
+        if (ui.exped_sett == null) {
+            ImGui.Button("exped_sett==null");
             return;
-        if (ImGui.BeginTabItem("Exped")) {
-            DrawContent();
-            ImGui.EndTabItem();
         }
-
+        var deton = ui.curr_map.exped_detonator;
+        if (deton == null) {
+            ImGui.Button("I don't see the blasting machine. " +
+                "\nIf you reloaded the map, just get close enough" +
+                "\n to it to get it to load");
+        }
+        else {
+            DrawContent();
+        }
+        if (ImGui.Button("Reload sett")) {
+            ui.exped_sett = new ExpedSett().Load<ExpedSett>();
+        }
+        ImGui.SameLine();
+        if (ImGui.Button("Reset sett")) {
+            ui.exped_sett = new ExpedSett();
+            ui.exped_sett.Save();
+        }
         void DrawContent() {
             ImGui.SetNextItemWidth(150);
             if (ImGui.SliderInt("Radius", ref ui.exped_sett.radius_persent, 0, 100)) {

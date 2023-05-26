@@ -10,7 +10,7 @@ public class ItemsOnGroundLabelElement : Element {
     public Element LabelOnHover {
         get {
             var readObjectAt = new Element(_data.Value.LabelOnHoverPtr);
-            return readObjectAt.Address == 0 ? null : readObjectAt;
+            return readObjectAt.Address == default ? null : readObjectAt;
         }
     }
 
@@ -18,7 +18,7 @@ public class ItemsOnGroundLabelElement : Element {
         get {
             var ptr = ui.m.Read<IntPtr>(_data.Value.ItemOnHoverPtr);
             var readObjectAt = new Entity(ptr);
-            return readObjectAt.Address == 0 ? null : readObjectAt;
+            return readObjectAt.Address == default ? null : readObjectAt;
         }
     }
 

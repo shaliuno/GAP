@@ -33,7 +33,7 @@ public partial class Session : IEquatable<Session> {
         var pull = new Thread(() => {
             while (b_running) {
                 try {
-                    if (tcp == null || tcp.GetStream() == null || tcp.Client == null || !tcp.Client.Connected) {
+                    if (tcp == null || !tcp.Connected) {
                         b_pull_ok = false; //if whilw was break
                         Thread.Sleep(3000); //poll interval 
                         continue;

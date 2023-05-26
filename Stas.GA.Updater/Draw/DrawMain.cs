@@ -26,22 +26,19 @@ partial class DrawMain : Overlay {
         info_ptr = ImGui.GetWindowDrawList();
         if (ImGui.CollapsingHeader("Setup information - study pls")) {
             var text = "edit your names in the file Stas.GA.Updater.Settings.sett" +
-                  "\r\nfields: boosty_name and discord_name and press for reload...";
+                  "\r\nfields: boosty_name and discord_name and...";
             DrawInfoOnQuad(text);
-
-            ImGui.Text("Your name on boosty.to/gameassist");
-            ImGui.SameLine();
-            if (ImGui.Button(ui.sett.boosty_mail)) {
+            if (ImGui.Button("press for reload...")) {
+                ui.SetDebugPossible();
                 ui.sett = new Settings().Load<Settings>();
             }
-            ToolTip("click this to load the current value from the settings file");
-
-            ImGui.Text("your name (with #) on my discord...");
+            ImGui.Text("Your name on boosty.to/gameassist => ");
             ImGui.SameLine();
-            if (ImGui.Button(ui.sett.discord_name)) {
-                ui.sett = new Settings().Load<Settings>();
-            }
-            ToolTip("click this to load the current value from the settings file");
+            ImGui.Button(ui.sett.boosty_mail);
+
+            ImGui.Text("your name (with #) on my discord => ");
+            ImGui.SameLine();
+            ImGui.Button(ui.sett.discord_name);
 
         }
 
@@ -60,20 +57,19 @@ partial class DrawMain : Overlay {
 
         // DrawDisabledButton("Sign UP");
         if (ImGui.Button("sign up")) {
-            ui.SetDebugPossible(() => {
-                ui.SignUp();
-            });
+            ui.SetDebugPossible();
+            ui.SignUp();
         }
         ImGui.SameLine();
         if (ImGui.Button("Login")) {
-            ui.SetDebugPossible(null);
+            ui.SetDebugPossible();
             ui.Login();
 
         }
         ImGui.SameLine();
         if (ImGui.Button("Quit")) {
             ui.sett.Save();
-            ui.SetDebugPossible(null);
+            ui.SetDebugPossible();
             ui.b_running = false;
             Thread.Sleep(500);
             ImGui.End();

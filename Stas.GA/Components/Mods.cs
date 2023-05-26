@@ -69,7 +69,7 @@ public class Mods : EntComp {
     public int ItemLevel { get; private set; } = 1;
     private List<string> GetStats(StdVector source) {
         var stats = new List<string>();
-        if (Address == 0) {
+        if (Address == default) {
             return stats;
         }
         var readPointersArray = ui.m.ReadPointersArray(source.First, source.Last, ModsComponentOffsets.StatRecordSize);
@@ -80,7 +80,7 @@ public class Mods : EntComp {
     }
     private IEnumerable<ItemMod> GetMods(StdVector source) {
         var mods = new List<ItemMod>();
-        if (Address == 0) {
+        if (Address == default) {
             return mods;
         }
 

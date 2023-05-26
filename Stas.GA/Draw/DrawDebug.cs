@@ -28,9 +28,7 @@ public partial class DrawMain {
         if (ui.b_show_cell)
             DebugNavGridCellRouts(ui.MapPixelToGP);
         if (ui.nav.b_ready && !ui.b_busy) {
-            if(ui.sett.b_develop)
-                DrawNavDebug();
-            //DebugNavMesh();
+            //DebugNavNodes();
             DebugNavPath();
             //DebugNavGP();
             //DebugNavTestPoints();

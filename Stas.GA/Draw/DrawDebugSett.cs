@@ -50,13 +50,6 @@ namespace Stas.GA {
             }
             ImGuiExt.ToolTip("draw mouse moving traces");
 
-            ImGui.SameLine();
-            if (ImGui.Checkbox("Node", ref ui.sett.b_debug_nav_node)) {
-                ui.sett.Save();
-            }
-            ImGuiExt.ToolTip("draw navigation nodes");
-
-
             ///===================== new line ====================
             ImGui.Checkbox("Cells", ref ui.b_show_cell);
             ImGuiExt.ToolTip("Show Nav map cells...");

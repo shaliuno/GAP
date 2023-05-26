@@ -19,7 +19,7 @@ public class Sockets : EntComp {
 
     public int LargestLinkSize {
         get {
-            if (Address == 0) return 0;
+            if (Address == default) return 0;
             var pLinkStart = ui.m.Read<long>(Address + 0x60);
             var pLinkEnd = ui.m.Read<long>(Address + 0x68);
             var LinkGroupingCount = pLinkEnd - pLinkStart;
@@ -38,7 +38,7 @@ public class Sockets : EntComp {
     public List<int[]> Links {
         get {
             var list = new List<int[]>();
-            if (Address == 0) return list;
+            if (Address == default) return list;
             var pLinkStart = ui.m.Read<long>(Address + 0x60);
             var pLinkEnd = ui.m.Read<long>(Address + 0x68);
             var LinkGroupingCount = pLinkEnd - pLinkStart;
@@ -65,7 +65,7 @@ public class Sockets : EntComp {
     public List<int> SocketList {
         get {
             var list = new List<int>();
-            if (Address == 0) return list;
+            if (Address == default) return list;
             var num = Address + 0x18;
 
             for (var i = 0; i < 6; i++) {

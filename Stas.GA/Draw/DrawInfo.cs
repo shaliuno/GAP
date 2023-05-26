@@ -64,7 +64,7 @@ namespace Stas.GA {
             if (ImGui.Button(ui.curr_map_name)) {
                 ui.ReloadGameState();
             }
-            ImGuiExt.ToolTip("Click for reload the map");
+            ImGuiExt.ToolTip("Click for reload the map id=[" + ui.curr_world.world_area.Id + "]");
 
             if (ui.curr_map?.danger > 0) {
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.ToImgui());
@@ -117,13 +117,13 @@ namespace Stas.GA {
 
             if (ui.sett.b_draw_map_fps) {
                 var res = sw_main.GetRes;
-                if(res.Item1 !=null)
-                    ImGui.Button(res.Item1);
+                if(res !=null)
+                    ImGui.Button(res);
             }
             if (ui.sett.b_draw_ent_fps) {
                 var res = ui.curr_map.sw_ent_upd.GetRes;
-                if (res.Item1 != null)
-                    ImGui.Button(res.Item1);
+                if (res != null)
+                    ImGui.Button(res);
             }
             DrawTabs();
             ImGui.SetWindowFontScale(1f);

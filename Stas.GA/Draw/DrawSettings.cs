@@ -138,8 +138,6 @@ namespace Stas.GA {
                     }
                     ImGuiExt.ToolTip("Auto get not visited...");
                 }
-
-              
             }
 
             //================>new line
@@ -155,6 +153,12 @@ namespace Stas.GA {
             if (ImGuiExt.EnumComboBox("<-master", ref ui.sett.master_name)) {
                 ui.sett.Save();
             }
+
+            ImGui.SameLine();
+            if (ImGui.Checkbox("Auto POE", ref ui.sett.b_auto_start_poe)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("Automatically start POE if it crashes");
 
             ImGui.SameLine();
             if (ImGui.Button("Save Sett")) {

@@ -21,7 +21,10 @@ public partial class AreaInstance {        //
     public aMapItem mi_debug;
     aMapItem frame_di;
     public string debug_info = "Mapper info";
-
+    /// <summary>
+    /// ent with a mark from me or any party member
+    /// need to Focus task
+    /// </summary>
     public Entity marked { get; private set; }
     /// <summary>
     /// debug ent ID(for editor)

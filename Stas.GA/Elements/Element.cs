@@ -5,7 +5,7 @@ namespace Stas.GA;
 
 public partial class Element : ObjectBase {
     public Element(nint ptr, string name = null) : base(ptr, name) {
-        _cacheElement = new FrameCache<ElemOffsets>(() => Address == 0 ? default : ui.m.Read<ElemOffsets>(Address));
+        _cacheElement = new FrameCache<ElemOffsets>(() => Address == default ? default : ui.m.Read<ElemOffsets>(Address));
         _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address != default && ui.m.Read<bool>(Address + ui.IsVisibleLocalOffs));
     }
 
@@ -110,14 +110,22 @@ public partial class Element : ObjectBase {
     long childHashCache;
     public ElemOffsets offs => _cacheElement.Value;
     public bool IsValid =>  offs.SelfPointer == Address && Address > 0;
-    public long chld_count => (offs.chld_ptr.Last - offs.chld_ptr.First) / 8;
+    public long chld_count {
+        get {
+            if (!IsValid)
+                return 0;
+            if (offs.chld_ptr.Last != default && offs.chld_ptr.First != default)
+                return (offs.chld_ptr.Last - offs.chld_ptr.First) / 8;
+            return 0;
+        }
+    }
     public bool IsVisibleLocal => (offs.IsVisibleLocal & 8) == 8;// ==(byte) 0x2E;  //0x26 is hidden
     public Element Root => ui.states.ingame_state.ui_root;
     public Element Parent => offs.parent_ptr == default ? null : (_parent ??= new Element(offs.parent_ptr));
     public Vector2 Position => offs.Position;
     public float X => offs.X;
     public float Y => offs.Y;
-    public Element Tooltip => Address == 0 ? null : new Element(offs.Tooltip);
+    public Element Tooltip => Address == default ? null : new Element(offs.Tooltip);
     public float Scale => offs.Scale;
     public float Width => offs.Width;
     public float Height => offs.Height;
@@ -215,7 +223,7 @@ public partial class Element : ObjectBase {
     private List<Element> GetParentChain() {
         var list = new List<Element>();
 
-        if (Address == 0)
+        if (Address == default)
             return list;
 
         var hashSet = new HashSet<Element>();
@@ -252,7 +260,7 @@ public partial class Element : ObjectBase {
     /// <returns></returns>
     public virtual RectangleF get_client_rectangle() {
 
-        if (Address == 0) return RectangleF.Empty;
+        if (Address == default) return RectangleF.Empty;
         var vPos = GetParentPos();
         float width = ui.camera.Width;
         float height = ui.camera.Height;
@@ -296,7 +304,7 @@ public partial class Element : ObjectBase {
                 return null;
             }
 
-            if (currentElement.Address == 0) {
+            if (currentElement.Address == default) {
                 ui.AddToLog($"{nameof(Element)} with index {index} has address = 0. Indices: {BuildErrorString(indexNumber)}");
                 return new Element(default, "error");
             }

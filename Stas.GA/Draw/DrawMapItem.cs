@@ -21,7 +21,8 @@ partial class DrawMain {
         var pos = V2.Transform(new V2(mi_gpos.X, mi_gpos.Y), rm);
         var p_min = new V2(uv.Left, uv.Top);
         var p_max = new V2(uv.Left + uv.Width, uv.Top + uv.Height);
-        map_ptr.AddImage(icons, pos.Increase(-his, -his), pos.Increase(his, his), p_min, p_max);
+        var transp = Color.FromArgb(ui.sett.map_icon_alpha, 255,255,255);
+        map_ptr.AddImage(icons, pos.Increase(-his, -his), pos.Increase(his, his), p_min, p_max, transp.ToImgui());
 
         if (ami is StaticMapItem) {
             var smi = (StaticMapItem)ami;

@@ -14,7 +14,7 @@ public class Mess {
     public int count;
     public MessType mtype;
 }
-public enum MessType { Ok = 0, Error = 1, Warning = 2, Critical = 3, OnTop = 4 }
+public enum MessType { Ok = 0, Error = 1, Warning = 2, Critical = 3, OnTop = 4, TimeDebug=5}
 public class FixedSizedLog : ConcurrentQueue<Mess> {
     private readonly object locker = new object();
 

@@ -24,6 +24,13 @@ public partial class Entity : RemoteObjectBase {
         if (!GetComp<Render>(out var _)) {
             this.eType = eTypes.Useless;
         }
+        else if (Path.EndsWith("Portal")) {
+            eType = eTypes.Portal;
+        }
+        else if (Path.EndsWith("Transition") || Path.Contains("AreaTransition")
+           || Path.Contains("LabyrinthIzaroDoor")) {
+            eType = eTypes.AreaTransition;
+        }
         else if (Path.Contains("/Abyss/", StringComparison.Ordinal)) {
             eType = eTypes.Abyss;
         }
