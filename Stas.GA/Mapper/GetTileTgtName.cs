@@ -130,7 +130,7 @@ public partial class AreaInstance {        //
                 skip += 1;
         }
         ui.AddToLog("Title create time=[" + sw.ElapsedTostring() + "] ok/err/skipp/totale=[" +
-           err_ptr + "/" + ok + "/" + skip + "/" + ui.nav.grid_cells.Count + "]", MessType.Warning);
+           ok + "/" + err_ptr + "/" + skip + "/" + ui.nav.grid_cells.Count + "]", MessType.Warning);
         //sw.Print();
     }
 }

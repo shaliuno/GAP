@@ -102,7 +102,6 @@ public struct TerrainStruct
     public ushort NumRows => (ushort)TotalTiles.Y;
     //[FieldOffset(0x08)] public IntPtr Unknown0;
     [FieldOffset(0x18)] public StdTuple2D<long> TotalTiles;
-
     [FieldOffset(0x28)] public StdVector TileDetailsPtr; // TileStructure
 
     //[FieldOffset(0x40)] public StdTuple2D<long> TotalTilesPlusOne;
@@ -118,9 +117,8 @@ public struct TerrainStruct
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 0x38)]
-public struct TileStructure // size 0x38
-{
-    public IntPtr SubTileDetailsPtr; // SubTileStruct
+public struct TileStructure{ // size 0x38 3.21
+    public IntPtr SubTileDetailsPtr; // SubTileStruct //SubTileDetailsPtr
     public IntPtr TgtFilePtr; // TgtFileStruct
     public StdVector EntitiesList;
     public IntPtr PAD_0x28;

@@ -150,6 +150,5 @@ namespace Stas.GA {
             else
                 return data[(int)gpos.X, (int)gpos.Y];
         }
-      
     }
 }

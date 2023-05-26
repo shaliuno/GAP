@@ -50,7 +50,7 @@ namespace Stas.GA {
                 }
             }
             ui.AddToLog("grid_cells=[" + ui.nav.grid_cells.Count + "] rout=[" + rc + "] visited=[" + vrc + "]");
-            sw_vis.Print();
+            //sw_vis.Print();
         }
     }
 }

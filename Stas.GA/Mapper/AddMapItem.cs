@@ -49,6 +49,7 @@ public partial class AreaInstance {
                 return GetAbyss(e, mi);
             case eTypes.MinimapIcon:
                 return GetIcon(e, mi);
+            case eTypes.AreaTransition:
             case eTypes.Portal:
                 return GetPortal(e);
             case eTypes.Door:

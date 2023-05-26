@@ -28,7 +28,6 @@ public partial class DrawMain {
         if (ui.b_show_cell)
             DebugNavGridCellRouts(ui.MapPixelToGP);
         if (ui.nav.b_ready && !ui.b_busy) {
-            //DebugNavNodes();
             DebugNavPath();
             //DebugNavGP();
             //DebugNavTestPoints();
@@ -46,14 +45,13 @@ public partial class DrawMain {
             DebugSP(v2.Key, true, v2.Value);
         }
         
-       
         if (ui.sett.b_draw_mouse_moving)
             DrawMouseMoving();
         DrawSaveCell();
         //DrawBadCells();
         //DebugNotVisited();
         //DebugMapPixelToWorls();
-        // DebugCursorToWorld3();
+        //DebugCursorToWorld3();
         if (ui.b_draw_save_screen)
             DrawSaveScreen();
         if (ui.b_draw_bad_centr)
@@ -130,26 +128,26 @@ public partial class DrawMain {
         var ta = ui.quest?.tiles;
         if (ta != null)
             foreach (var t in ta) {
-                //var ra = ui.nav.grouts.Where(r => r.fname == t).ToList();
-                //foreach (var r in ra)
-                //    DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
+                var ra = ui.nav.grouts.Where(r => r.fname == t).ToList();
+                foreach (var r in ra)
+                    DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
             }
     }
     void DrawTiles() {
         if (!ui.b_tile || ui.me == null || !ui.b_alt)
             return;
-        //var gc = ui.nav.Get_gc_by_gp(ui.me.gpos);
-        //Debug.Assert(gc != null);
-        //if (gc.fname == null)
-        //    DebugCell(gc, Color.FromArgb(80, 200, 0, 15), false, "Error");
-        //else {
-        //    DebugCell(gc, Color.FromArgb(80, 200, 86, 15), false, gc.fname);
-        //    var ra = ui.nav.grouts.Where(r => r.fname == gc.fname);
-        //    foreach (var r in ra) {
-        //        DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
+        var gc = ui.nav.Get_gc_by_gp(ui.me.gpos);
+        Debug.Assert(gc != null);
+        if (gc.fname == null)
+            DebugCell(gc, Color.FromArgb(80, 200, 0, 15), false, "Error");
+        else {
+            DebugCell(gc, Color.FromArgb(80, 200, 86, 15), false, gc.fname);
+            var ra = ui.nav.grouts.Where(r => r.fname == gc.fname);
+            foreach (var r in ra) {
+                DebugCell(r, Color.FromArgb(50, 200, 86, 15), true);
 
-        //    }
-        //}
+            }
+        }
     }
    
 
